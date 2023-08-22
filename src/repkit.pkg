@@ -20,11 +20,11 @@ d
 d Distribution-Date: 20230822
 d
 *** adofiles
-f ado/rkadopath.ado
+f ado/repado.ado
 f ado/repkit.ado
 
 *** helpfiles
-f sthlp/rkadopath.sthlp
+f sthlp/repado.sthlp
 f sthlp/repkit.sthlp
 
 *** ancillaryfiles

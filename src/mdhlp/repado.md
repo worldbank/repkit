@@ -1,10 +1,10 @@
 # Title
 
-__rkadopath__ - This command is used for short description.
+__repado__ - This command is used for short description.
 
 # Syntax
 
-__rkadopath__ , option1(_string_)
+__repado__ , option1(_string_)
 
 | _options_ | Description |
 |-----------|-------------|
