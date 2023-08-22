@@ -1,0 +1,33 @@
+* This package file is generated in the adodown workflow. Do not edit directly.
+*** version
+v 0.0
+*** name
+d repkit
+*** description
+d A Stata package with tools related to computational reproducibility
+d
+*** stata
+d Version: Stata 14.1
+d
+*** author
+d Author: DIME Analytics
+*** contact
+d Contact: dimeanalytics@worldbank.org
+*** url
+d URL: https://github.com/worldbank/repkit
+d
+*** date
+d Distribution-Date: 20230822
+d
+*** adofiles
+f ado/rkadopath.ado
+f ado/repkit.ado
+
+*** helpfiles
+f sthlp/rkadopath.sthlp
+f sthlp/repkit.sthlp
+
+*** ancillaryfiles
+
+*** end
+e
