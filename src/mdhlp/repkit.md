@@ -1,33 +1,29 @@
 # Title
 
-__repkit__ - This command is used for short description.
+__repkit__ - Package command with utilities for the rest of the package
 
 # Syntax
 
-__repkit__ , option1(_string_)
-
-| _options_ | Description |
-|-----------|-------------|
-| option1(_string_)   | Short description of option1  |
+__repkit__
 
 # Description
 
-<!--- Longer description of the intended use of the command and best practices related to the usage. -->
+This command only returns the version number and version data to the user.
+This command has little application for the user.
+For packages installed on SSC it is important that a there is a command
+in the package that has the same name as the package.
+That is the main purpose of this command.
 
 # Options
 
-<!--- Longer description (paragraph length) of all options, their intended use case and best practices related to them. -->
-
-option1(_string_) is used for xyz. Longer description (paragraph length) of all options, their intended use case and best practices related to them.
-
-# Examples
-
-<!--- A couple of examples to help the user get started and a short explanation of each of them. -->
+This command has no options.
 
 # Feedback, bug reports and contributions
 
-<!--- A couple of examples to help the user get started and a short explanation of each of them. -->
+Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit.
+
+PRs with suggestions for improvements are also greatly appreciated.
 
 # Authors
 
-TODO: Populate this field from .pkg file
+DIME Analytics, The World Bank dimenalytics@worldbank.org
