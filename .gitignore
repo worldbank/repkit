@@ -51,3 +51,6 @@
 
 # Markdown
 !/**/*.md
+
+# Adodown web docs
+!/**/dev/*.png
