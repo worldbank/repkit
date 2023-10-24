@@ -20,7 +20,7 @@ you need the following four elements:
 4. The exact same computation environment
 
 Sharing the same project data and code is straightforward and
-s typically done by publishing the data and code to an archive.
+is typically done by publishing the data and code to an archive.
 Using the same computation environment is more complicated
 and often involves using software like Docker.
 However, this article will focus on how to
@@ -28,7 +28,8 @@ share the same project code dependencies and will primarily cover Stata.
 
 ### Reproducible Code Dependencies
 
-Writing code is about creating precise instructions that a computer can follow. This precision is crucial for ensuring reproducibility in research.
+Writing code is about creating precise instructions that a computer can follow. 
+This precision is crucial for ensuring reproducibility in research.
 The code used in a project includes both the code written by the team
 and the code within all the commands that the project code relies on.
 Users running different versions of these commands
@@ -71,7 +72,7 @@ reproducibility for as many users as possible.
 
 In most other programming languages, there are version-controlled archives for
 community-contributed commands (or libraries).
-For R, there is CRAN, and for Python, there are tools like `pip` and `conda`.
+For R, there is CRAN, and for Python, there are archives like `pip` and `conda`.
 Tools for these archives make older versions of commands available,
 and in these languages, these tools can be used to specify
 the required commands and their exact versions when reproducing a project.
@@ -91,15 +92,15 @@ version controlling community-contributed commands.
 
 ## Using `repado`
 
-### The Best Practice
+### The Best Practice `repado` Implements
 
 In Stata, the best practice for
 version controlling community-contributed commands is to first include
 the ado-files of the commands used in the reproducibility package.
-Then, you should include code that ensures all users
+Then, your project code should code that ensures all users
 utilize these files exclusively.
 To achieve this, the project must incorporate some technical code
-(to set the "_ado-paths_").
+to set the "_ado-paths_".
 The motivation behind `repado` is to encapsulate this technical code
 within an accessible command,
 making this feature available to a wider audience of Stata users.
@@ -247,14 +248,16 @@ to utilize a command already installed on their computer
 before deciding to install it in the project ado-folder.
 In no-strict mode, the project ado-folder path is
 set to `PERSONAL` instead of `PLUS`.
-`PERSONAL` has higher priority (second only to `BASE`) compared to `PLUS`.
+`PERSONAL` is given the second highest priority after `BASE` in this mode,
+meaning `PERSONAL` is given higher priority compared to `PLUS`.
 Thus, a command installed in the project ado-folder
 will be used over a command with the same name
 (typically the same command but a different version)
 in the user's default `PLUS` folder.
 
 It's important to note that the no-strict mode workflow
-is not guaranteed to be reproducible and should only be used temporarily.
+is not guaranteed to be reproducible and 
+is only intended to be used temporarily.
 
 ## Drawbacks of `repado`
 
@@ -281,8 +284,8 @@ publish a reproducibility package containing these commands.
 
 The other aspect to consider is that,
 even after `repado` is set up in the project code,
-each user needs to install `repkit` on their own computers for `repado`
-before the functionality will work on their computers.
+each user needs to install `repkit` on their own computers
+before the `repado` functionality will work on their computers.
 This is the case even if `repkit` is installed in the project ado-folder.
 Below, we suggest our recommended mitigation for this aspect,
 as well as an alternative approach that
@@ -301,15 +304,17 @@ To version control all dependencies used for generating results,
 the functionality now in `repado` cannot
 share a package with any command used for that purpose.
 
-
 ### Mitigation
 
+One mitigation to this is to include code that tests
+if `repkit` is already installed on a user's computer.
 A do-file intended for potential wide distribution
 should never include code that automatically
 installs anything on other users' computers.
-This practice is inconsiderate and is generally considered bad practice.
+That practice is inconsiderate and is generally considered bad practice.
 However, it is a good practice to include a polite prompt
-instructing the user to install `repkit` in order to run the code.
+instructing the user to install `repkit` in order to run the code
+if the package is not already installed.
 See the example below:
 
 ```stata
@@ -325,11 +330,12 @@ if _rc == 111 {
 
 As an alternative, the code from `repado` can be copied
 into the project's main file.
+`repkit` is published using the MIT license where this is perfectly allowed.
 The ado-folder must still be created in the same way as described above.
 Afterward, you can add that folder using one of the two examples below.
 Both examples assume the same folder structure as previously outlined.
 
-Before using this code, ensure that it is utilizing
+Before using any of these examples, ensure they are utilizing
 the most recent version of the code used in the `repado` command
 [here](https://github.com/dime-worldbank/repkit/blob/main/src/ado/repado.ado).
 
