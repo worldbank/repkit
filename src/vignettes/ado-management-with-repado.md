@@ -4,11 +4,6 @@ _This is a comprehensive guide on how to use `repado`. For a shorter and more te
 
 ---
 
-Table of Contents:
-* [Background](#background)
-* [Using `repado`](#using-repado)
-* [Drawbacks of `repado`](#drawbacks-of-repado)
-
 ## Background
 
 To create a fully reproducible reproducibility package for a research project,
