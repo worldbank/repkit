@@ -1,6 +1,6 @@
-# repkit
+# repkit - a toolkit for reproducibility
 
-This Stata package is published by DIME Analytics and with tools related to computational reproducibility. 
+This Stata package is published by DIME Analytics and with tools related to computational reproducibility.
 
 ---
 
