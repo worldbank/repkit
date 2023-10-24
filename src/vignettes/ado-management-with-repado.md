@@ -2,8 +2,6 @@
 
 _This is a comprehensive guide on how to use `repado`. For a shorter and more technical syntax documentation, refer to the [helpfile](https://dime-worldbank.github.io/repkit/reference/repado.html)._
 
----
-
 ## Background
 
 To create a fully reproducible reproducibility package for a research project,
@@ -23,7 +21,7 @@ share the same project code dependencies and will primarily cover Stata.
 
 ### Reproducible Code Dependencies
 
-Writing code is about creating precise instructions that a computer can follow. 
+Writing code is about creating precise instructions that a computer can follow.
 This precision is crucial for ensuring reproducibility in research.
 The code used in a project includes both the code written by the team
 and the code within all the commands that the project code relies on.
@@ -251,7 +249,7 @@ will be used over a command with the same name
 in the user's default `PLUS` folder.
 
 It's important to note that the no-strict mode workflow
-is not guaranteed to be reproducible and 
+is not guaranteed to be reproducible and
 is only intended to be used temporarily.
 
 ## Drawbacks of `repado`
