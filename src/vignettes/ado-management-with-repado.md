@@ -165,7 +165,7 @@ myproject/
 
 In this case, the basic use of `repado` would be as follows:
 
-```
+```{stata}
 * Set user root folder
 global root "C:\Users\user123\github\myproject"
 
@@ -310,7 +310,7 @@ instructing the user to install `repkit` in order to run the code
 if the package is not already installed.
 See the example below:
 
-```stata
+```{stata}
 * Make sure that repkit is installed
 * If not, prompt user to install it from ssc
 cap which repkit  
@@ -340,7 +340,7 @@ After running this code, you can still install commands
 in the project ado-folder using `ssc install` and
 use other commands that use the `PLUS` folder.
 
-```
+```{stata}
 * Set user root folder
 global root "C:\Users\user123\github\myproject"
 
@@ -368,7 +368,7 @@ as mistakes like this cannot be easily reverted.
 If Git is employed, and all content in the ado-folder
 is tracked in the repository, this difference becomes less significant.
 
-```
+```{stata}
 * Set user root folder
 global root "C:\Users\user123\github\myproject"
 
