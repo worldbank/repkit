@@ -41,7 +41,7 @@ and then run the code.
 ```
 local tag "v1.0"
 net install repkit, ///
-  from("https://raw.githubusercontent.com/dime-worldbank/repkit/`tag`/src")
+  from("https://raw.githubusercontent.com/dime-worldbank/repkit/`tag'/src")
 ```
 
 # Contributions
