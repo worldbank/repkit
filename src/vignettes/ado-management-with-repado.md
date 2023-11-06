@@ -57,7 +57,7 @@ Unless a specific new feature is required,
 it's advisable not to choose the most recent version to ensure
 reproducibility for as many users as possible.
 
-```
+```stata
   version 12.1
 ```
 
