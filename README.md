@@ -31,7 +31,18 @@ ssc install repkit
 
 ## Install from GitHub repo
 
-TODO
+You can install older versions of `repkit` directly from the GitHub repository.
+To do so, start by finding the tag corresponding to
+the version you want to install here:
+https://github.com/dime-worldbank/repkit/tags.
+Update the local "tag" in the code below with the value of the tag you picked,
+and then run the code.
+
+```
+local tag "v1.0"
+net install repkit, ///
+  from("https://raw.githubusercontent.com/dime-worldbank/repkit/`tag`/src")
+```
 
 # Contributions
 
