@@ -1,9 +1,13 @@
+*! version 1.0 05NOV2023 DIME Analytics dimeanalytics@worldbank.org
+
 cap program drop   repkit
     program define repkit, rclass
 
+    version 13.0
+
     * UPDATE THESE LOCALS FOR EACH NEW VERSION PUBLISHED
-  	local version "0.1"
-  	local versionDate "22AUG2023"
+  	local version "1.0"
+  	local versionDate "05NOV2023"
 
   	syntax [anything]
 
