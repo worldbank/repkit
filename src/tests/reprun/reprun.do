@@ -26,7 +26,7 @@
     reprun "${tf}/target-1.do" using "${tf}/" , s(srng)
     reprun "${tf}/target-1.do" using "${tf}/" , compact  s(rng srng dsig)
     reprun "${tf}/target-1.do"  ,  verbose
--
+
     * Example A - single file
     reprun "${sf}/main.do" using "${sf}/output" , verbose
 
