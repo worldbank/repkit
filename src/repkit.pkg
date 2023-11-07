@@ -20,6 +20,7 @@ d
 d Distribution-Date: 20230822
 d
 *** adofiles
+f ado/reprun_dataline.ado
 f ado/reprun.ado
 f ado/repado.ado
 f ado/repkit.ado
