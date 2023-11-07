@@ -22,11 +22,11 @@
     file close _all
 
     * Example 0 - Ben's files
-    reprun "${tf}/target-1.do" using "${tf}/output/"
-    reprun "${tf}/target-1.do" using "${tf}/output/" , s(srng)
-    reprun "${tf}/target-1.do" using "${tf}/output/" , compact  s(rng srng dsig)
-    reprun "${tf}/target-1.do"  ,  verbose debug
-
+    reprun "${tf}/target-1.do" using "${tf}/"
+    reprun "${tf}/target-1.do" using "${tf}/" , s(srng)
+    reprun "${tf}/target-1.do" using "${tf}/" , compact  s(rng srng dsig)
+    reprun "${tf}/target-1.do"  ,  verbose
+-
     * Example A - single file
     reprun "${sf}/main.do" using "${sf}/output" , verbose
 

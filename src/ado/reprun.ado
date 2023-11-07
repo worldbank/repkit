@@ -122,9 +122,9 @@ cap program drop   reprun
           Write smcl file to disk and clean up intermediate files unless debugging
     *****************************************************************************/
 
-      copy `f_smcl' "`dirout'/`ofname'rep.smcl" , replace
+      copy `f_smcl' "`dirout'/`ofname'.reprun.smcl" , replace
       noi di as res ""
-      noi di as res `"{phang}SMCL-file with report written to: {view "`dirout'/`ofname'rep.smcl"}{p_end}"'
+      noi di as res `"{phang}SMCL-file with report written to: {view "`dirout'/`ofname'.reprun.smcl"}{p_end}"'
 
       if missing("`debug'") {
         rm_output_dir , folder("`dirout'/run1/")
