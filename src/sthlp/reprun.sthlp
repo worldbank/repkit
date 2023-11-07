@@ -36,7 +36,28 @@
 
 {title:Options}
 
-{pstd}{bf:{ul:opt}ion1}({it:string}) is used for xyz. Longer description (paragraph length) of all options, their intended use case and best practices related to them.
+{pstd}By default, {bf:reprun} returns a list of {it:mismatches} in Stata state between Run 1 and Run 2. This means that any time the state of the random number generator, the sort order of the data, or the contents of the data itself do not match Run 1 during Run 2, a flag will be generated for the corresponding line of code. The user may modify this reporting in several ways using options.
+{p_end}
+
+{dlgtab:Line flagging options}
+
+{pstd}The {bf:{ul:v}erbose} option can be used to produce even more detail than the default. If the {bf:{ul:v}erbose} option is specified, then any line in which the state changes {it:during} Run 1 or Run 2; or mismatches {it:between} the runs will be flagged and reported. This is intended to allow the user to do a deep-dive into the function and structure of the do-file{c 39}s execution.
+{p_end}
+
+{pstd}The {bf:{ul:c}ompact} option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the {bf:{ul:c}ompact} option is specified, then {it:only} those lines which have changes {it:during} Run 1 or Run 2 {bf:and} mismatches {it:between} the runs will be flagged and reported. This is intended to reduce the reporting of {c 34}cascading{c 34} flags, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run.
+{p_end}
+
+{pstd}The {bf:{ul:s}uppress()} option is used to hide the reporting of changes that do not lead to mismatches (especially when the {bf:{ul:v}erbose} option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should {it:not} be forced to match between runs, it will very often have changes that do not produce errors, specifying {bf:{ul:s}uppress(srng)} will remove a great deal of unhelpful output from the reporting table. To do this for all states, write {bf:{ul:s}uppress(rng srng dsig)}.
+{p_end}
+
+{dlgtab:Reporting and debugging options}
+
+{pstd}The {bf:{ul:d}ebug} option allows the user to save all of the underlying materials used by {bf:reprun} in the {inp:/reprun/} folder where the reporting SMCL file will be written. This will include copies of all do-files for each run for manual inspection, text files of the states of Stata after each line, and copies of the dataset at specific lines when it is needed. This can take a lot of space, and is automatically cleaned up after execution if {bf:{ul:d}ebug} is not specified.
+{p_end}
+
+{dlgtab:Other options}
+
+{pstd}By default, {bf:reprun} invokes {bf:clear} and {bf:set seed 12345} to match the default Stata state before beginning Run 1. {bf:{ul:noc}lear} prevents this behavior.
 {p_end}
 
 {title:Examples}
