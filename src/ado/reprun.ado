@@ -1,7 +1,7 @@
 *! version XX XXXXXXXXX ADAUTHORNAME ADCONTACTINFO
 
 cap program drop   reprun
-    program define reprun
+    program define reprun, rclass
 
     qui {
       syntax anything [using/] , [verbose] [compact] [noClear] [debug] [Suppress(passthru)]
@@ -44,12 +44,11 @@ cap program drop   reprun
         Set up output structure
       *****************************************************************************/
 
+      local dirout "`output'/reprun"
       * Remove existing output if it exists
-      mata : st_numscalar("r(dirExist)", direxists("`output'/iedorep"))
-      if (`r(dirExist)' == 1) rm_output_dir, folder("`output'/iedorep")
-
+      mata : st_numscalar("r(dirExist)", direxists("`dirout'"))
+      if (`r(dirExist)' == 1) rm_output_dir, folder("`dirout'")
       * Create the new output folder structure
-      local dirout "`output'/iedorep"
       mkdir "`dirout'"
 
       * Create the subfolders in the output folder structure
@@ -63,8 +62,8 @@ cap program drop   reprun
       *****************************************************************************/
 
       noi di as res ""
-      noi di as res "{phang}Starting idorep. Creating the do-files for run 1 and run 2.{p_end}"
-      noi iedorep_recurse, dofile("`dofile'") output("`dirout'") stub("m")
+      noi di as res "{phang}Starting reprun. Creating the do-files for run 1 and run 2.{p_end}"
+      noi reprun_recurse, dofile("`dofile'") output("`dirout'") stub("m")
       local code_file_run1 "`r(code_file_run1)'"
       local code_file_run2 "`r(code_file_run2)'"
       noi di as res "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
@@ -145,8 +144,8 @@ cap program drop   reprun
     *****************************************************************************/
 
     * Go over the do-file to create run 1 and run 2 do-files. Run 1 and 2 are identical with each other and the orginal file with two exceptions. Run 1 and run 2 writes after each line of code the states to a data file each.
-    cap program drop iedorep_recurse
-    program define   iedorep_recurse, rclass
+    cap program drop reprun_recurse
+    program define   reprun_recurse, rclass
     qui {
       syntax, dofile(string) output(string) stub(string)
 
@@ -259,7 +258,7 @@ cap program drop   reprun
               * Get the file path from the second word
               local file = `"`macval(secondw)'"'
 
-              noi iedorep_recurse, dofile("`file'")     ///
+              noi reprun_recurse, dofile("`file'")     ///
                                    output("`output'")   ///
                                    stub("`recursestub'")
               local sub_f1 "`r(code_file_run1)'"
@@ -304,8 +303,8 @@ cap program drop   reprun
 
             if (`write_recline' == 1) {
 
-              file write `handle_c1' `"iedorep_dataline, run(1) lnum(`lnum') datatmp("`file_d1'") recursestub(`recursestub') orgsubfile(`file')"' _n
-              file write `handle_c2' `"iedorep_dataline, run(2) lnum(`lnum') datatmp("`file_d2'") recursestub(`recursestub') orgsubfile(`file')"' _n
+              file write `handle_c1' `"reprun_dataline, run(1) lnum(`lnum') datatmp("`file_d1'") recursestub(`recursestub') orgsubfile(`file')"' _n
+              file write `handle_c2' `"reprun_dataline, run(2) lnum(`lnum') datatmp("`file_d2'") recursestub(`recursestub') orgsubfile(`file')"' _n
             }
 
             * Write the line copied from original file
@@ -328,8 +327,8 @@ cap program drop   reprun
 
               * Write lines to run file 1 and 2
 
-              file write `handle_c1' `"iedorep_dataline, run(1) lnum(`lnum') datatmp("`file_d1'") looptracker("`macval(loop_str)'")"' _n
-              file write `handle_c2' `"iedorep_dataline, run(2) lnum(`lnum') datatmp("`file_d2'") looptracker("`macval(loop_str)'")"' _n
+              file write `handle_c1' `"reprun_dataline, run(1) lnum(`lnum') datatmp("`file_d1'") looptracker("`macval(loop_str)'")"' _n
+              file write `handle_c2' `"reprun_dataline, run(2) lnum(`lnum') datatmp("`file_d2'") looptracker("`macval(loop_str)'")"' _n
             }
           }
           local ++lnum
@@ -744,7 +743,7 @@ cap program drop   reprun
       if !missing("`intro_output'") {
         local l1 " "
         local l2 "{hline}"
-        local l3 "`line'{phang}iedorep output created by user `c(username)' at `c(current_date)' `c(current_time)'{p_end}"
+        local l3 "`line'{phang}reprun output created by user `c(username)' at `c(current_date)' `c(current_time)'{p_end}"
         local l4 "`line'{phang}Operating System `c(machine_type)' `c(os)' `c(osdtl)'{p_end}"
         local l5 "`line'{phang}Stata `c(edition_real)' - Version `c(stata_version)' running as version `c(version)'{p_end}"
         local l6 "{hline}"

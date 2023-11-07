@@ -4,7 +4,7 @@
 * that the command iedorep is generating
 
 cap program drop   reprun_dataline
-    program define reprun_dataline
+    program define reprun_dataline, rclass
 
 
       syntax , run(string)    ///
