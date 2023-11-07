@@ -695,6 +695,15 @@ cap program drop   reprun
               else local `state'_c2 = "{err:Error!}"
             }
 
+            // Ignore if starting on default seed setting
+            set seed 12345
+            if ("`l1_`state''" == "`c(rngstate)'") {
+              local `state'_c1 = " "
+              local `state'_c2 = " "
+              local l1_`state' = "DEFAULT"
+              local l2_`state' = "DEFAULT"
+            }
+
         }
 
         foreach state in rng srng dsig {

@@ -22,7 +22,8 @@
     file close _all
 
     * Example 0 - Ben's files
-    reprun "${tf}/target-1.do" using "${tf}/"
+    clear
+    reprun "${tf}/target-1.do" using "${tf}/" , debug
     reprun "${tf}/target-1.do" using "${tf}/" , s(srng)
     reprun "${tf}/target-1.do" using "${tf}/" , compact  s(rng srng dsig)
     reprun "${tf}/target-1.do"  ,  verbose

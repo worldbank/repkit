@@ -6,7 +6,7 @@
 
 {title:Title}
 
-{phang}{bf:reprun} - This command is used to automate a replication check for a single Stata do-file, or a set of do-files called by a main do-file. The command should be used interactively; {bf:reprun} will execute one run of the do-file and record the state of Stata after the execution of each line. It will then run the entire do-file a second time and flag all potential replication error causes by comparing the Stata state to the first run {it:after each line}. Debugging and reporting options are available.
+{phang}{bf:reprun} - This command is used to automate a reproducibility check for a single Stata do-file, or a set of do-files called by a main do-file. The command should be used interactively; {bf:reprun} will execute one run of the do-file and record the state of Stata after the execution of each line. It will then run the entire do-file a second time and flag all potential reproducibility error causes by comparing the Stata state to the first run {it:after each line}. Debugging and reporting options are available.
 {p_end}
 
 {title:Syntax}
@@ -26,12 +26,15 @@
 {synopt: {bf:{ul:c}ompact}}Report only lines where Run 1 and Run 2 mismatch {bf:and} change for any value{p_end}
 {synopt: {bf:{ul:s}uppress(types)}}Suppress reporting of state changes that do not result in mismatches for seed RNG state ({inp:rng}), sort order RNG ({inp:srng}), and/or data signature ({inp:dsig}), for any reporting setting{p_end}
 {synopt: {bf:{ul:d}ebug}}Save all records of Stata states in Run 1 and Run 2 for inspection in the {inp:/reprun/} folder{p_end}
-{synopt: {bf:{ul:noc}lear}}Do not reset the Stata state before beginning replication Run 1{p_end}
+{synopt: {bf:{ul:noc}lear}}Do not reset the Stata state before beginning reproducibility Run 1{p_end}
 {synoptline}
 
 {title:Description}
 
-{pstd}The {bf:reprun} command is intended to be used to check the replicability of a do-file or set of do-files (called by a main do-file) that are ready to be transferred to other users or published. The command will ensure that the outputs produced by the do-file or set of do-files are stable across runs, such that they do not produce replicability errors caused by incorrectly managed randomness in Stata. To do so, {bf:reprun} will check three key sources of replication failure at each point in execution of the do-file(s): the state of the random number generator, the sort order of the data, and the contents of the data itself.
+{pstd}The {bf:reprun} command is intended to be used to check the reproducibility of a do-file or set of do-files (called by a main do-file) that are ready to be transferred to other users or published. The command will ensure that the outputs produced by the do-file or set of do-files are stable across runs, such that they do not produce reproducibility errors caused by incorrectly managed randomness in Stata. To do so, {bf:reprun} will check three key sources of reproducibility failure at each point in execution of the do-file(s): the state of the random number generator, the sort order of the data, and the contents of the data itself.
+{p_end}
+
+{pstd}After completing Run 2, {bf:reprun} will report all lines where there are mismatches in any of these values between Run 1 and Run 2. Lines where {it:changes} lead to {it:mismatches} will be highlighted, and an indicator for potentially {c 34}cascading{c 34} mismatches (those caused by previous changes) will be shown by a vertical line and the absence of the change flag. In general, this structure means that problems should be, to a first approximation, approached top-to-bottom, as solving an earlier issue will often resolve later ones (since later changes may not be the ones causing the mismatches). In addition, we have set things up so that problems should also in general be approached from left-to-right in this table. RNG states are responsible for most errors; then unstable sorts; and data mismatches are typically symptoms of these reproducibility failures, rather than causes in and of themselves.
 {p_end}
 
 {title:Options}
@@ -57,7 +60,7 @@
 
 {dlgtab:Other options}
 
-{pstd}By default, {bf:reprun} invokes {bf:clear} and {bf:set seed 12345} to match the default Stata state before beginning Run 1. {bf:{ul:noc}lear} prevents this behavior.
+{pstd}By default, {bf:reprun} invokes {bf:clear} and {bf:set seed 12345} to match the default Stata state before beginning Run 1. {bf:{ul:noc}lear} prevents this behavior. It is not recommended unless you have a rare issue that you need to check at the very beginning of the file, because most projects should very quickly set these states appropriately for reproducibility.
 {p_end}
 
 {title:Examples}

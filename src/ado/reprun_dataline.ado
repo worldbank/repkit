@@ -32,18 +32,18 @@ cap program drop   reprun_dataline
         local loopt = trim("`looptracker'")
 
         * Handle data line
-        local output = substr(`"`datatmp'"',1,strrpos(`"`datatmp'"',"/"))
+        local output = substr(`"`datatmp'"',1,strrpos(`"`datatmp'"',".txt"))
         local data = "`lnum'`looptracker'"
         local data = subinstr("`data'"," ","_",.)
         local data = subinstr("`data'",":","-",.)
         if `run' == 1 {
-          cap mkdir "`output'/dta/"
-          save "`output'/dta/`data'.dta" , replace emptyok
+          cap mkdir "`output'"
+          save "`output'/`data'.dta" , replace emptyok
           local srngcheck = _rc
         }
         if `run' == 2 {
           local output = subinstr(`"`output'"',"run2","run1",.)
-          cap cf _all using "`output'/dta/`data'.dta"
+          cap cf _all using "`output'/`data'.dta"
           local srngcheck = _rc
         }
 
