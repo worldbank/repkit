@@ -5,7 +5,6 @@ __reprun__ - This command is used to automate a replication check for a single S
 # Syntax
 
 __reprun__ "_do-file.do_" [using "_/directory/_"]
-__reprun__ "_do-file.do_" [using "_/directory/_"]
 , [__**v**erbose__] [__**c**ompact__] [__**s**uppress(rng|srng|dsig)__]
 [__**d**ebug__] [__**noc**lear__]
 
