@@ -32,7 +32,7 @@ cap program drop   reprun_dataline
         local loopt = trim("`looptracker'")
 
         * Handle data line
-        local output = substr(`"`datatmp'"',1,strrpos(`"`datatmp'"',".txt"))
+        local output = substr(`"`datatmp'"',1,strrpos(`"`datatmp'"',".txt")-1)
         local data = "`lnum'`looptracker'"
         local data = subinstr("`data'"," ","_",.)
         local data = subinstr("`data'",":","-",.)
@@ -48,7 +48,7 @@ cap program drop   reprun_dataline
         }
 
         *Build data line
-        local line "l:`lnum'&rng:`rng'&srngstate:`srng'&dsig:`dsig'&loopt:`loopt'&srngcheck:`srngcheck'"
+        local line "l:`lnum'&rng:`rng'&srngstate:`srng'&data:`output'/`data'.dta&dsig:`dsig'&loopt:`loopt'&srngcheck:`srngcheck'"
       }
 
       * Recurse line
