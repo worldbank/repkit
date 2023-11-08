@@ -665,7 +665,10 @@ cap program drop   reprun
             noi di as error "Internal error: The looptracker should always be the same in data line from run 1 and run 2. But in this case looptracker in run 1 it is `l1_loopt', and in run 2 it is `l2_loopt'"
             error 198
         }
-        if ("`l1_loopt'" == "`pl1_loopt'") & !missing("`l1_loopt'") local l1_loopt "{c |}"
+
+        // Suppress loop info
+        if ("`l1_loopt'" == "`pl1_loopt'") & !missing("`l1_loopt'") & strpos("`suppress'","loop") ///
+          local l1_loopt "{c |}"
         return local loopt "`l1_loopt'"
 
         * Logic for minimal SRNG checker

@@ -12,7 +12,7 @@
 {title:Syntax}
 
 {phang}{bf:reprun} {c 34}{it:do-file.do}{c 34} [using {c 34}{it:/directory/}{c 34}]
-, [{bf:{ul:v}erbose}] [{bf:{ul:c}ompact}] [{bf:{ul:s}uppress(rng|srng|dsig)}]
+, [{bf:{ul:v}erbose}] [{bf:{ul:c}ompact}] [{bf:{ul:s}uppress(rng|srng|dsig|loop)}]
 [{bf:{ul:d}ebug}] [{bf:{ul:noc}lear}]
 {p_end}
 
@@ -50,7 +50,7 @@
 {pstd}The {bf:{ul:c}ompact} option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the {bf:{ul:c}ompact} option is specified, then {it:only} those lines which have changes {it:during} Run 1 or Run 2 {bf:and} mismatches {it:between} the runs will be flagged and reported. This is intended to reduce the reporting of {c 34}cascading{c 34} flags, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run.
 {p_end}
 
-{pstd}The {bf:{ul:s}uppress()} option is used to hide the reporting of changes that do not lead to mismatches (especially when the {bf:{ul:v}erbose} option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should {it:not} be forced to match between runs, it will very often have changes that do not produce errors, specifying {bf:{ul:s}uppress(srng)} will remove a great deal of unhelpful output from the reporting table. To do this for all states, write {bf:{ul:s}uppress(rng srng dsig)}.
+{pstd}The {bf:{ul:s}uppress()} option is used to hide the reporting of changes that do not lead to mismatches (especially when the {bf:{ul:v}erbose} option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should {it:not} be forced to match between runs, it will very often have changes that do not produce errors, specifying {bf:{ul:s}uppress(srng)} will remove a great deal of unhelpful output from the reporting table. To do this for all states, write {bf:{ul:s}uppress(rng srng dsig)}. Suppressing {inp:loop} will clean up the display of loops so that the titles are only shown on the first line; but if combined with {inp:compact} may not display at all.
 {p_end}
 
 {dlgtab:Reporting and debugging options}

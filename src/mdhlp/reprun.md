@@ -5,7 +5,7 @@ __reprun__ - This command is used to automate a reproducibility check for a sing
 # Syntax
 
 __reprun__ "_do-file.do_" [using "_/directory/_"]
-, [__**v**erbose__] [__**c**ompact__] [__**s**uppress(rng|srng|dsig)__]
+, [__**v**erbose__] [__**c**ompact__] [__**s**uppress(rng|srng|dsig|loop)__]
 [__**d**ebug__] [__**noc**lear__]
 
 By default, __reprun__ will execute the complete do-file specified in "_do-file.do_" once (Run 1), and record the "seed RNG state", "sort order RNG", and "data signature" after the execution of every line, as well as the exact data in certain cases. __reprun__ will then execute the do-file a second time (Run 2), and find all _changes_ and _mismatches_ in these states throughout Run 2. A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called `/reprun/` in the same location as the do-file. If the `using` argument is supplied, the `/reprun/` directory containing the SMCL file will be stored in that location instead.
@@ -34,7 +34,7 @@ The __**v**erbose__ option can be used to produce even more detail than the defa
 
 The __**c**ompact__ option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the __**c**ompact__ option is specified, then _only_ those lines which have changes _during_ Run 1 or Run 2 __and__ mismatches _between_ the runs will be flagged and reported. This is intended to reduce the reporting of "cascading" flags, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run.
 
-The __**s**uppress()__ option is used to hide the reporting of changes that do not lead to mismatches (especially when the __**v**erbose__ option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should _not_ be forced to match between runs, it will very often have changes that do not produce errors, specifying __**s**uppress(srng)__ will remove a great deal of unhelpful output from the reporting table. To do this for all states, write __**s**uppress(rng srng dsig)__.
+The __**s**uppress()__ option is used to hide the reporting of changes that do not lead to mismatches (especially when the __**v**erbose__ option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should _not_ be forced to match between runs, it will very often have changes that do not produce errors, specifying __**s**uppress(srng)__ will remove a great deal of unhelpful output from the reporting table. To do this for all states, write __**s**uppress(rng srng dsig)__. Suppressing `loop` will clean up the display of loops so that the titles are only shown on the first line; but if combined with `compact` may not display at all.
 
 ## Reporting and debugging options
 
