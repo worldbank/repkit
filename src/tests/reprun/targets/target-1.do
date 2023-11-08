@@ -13,6 +13,8 @@ su price
 
 di as err "Should be 6165... `r(mean)'"
 
+di as err "Should be 6165... `r(mean)'"
+
 #d cr
 
 // TEST COMMENT
