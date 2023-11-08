@@ -667,11 +667,11 @@ cap program drop   reprun
         }
         return local loopt "`l1_loopt'"
 
-        * Logic for minimal SRNG checker (still oversensitive)
+        * Logic for minimal SRNG checker
           local l1_srng = "`l1_srngstate'"
           local pl1_srng = "`pl1_srngstate'"
 
-          if ("`l1_srngstate'" != "`pl1_srngstate'") & ("`l2_srngcheck'" != "0") {
+          if ("`l2_srngcheck'" != "0") {
             local l2_srng = "`l2_srngstate'"
             local pl2_srng = "`pl2_srngstate'"
           }
