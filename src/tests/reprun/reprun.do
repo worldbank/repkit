@@ -29,7 +29,7 @@
     reprun "${tf}/target-1.do"  ,  verbose
 
     * Example A - single file
-    reprun "${sf}/main.do" using "${sf}/output" , verbose
+    reprun "${sf}/main.do" using "${sf}/" , verbose
 
     * Example B - multiple file
     reprun "${mf}/main.do" using "${mf}/output"
@@ -38,4 +38,4 @@
     reprun "${mf}/main.do" using "${mf}/output_verbose"
 
     * Example D - multiple file
-    reprun "${lf}/main.do" using "${lf}/output" , verbose
+    reprun "${lf}/main.do" using "${lf}/" , verbose s(loop)
