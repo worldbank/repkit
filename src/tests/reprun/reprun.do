@@ -22,6 +22,7 @@
     * Install the version of this package in 
     * the plus-ado folder in the test folder
     repado , adopath("${test_fldr}/plus-ado/") mode(strict)
+    cap net uninstall repkit
     net install repkit, from("${src_fldr}") replace
 
     file close _all
