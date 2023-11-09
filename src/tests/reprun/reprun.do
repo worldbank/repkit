@@ -28,22 +28,30 @@
 
     * Example 0 - Ben's files
     clear
-    reprun "${tf}/target-1.do" using "${tf}/" , debug
-    reprun "${tf}/target-1.do" using "${tf}/" , s(srng loop)
-    reprun "${tf}/target-1.do" using "${tf}/" , compact  s(rng srng dsig)
+    cap mkdir "${tf}/output-1"
+    cap mkdir "${tf}/output-2"
+    cap mkdir "${tf}/output-3"
+    reprun "${tf}/target-1.do" using "${tf}/output-1" , debug
+    reprun "${tf}/target-1.do" using "${tf}/output-2" , s(srng loop)
+    reprun "${tf}/target-1.do" using "${tf}/output-3" , compact  s(rng srng dsig)
     reprun "${tf}/target-1.do"  ,  verbose
 
     * Example A - single file
-    reprun "${sf}/main.do" using "${sf}/" , verbose
+    cap mkdir "${sf}/output"
+    reprun "${sf}/main.do" using "${sf}/output" , verbose
 
     * Example B - multiple file
+    cap mkdir "${mf}/output"
     reprun "${mf}/main.do" using "${mf}/output"
 
     * Example C - multiple file
+    cap mkdir "${mf}/output_verbose"
     reprun "${mf}/main.do" using "${mf}/output_verbose"
 
     * Example D - multiple file
-    reprun "${lf}/main.do" using "${lf}/" , verbose s(loop)
+    cap mkdir "${lf}/output"
+    reprun "${lf}/main.do" using "${lf}/output" , verbose s(loop)
 
     * Example E - with clear all
+    cap mkdir "${wca}/output"
     reprun "${wca}/main.do" using "${wca}/output" , debug
