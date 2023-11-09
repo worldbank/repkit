@@ -9,15 +9,20 @@
     }
 
     * Set global to ado_fldr
-    global ado_fldr "${clone}/src/ado"
-    global run_fldr "${clone}/src/tests/reprun"
-    global tf       "${run_fldr}/targets"
-    global sf       "${run_fldr}/single-file"
-    global mf       "${run_fldr}/multi-file"
-    global lf       "${run_fldr}/loop-file"
+    global src_fldr  "${clone}/src"
+    global test_fldr "${src_fldr}/tests/"
+    global run_fldr  "${test_fldr}/reprun/"
+    global tf        "${run_fldr}/targets"
+    global sf        "${run_fldr}/single-file"
+    global mf        "${run_fldr}/multi-file"
+    global lf        "${run_fldr}/loop-file"
+    global wca       "${run_fldr}/with-clear-all"
+    global waf       "${run_fldr}/with-ado-folder"
 
-    qui do          "${ado_fldr}/reprun.ado"
-    qui do          "${ado_fldr}/reprun_dataline.ado"
+    * Install the version of this package in 
+    * the plus-ado folder in the test folder
+    repado , adopath("${test_fldr}/plus-ado/") mode(strict)
+    net install repkit, from("${src_fldr}") replace
 
     file close _all
 
@@ -39,3 +44,6 @@
 
     * Example D - multiple file
     reprun "${lf}/main.do" using "${lf}/" , verbose s(loop)
+
+    * Example E - with clear all
+    reprun "${wca}/main.do" using "${wca}/output" , debug
