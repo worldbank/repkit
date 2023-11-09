@@ -56,3 +56,6 @@
     * Example E - with clear all
     cap mkdir "${wca}/output"
     reprun "${wca}/main.do" using "${wca}/output" , debug
+
+    * Example F - with project ado-folder
+    reprun "${waf}/main.do" using "${waf}/output" , debug 
