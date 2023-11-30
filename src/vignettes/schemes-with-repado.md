@@ -10,7 +10,8 @@ In this case we recommend installing the custom schemes
 in the folder used in the `adopath()` option.
 
 A simple implementation is as follows:
-```
+
+```stata
   global myproject "/path/to/project/"
   repado , adopath("${myproject}/ado") mode(strict)
 
