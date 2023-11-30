@@ -11,12 +11,11 @@ in the folder used in the `adopath()` option.
 
 A simple implementation is as follows:
 ```
-global myproject "/path/to/project/"
+  global myproject "/path/to/project/"
+  repado , adopath("${myproject}/ado") mode(strict)
 
-repado , adopath("${myproject}/ado/") mode(strict)
-
-copy "https://github.com/graykimbrough/uncluttered-stata-graphs/raw/master/schemes/scheme-uncluttered.scheme" ///
-  "${repkit}/src/tests/plus-ado/scheme-uncluttered.scheme" , replace
+  local url "https://github.com/graykimbrough/uncluttered-stata-graphs/raw/master/schemes/scheme-uncluttered.scheme" 
+  copy "`url" "${myproject}/ado/scheme-uncluttered.scheme" , replace
 
   set scheme uncluttered , perm
   graph set eps fontface "Helvetica"
