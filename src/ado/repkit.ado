@@ -11,8 +11,6 @@ cap program drop   repkit
 
   	syntax [anything]
 
-  	version 12
-
     * Prepare returned locals
     return local versiondate     "`versionDate'"
     return local version		      = `version'
