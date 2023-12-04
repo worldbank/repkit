@@ -48,7 +48,7 @@ repado , adopath("${myproj}/ado") mode("strict")
 
 Read more about the commands in this package at https://dime-worldbank.github.io/repkit.
 
-Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit.
+Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit/issues.
 
 PRs with suggestions for improvements are also greatly appreciated.
 
