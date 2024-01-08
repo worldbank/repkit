@@ -636,7 +636,7 @@ cap program drop   reprun
                   local write_outputline 1
                 * Test if any line is "Missmatch"
                 local any_mismatch = ///
-                  max(strpos("`r(`matchtype'_m)'","NO"),strpos("`r(`matchtype'_m)'","|"))
+                  max(strpos("`r(`matchtype'_m)'","ERR"),strpos("`r(`matchtype'_m)'","DIFF"))
                 if (`any_mismatch' > 0) & missing(`"`compact'"') local write_outputline 1
                 * Compact display
                 if (`any_mismatch' > 0) & (`any_change' > 0) local write_outputline 1
@@ -701,7 +701,7 @@ cap program drop   reprun
 
         // Suppress loop info
         if ("`l1_loopt'" == "`pl1_loopt'") & !missing("`l1_loopt'") & strpos("`suppress'","loop") ///
-          local l1_loopt "{c |}"
+          local l1_loopt ""
         return local loopt "`l1_loopt'"
 
         * Logic for minimal SRNG checker
@@ -717,53 +717,67 @@ cap program drop   reprun
             local pl2_srng = "`pl1_srngstate'"
           }
 
+        local arrow "{c -}{c -}{c -}{c -}{c -}>"
+
         * Comparing all states since previous line and between runs
         foreach state in rng srng dsig {
 
           * Compare state in each run compared to previous line
-            local `state'_c1 = " "
-            if ("`l1_`state''" != "`pl1_`state''") {
-              local `state'_c1 = "Change"
-            }
+          local `state'_c1 = ""
+          local change1 0
+          if ("`l1_`state''" != "`pl1_`state''") {
+            local `state'_c1 = "Change"
+            local change1 1
+          }
 
-            local `state'_c2 = " "
-            if ("`l2_`state''" != "`pl2_`state''") {
-              if "``state'_c1'" == "Change" local `state'_c2 = "{c -}{c -}{c -}{c -}{c -}>"
-              else local `state'_c2 = "{err:Error!}"
-            }
+          local `state'_c2 = ""
+          local change2 0
+          if ("`l2_`state''" != "`pl2_`state''") {
+            local `state'_c2 = "Change"
+            local change2 1
+          }
 
-            // Ignore if starting on default seed setting
+          // Ignore RNG if seed is still on default seed
+          if ("`state'" == "rng") {
             set seed 12345
             if ("`l1_`state''" == "`c(rngstate)'") {
-              local `state'_c1 = " "
-              local `state'_c2 = " "
+              local `state'_c1 = ""
+              local `state'_c2 = ""
               local l1_`state' = "DEFAULT"
               local l2_`state' = "DEFAULT"
+              local change1 0
+              local change2 0
             }
-
-        }
-
-        foreach state in rng srng dsig {
-
-          * Compare state between runs
-          if !strpos(" `suppress' " , " `state' ") {
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>")) return local `state'_m "   OK!"
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" != "Change") & ("``state'_c2'" != "{c -}{c -}{c -}{c -}{c -}>")) return local `state'_m "      "
-          }
-          if strpos(" `suppress' " , " `state' ") {
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>")) local `state'_c2 = ""
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" != "Change") & ("``state'_c2'" != "{c -}{c -}{c -}{c -}{c -}>")) local `state'_c2 = ""
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>")) local `state'_c1 = ""
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" != "Change") & ("``state'_c2'" != "{c -}{c -}{c -}{c -}{c -}>")) local `state'_c1 = ""
           }
 
-          if ("`l1_`state''" != "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>")) return local `state'_m "{err:{c TRC}NO}"
-          if ("`l1_`state''" != "`l2_`state''") & (("``state'_c1'" != "Change") & ("``state'_c2'" != "{c -}{c -}{c -}{c -}{c -}>")) return local `state'_m "{err:{c |}}"
-
-          if ("`l1_`state''" != "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>"))  local `state'_c1 "{err:``state'_c1'}"
-          if ("`l1_`state''" != "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>"))  local `state'_c2 "{err:``state'_c2'}"
+          * Return the labels for each state
           return local `state'_c1 "``state'_c1'"
           return local `state'_c2 "``state'_c2'"
+
+          ************************************************************
+          * Compare states across runs
+
+          * Match
+          if ("`l1_`state''" == "`l2_`state''") {
+            if !missing("``state'_c1'``state'_c2'") return local `state'_m "OK!"
+          }
+
+          * Not matching
+          else {
+            * Stata changes in both runs, but to different values
+            if (`change1' & `change2') {
+              return local `state'_m "{err:DIFF}"
+            }
+            * Neither value changed, they were different from before
+            else if (!`change1' & !`change2') {
+              return local `state'_m ""
+            }
+            * Only one value changed - that is an error
+            else {
+              return local `state'_m "{err:ERR}"
+            }
+          }
+
 
         }
     end
