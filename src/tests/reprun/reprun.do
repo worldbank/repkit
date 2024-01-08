@@ -10,8 +10,8 @@
 
     * Set global to ado_fldr
     global src_fldr  "${clone}/src"
-    global test_fldr "${src_fldr}/tests/"
-    global run_fldr  "${test_fldr}/reprun/"
+    global test_fldr "${src_fldr}/tests"
+    global run_fldr  "${test_fldr}/reprun"
     global tf        "${run_fldr}/targets"
     global sf        "${run_fldr}/single-file"
     global mf        "${run_fldr}/multi-file"
