@@ -9,11 +9,11 @@ adopath ++  BASE
 
 * KB COMMENT : these lines are commented out as they lead to
 * an infinte loop. I do not yet understand why that is the case.
-// local morepaths 1
-// while (`morepaths' == 1) {
-//   capture adopath - 3
-//   if _rc local morepaths 0
-// }
+local morepaths 1
+while (`morepaths' == 1) {
+  capture adopath - 3
+  if _rc local morepaths 0
+}
 
 *********************************************************************
 
