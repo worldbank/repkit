@@ -61,27 +61,30 @@ cap program drop   reprun
       *************************************************************************/
 
       noi di as res ""
-      noi di as res "{phang}Starting reprun. Creating the do-files for run 1 and run 2.{p_end}"
+      noi di as err "{phang}Starting reprun. Creating the do-files for run 1 and run 2.{p_end}"
       noi reprun_recurse, dofile("`dofile'") output("`dirout'") stub("m")
       local code_file_run1 "`r(code_file_run1)'"
       local code_file_run2 "`r(code_file_run2)'"
-      noi di as res "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
+      noi di as err "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
 
       /*************************************************************************
         Execute the run 1 and run 2 file to write the data files
       *************************************************************************/
 
+
       * Run 1
-      noi di as res "{phang}Executing the do-file for run 1.{p_end}"
+      noi di as err `"{phang}Executing "`ofname'" for run 1.{p_end}"'
+      clear
       set seed 12345 // Use Stata default setting when starting routine
       do "`code_file_run1'"
-      noi di as res "{phang}Done executing the do-file for run 1.{p_end}"
-
+      noi di as err `"{phang}Done executing "`ofname'" for run 1.{p_end}"'
+      
       * Run 2
-      noi di as res "{phang}Executing the do-file for run 2.{p_end}"
+      noi di as err `"{phang}Executing "`ofname'" for run 2.{p_end}"'
+      clear
       set seed 12345 // Use Stata default setting when starting routine
       do "`code_file_run2'"
-      noi di as res "{phang}Done executing the do-file for run 2.{p_end}"
+      noi di as err `"{phang}Done executing "`ofname'" for run 2.{p_end}"'
 
       /*************************************************************************
         Compare the data files and output the result
