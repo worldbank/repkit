@@ -19,9 +19,12 @@ cap program drop   reprun
         local output = substr(`"`dofile'"',1,strrpos(`"`dofile'"',"/"))
       }
 
-      di `"`dofile' || `output'"'
+      if !missing("`debug'") di `"`dofile' || `output'"'
 
-
+      if missing(`"`clear'"') {
+        clear          // Data matches, zeroed out by default
+        set seed 12345 // Use Stata default setting when starting routine
+      }
 
       /*************************************************************************
         Test input
@@ -71,20 +74,17 @@ cap program drop   reprun
         Execute the run 1 and run 2 file to write the data files
       *************************************************************************/
 
-
       * Run 1
-      noi di as err `"{phang}Executing "`ofname'" for run 1.{p_end}"'
+      noi di as err `"{phang}Executing "`orig_fname'" for run 1.{p_end}"'
       clear
-      set seed 12345 // Use Stata default setting when starting routine
       do "`code_file_run1'"
-      noi di as err `"{phang}Done executing "`ofname'" for run 1.{p_end}"'
-      
+      noi di as err `"{phang}Done executing "`orig_fname'" for run 1.{p_end}"'
+
       * Run 2
-      noi di as err `"{phang}Executing "`ofname'" for run 2.{p_end}"'
+      noi di as err `"{phang}Executing "`orig_fname'" for run 2.{p_end}"'
       clear
-      set seed 12345 // Use Stata default setting when starting routine
       do "`code_file_run2'"
-      noi di as err `"{phang}Done executing "`ofname'" for run 2.{p_end}"'
+      noi di as err `"{phang}Done executing "`orig_fname'" for run 2.{p_end}"'
 
       /*************************************************************************
         Compare the data files and output the result
