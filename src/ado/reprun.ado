@@ -136,6 +136,10 @@ cap program drop   reprun
         rm_output_dir , folder("`dirout'/run2/")
       }
     }
+
+    // Remove then command is no longer in beta
+    noi repkit "beta reprun"
+
     end
 
     /***************************************************************************
