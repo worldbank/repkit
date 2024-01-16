@@ -38,9 +38,9 @@ cap program drop   repkit
 
       if ("`subcmd'" == "beta") {
 
-        noi di "{hline}" _n
-        noi di as text "{pstd}{ul:{red:Warning:} This command currently only released as a beta release}{p_end}" _n
-        noi di as text "{pstd}We're excited to introduce a beta release of the command {inp:`subtwo'}. Feedback from users like you will help us refine and finalize this command. We, especially during the beta phase, welcome bug reports, feature requests, and any other comments at: https://github.com/dime-worldbank/repkit/issues. {p_end}" _n
+        noi di _n "{hline}" _n
+        noi di as text "{pstd}{ul:{red:Warning:} This command {inp:`subtwo'} is currently only released as a beta release}{p_end}" _n
+        noi di as text `"{pstd}We're excited to introduce a beta release of the command {inp:`subtwo'}. Feedback from users like you will help us refine and finalize this command. We, especially during the beta phase, welcome bug reports, feature requests, and any other comments at: {browse "https://github.com/dime-worldbank/repkit/issues"}.{p_end}"' _n
         noi di as text "{pstd}Please note that during the beta release we might rename or remove options without building in backward compatibility, and some still eperimental features might not be fully documented.{p_end}" _n
         noi di _n "{hline}"
       }
