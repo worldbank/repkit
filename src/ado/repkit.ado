@@ -36,7 +36,7 @@ cap program drop   repkit
       local subthree "`3'"
       local subfour "`4'"
 
-      if ("`subcmd'" == "beta_output") {
+      if ("`subcmd'" == "beta") {
 
         noi di "{hline}" _n
         noi di as text "{pstd}{ul:{red:Warning:} This command currently only released as a beta release}{p_end}" _n

@@ -9,7 +9,7 @@
   repkit
   
   * test beta output
-  repkit "beta_output dimetest"
+  repkit "beta dimetest"
 
   * Test that invalid command is caught
   cap repkit "invalid subcommand"
