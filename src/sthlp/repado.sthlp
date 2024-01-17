@@ -1,5 +1,5 @@
 {smcl}
-{* 07 Nov 2023}{...}
+{* 01 Jan 1960}{...}
 {hline}
 {pstd}help file for {hi:repado}{p_end}
 {hline}
@@ -11,15 +11,15 @@
 
 {title:Syntax}
 
-{phang}{bf:repado} , {bf:adopath}({it:string}) {bf:mode}({it:string}) [{bf:lessverbose}]
+{phang}{bf:repado} {bf:using} {it:adopath} , {bf:mode}({it:string}) [{bf:lessverbose}]
 {p_end}
 
-{synoptset 15}{...}
+{synoptset 13}{...}
 {synopthdr:options}
 {synoptline}
-{synopt: adopath({it:string})}The file path to the ado-folder to use{p_end}
-{synopt: mode({it:string})}Indicate {it:strict} or {it:nostrict} mode{p_end}
-{synopt: lessverbose}Have less explanatory details in the output{p_end}
+{synopt: {bf:using} {it:adopath}}The file path to the ado-folder to use{p_end}
+{synopt: {bf:mode}({it:string})}Indicate {it:strict} or {it:nostrict} mode{p_end}
+{synopt: {bf:lessverbose}}Have less explanatory details in the output{p_end}
 {synoptline}
 
 {title:Description}
@@ -41,7 +41,10 @@ These settings are restored next time Stata is restarted.
 
 {title:Options}
 
-{pstd}{bf:adopath}({it:string}) is used to specify where the ado-folder is located within the project folder. To make this reproducible across computers we recommend using a reproducible way of setting the root paths.
+{pstd}{bf:using} {it:adopath} is used to specify where the ado-folder is located within the project folder. To make this reproducible across computers we recommend using a reproducible way of setting the root paths.
+By sharing the folder {it:adopath} points to through OneDrive/DropBox etc.,
+a network drive or a Git repository, you can set up a project environment
+where all project dependencies are stable across all users.
 {p_end}
 
 {pstd}{bf:mode}({it:string}) is used to specify which mode is used. It must be specified and can either be {it:strict} or {it:nostrict}. See the Description section above for a description of the differences between the two modes.
@@ -57,7 +60,7 @@ These settings are restored next time Stata is restarted.
 {pstd}In this example the ado-folder is a folder called {inp:ado} in the folder that the global {inp:myproj} is pointing to.
 {p_end}
 
-{input}{space 8}repado , adopath({c 34}{c S|}{c -(}myproj{c )-}/ado{c 34}) mode({c 34}strict{c 34})
+{input}{space 8}repado , adopath("${myproj}/ado") mode("strict")
 {text}
 {title:Feedback, bug reports and contributions}
 

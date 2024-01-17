@@ -4,13 +4,13 @@ __repado__ - a command to handle ado-file dependencies
 
 # Syntax
 
-__repado__ , __adopath__(_string_) __mode__(_string_) [__lessverbose__]
+__repado__ __using__ _adopath_ , __mode__(_string_) [__lessverbose__]
 
 | _options_ | Description |
 |-----------|-------------|
-| adopath(_string_) | The file path to the ado-folder to use   |
-| mode(_string_)    | Indicate _strict_ or _nostrict_ mode |
-| lessverbose       | Have less explanatory details in the output |
+| __using__ _adopath_ | The file path to the ado-folder to use |
+| __mode__(_string_)  | Indicate _strict_ or _nostrict_ mode |
+| __lessverbose__     | Have less explanatory details in the output |
 
 # Description
 
@@ -27,7 +27,10 @@ While it might seem more convenient to use the _nostrict_ as default as it makes
 
 # Options
 
-__adopath__(_string_) is used to specify where the ado-folder is located within the project folder. To make this reproducible across computers we recommend using a reproducible way of setting the root paths.
+__using__ _adopath_ is used to specify where the ado-folder is located within the project folder. To make this reproducible across computers we recommend using a reproducible way of setting the root paths.
+By sharing the folder _adopath_ points to through OneDrive/DropBox etc.,
+a network drive or a Git repository, you can set up a project environment
+where all project dependencies are stable across all users.
 
 __mode__(_string_) is used to specify which mode is used. It must be specified and can either be _strict_ or _nostrict_. See the Description section above for a description of the differences between the two modes.
 
@@ -48,7 +51,7 @@ repado , adopath("${myproj}/ado") mode("strict")
 
 Read more about the commands in this package at https://dime-worldbank.github.io/repkit.
 
-Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit.
+Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit/issues.
 
 PRs with suggestions for improvements are also greatly appreciated.
 
