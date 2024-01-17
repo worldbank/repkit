@@ -7,7 +7,7 @@ qui {
 
     version 13.0
 
-    syntax using/, ///
+    syntax [using/], ///
       /// Optional commands
       [ ///
       nostrict ///
@@ -26,6 +26,13 @@ qui {
     * If using is used, use that path, otherwise use old syntax
     if !missing("`using'") {
       local adopath "`using'"
+    }
+
+    * Mimic stata's built in check for using
+    if missing("`adopath'") {
+      noi di as error "using required"
+      error 100
+      exit
     }
 
     * Test adopath input
