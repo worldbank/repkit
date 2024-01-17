@@ -4,12 +4,12 @@ __repado__ - a command to handle ado-file dependencies
 
 # Syntax
 
-__repado__ __using__ _adopath_ , __mode__(_string_) [__lessverbose__]
+__repado__ __using__ _adopath_ , [__nostrict__ __lessverbose__]
 
 | _options_ | Description |
 |-----------|-------------|
 | __using__ _adopath_ | The file path to the ado-folder to use |
-| __mode__(_string_)  | Indicate _strict_ or _nostrict_ mode |
+| __nostrict__        | Use _nostrict_ mode instead of the default _strict_ mode |
 | __lessverbose__     | Have less explanatory details in the output |
 
 # Description
@@ -32,7 +32,10 @@ By sharing the folder _adopath_ points to through OneDrive/DropBox etc.,
 a network drive or a Git repository, you can set up a project environment
 where all project dependencies are stable across all users.
 
-__mode__(_string_) is used to specify which mode is used. It must be specified and can either be _strict_ or _nostrict_. See the Description section above for a description of the differences between the two modes.
+__nostrict__ is used to switch to the _nostrict_ mode
+instead of the default _strict_ mode.
+See the Description section above for a description of
+the differences between the two modes.
 
 __lessverbose__ is used to reduce the output that this command produces. The default without this option is that this command outputs how the adopaths has been modified and how that makes running your code different.
 
@@ -46,6 +49,16 @@ In this example the ado-folder is a folder called `ado` in the folder that the g
 repado , adopath("${myproj}/ado") mode("strict")
 ```
 
+## Example 2
+
+Similarly to example 1, in this example,
+the ado-folder is a folder called `ado` in the folder
+that the global `myproj` is pointing to.
+In this example the _nostrict_ mode is used.
+
+```
+repado using "${myproj}/ado", nostrict
+```
 
 # Feedback, bug reports and contributions
 
