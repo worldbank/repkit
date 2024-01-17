@@ -6,8 +6,8 @@ cap program drop   repkit
     version 13.0
 
     * UPDATE THESE LOCALS FOR EACH NEW VERSION PUBLISHED
-  	local version "1.0"
-  	local versionDate "05NOV2023"
+  	local version "1.1"
+  	local versionDate "17DEC2024"
     local cmd    "repkit"
 
   	syntax [anything]
