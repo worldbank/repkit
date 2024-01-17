@@ -11,14 +11,14 @@
 
 {title:Syntax}
 
-{phang}{bf:repado} {bf:using} {it:adopath} , {bf:mode}({it:string}) [{bf:lessverbose}]
+{phang}{bf:repado} {bf:using} {it:adopath} , [{bf:nostrict} {bf:lessverbose}]
 {p_end}
 
 {synoptset 13}{...}
 {synopthdr:options}
 {synoptline}
 {synopt: {bf:using} {it:adopath}}The file path to the ado-folder to use{p_end}
-{synopt: {bf:mode}({it:string})}Indicate {it:strict} or {it:nostrict} mode{p_end}
+{synopt: {bf:nostrict}}Use {it:nostrict} mode instead of the default {it:strict} mode{p_end}
 {synopt: {bf:lessverbose}}Have less explanatory details in the output{p_end}
 {synoptline}
 
@@ -47,30 +47,45 @@ a network drive or a Git repository, you can set up a project environment
 where all project dependencies are stable across all users.
 {p_end}
 
-{pstd}{bf:mode}({it:string}) is used to specify which mode is used. It must be specified and can either be {it:strict} or {it:nostrict}. See the Description section above for a description of the differences between the two modes.
+{pstd}{bf:nostrict} is used to switch to the {it:nostrict} mode
+instead of the default {it:strict} mode.
+See the Description section above for a description of
+the differences between the two modes.
 {p_end}
 
 {pstd}{bf:lessverbose} is used to reduce the output that this command produces. The default without this option is that this command outputs how the adopaths has been modified and how that makes running your code different.
+{p_end}
+
+{dlgtab:Note on old and undocumented but still supported options}
+
+{pstd}In earlier versions of {inp:repado}, {bf:adopath}({it:adopath})
+and {bf:mode}({it:{c -(}} {it:strict} {it:|} {it:nostrict} {it:{c )-}}) were two documented options.
+These two options are replaced by {bf:using} {it:adopath} and {bf:nostrict},
+but they are still supported for the sake of backward compatibility.
 {p_end}
 
 {title:Examples}
 
 {dlgtab:Example 1}
 
-{pstd}In this example the ado-folder is a folder called {inp:ado} in the folder that the global {inp:myproj} is pointing to.
+{pstd}In this example, the ado-folder is a folder called {inp:ado} in the folder that the global {inp:myproj} is pointing to.
 {p_end}
 
-{input}{space 8}repado , adopath("${myproj}/ado") mode("strict")
+{input}{space 8}repado using "${myproj}/ado"
+{text}
+{dlgtab:Example 2}
+
+{pstd}Similarly to example 1, in this example,
+the ado-folder is a folder called {inp:ado} in the folder
+that the global {inp:myproj} is pointing to.
+In this example the {it:nostrict} mode is used.
+{p_end}
+
+{input}{space 8}repado using "${myproj}/ado", nostrict
 {text}
 {title:Feedback, bug reports and contributions}
 
-{pstd}Read more about the commands in this package at https://dime-worldbank.github.io/repkit.
-{p_end}
-
-{pstd}Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit.
-{p_end}
-
-{pstd}PRs with suggestions for improvements are also greatly appreciated.
+{pstd}Read more about these commands on {browse "https://github.com/dime-worldbank/repkit":this repo} where this package is developed. Please provide any feedback by {browse "https://github.com/dime-worldbank/repkit/issues":opening an issue}. PRs with suggestions for improvements are also greatly appreciated.
 {p_end}
 
 {title:Authors}

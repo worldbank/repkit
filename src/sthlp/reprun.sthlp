@@ -63,11 +63,12 @@
 {pstd}By default, {bf:reprun} invokes {bf:clear} and {bf:set seed 12345} to match the default Stata state before beginning Run 1. {bf:{ul:noc}lear} prevents this behavior. It is not recommended unless you have a rare issue that you need to check at the very beginning of the file, because most projects should very quickly set these states appropriately for reproducibility.
 {p_end}
 
-{title:Examples}
-
 {title:Feedback, bug reports and contributions}
+
+{pstd}Read more about these commands on {browse "https://github.com/dime-worldbank/repkit":this repo} where this package is developed. Please provide any feedback by {browse "https://github.com/dime-worldbank/repkit/issues":opening an issue}. PRs with suggestions for improvements are also greatly appreciated.
+{p_end}
 
 {title:Authors}
 
-{pstd}TODO: Populate this field from .pkg file
+{pstd}DIME Analytics, The World Bank dimenalytics@worldbank.org
 {p_end}
