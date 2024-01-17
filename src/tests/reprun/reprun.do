@@ -10,8 +10,8 @@
 
     * Set global to ado_fldr
     global src_fldr  "${clone}/src"
-    global test_fldr "${src_fldr}/tests/"
-    global run_fldr  "${test_fldr}/reprun/"
+    global test_fldr "${src_fldr}/tests"
+    global run_fldr  "${test_fldr}/reprun"
     global tf        "${run_fldr}/targets"
     global sf        "${run_fldr}/single-file"
     global mf        "${run_fldr}/multi-file"
@@ -56,3 +56,6 @@
     * Example E - with clear all
     cap mkdir "${wca}/output"
     reprun "${wca}/main.do" using "${wca}/output" , debug
+
+    * Example F - with project ado-folder
+    reprun "${waf}/main.do" using "${waf}/output" , debug 
