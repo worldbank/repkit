@@ -1,4 +1,4 @@
-*! version XX XXXXXXXXX ADAUTHORNAME ADCONTACTINFO
+*! version 1.1 17DEC2024 DIME Analytics dimeanalytics@worldbank.org
 
 * Command intended to exclusively be run from the run files
 * that the command iedorep is generating
