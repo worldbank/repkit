@@ -44,12 +44,10 @@ The __**d**ebug__ option allows the user to save all of the underlying materials
 
 By default, __reprun__ invokes __clear__ and __set seed 12345__ to match the default Stata state before beginning Run 1. __**noc**lear__ prevents this behavior. It is not recommended unless you have a rare issue that you need to check at the very beginning of the file, because most projects should very quickly set these states appropriately for reproducibility.
 
-# Examples
-<!-- A couple of examples to help the user get started and a short explanation of each of them. -->
-
 # Feedback, bug reports and contributions
-<!-- A couple of examples to help the user get started and a short explanation of each of them. -->
+
+Read more about these commands on [this repo](https://github.com/dime-worldbank/repkit) where this package is developed. Please provide any feedback by [opening an issue](https://github.com/dime-worldbank/repkit/issues). PRs with suggestions for improvements are also greatly appreciated.
 
 # Authors
 
-TODO: Populate this field from .pkg file
+DIME Analytics, The World Bank dimenalytics@worldbank.org

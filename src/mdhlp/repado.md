@@ -69,11 +69,7 @@ repado using "${myproj}/ado", nostrict
 
 # Feedback, bug reports and contributions
 
-Read more about the commands in this package at https://dime-worldbank.github.io/repkit.
-
-Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit/issues.
-
-PRs with suggestions for improvements are also greatly appreciated.
+Read more about these commands on [this repo](https://github.com/dime-worldbank/repkit) where this package is developed. Please provide any feedback by [opening an issue](https://github.com/dime-worldbank/repkit/issues). PRs with suggestions for improvements are also greatly appreciated.
 
 # Authors
 
