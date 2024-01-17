@@ -1,7 +1,7 @@
 *! version 1.0 05NOV2023 DIME Analytics dimeanalytics@worldbank.org
 
 cap program drop   repado
-    program define repado
+    program define repado, rclass
 
 qui {
 
