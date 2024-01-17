@@ -3,10 +3,11 @@
   local ado "`src'/ado"
   local out "`src'/tests/output/repado"
 
+  
   do "`ado'/repado.ado"
 
   //repado , adopath("`out'/ado") mode("nostrict")
-  repado , adopath("`out'/ado") mode("strict")
+  repado using "`out'/ado", mode("nostrict")
   
 
 //   repado , adopath("`out'/ado") mode("nostrict") lessverbose

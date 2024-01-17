@@ -4,15 +4,28 @@ cap program drop   repado
     program define repado
 
 qui {
-    syntax , adopath(string) mode(string) [lessverbose]
 
     version 13.0
+
+    syntax using/, ///
+      mode(string) ///
+      /// Optional commands
+      [ ///
+      lessverbose ///
+      /// Old undocumented but still supported yntax
+      adopath(string) ///
+      ]
 
     /***************************************************************************
     ****************************************************************************
       TEST INPUT
     ****************************************************************************
     ***************************************************************************/
+
+    * If using is used, use that path, otherwise use old syntax
+    if !missing("`using'") {
+      local adopath "`using'"
+    }
 
     * Test adopath input
     mata : st_numscalar("r(dirExist)", direxists("`adopath'"))
