@@ -8,12 +8,13 @@ qui {
     version 13.0
 
     syntax using/, ///
-      mode(string) ///
       /// Optional commands
       [ ///
+      nostrict ///
       lessverbose ///
       /// Old undocumented but still supported yntax
       adopath(string) ///
+      mode(string) ///
       ]
 
     /***************************************************************************
@@ -34,10 +35,29 @@ qui {
       error 99
     }
 
-    * Test mode input
-    if !inlist("`mode'","strict","nostrict") {
-      noi di as error `"{phang}The mode {inp:`mode'} specified in {inp:mode(`mode')} is not valid. Only {inp:strict} and {inp:strict} is allowed. See helpfile {help repado} for more details.{p_end}"'
+
+    * Test that if the old undocumented option mode() was used,
+    * its value is still strict/nostrict or missing
+    if !inlist("`mode'","strict","nostrict","") {
+      noi di as error `"{phang}When using the old and undocumented but still supported option {inp:mode()}, its value  must be {inp:strict} or {inp:nostrict}. See helpfile {help repado} for the option {inp:nostrict} that replaced the option {inp:mode()}.{p_end}"'
       error 99
+    }
+
+    *** Handling supporting the old undocumented command mode
+    * Option nostrict not used
+    if missing("`strict'") {
+      * Neither is mode, so use default strict mode
+      if missing("`mode'") local mode "strict"
+      //else: kept value from mode() already in `mode'
+    }
+    * Option nostrict is used
+    else {
+      * test that mode(strict) was not used with nostrict
+      if ("`mode'" != "strict") local mode "nostrict"
+      else {
+        * nostrict was used with strict - thats ambigious
+        noi di as error `"{pstd}Option {inp:nostrict} cannot be used together with value {sf:"strict"} in the old undocummented option {inp:mode()}.{p_end}"'
+      }
     }
 
     /***************************************************************************
