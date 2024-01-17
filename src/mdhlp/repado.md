@@ -39,14 +39,21 @@ the differences between the two modes.
 
 __lessverbose__ is used to reduce the output that this command produces. The default without this option is that this command outputs how the adopaths has been modified and how that makes running your code different.
 
+## Note on old and undocumented but still supported options
+
+In earlier versions of `repado`, __adopath__(_adopath_)
+and __mode__(_{_ _strict_ _|_ _nostrict_ _}_) were two documented options.
+These two options are replaced by __using__ _adopath_ and __nostrict__,
+but they are still supported for the sake of backward compatibility.
+
 # Examples
 
 ## Example 1
 
-In this example the ado-folder is a folder called `ado` in the folder that the global `myproj` is pointing to.
+In this example, the ado-folder is a folder called `ado` in the folder that the global `myproj` is pointing to.
 
 ```
-repado , adopath("${myproj}/ado") mode("strict")
+repado using "${myproj}/ado"
 ```
 
 ## Example 2
