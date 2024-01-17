@@ -53,8 +53,10 @@
 # Markdown
 !/**/*.md
 
-# Test output that should always be local
-/**/plus-ado
+* Ignore the local env
+/**/plus-ado/
+
+* Ignore local test output
 /**/run1
 /**/run2
 
