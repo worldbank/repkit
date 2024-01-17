@@ -20,7 +20,7 @@
 # These files include GitHub settings
 !.gitignore
 !.gitattributes
-!.github/
+!.github/**/*.yaml
 
 # Git placeholder file (to commit empty folders)
 !/**/*.gitkeep
