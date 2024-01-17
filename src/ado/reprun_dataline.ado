@@ -6,6 +6,8 @@
 cap program drop   reprun_dataline
     program define reprun_dataline, rclass
 
+    version 13.0
+
     syntax ,              ///
       run(string)         /// run 1 or 2
       lnum(string)        /// line number for output

@@ -4,6 +4,9 @@ cap program drop   reprun
     program define reprun, rclass
 
     qui {
+
+      version 13.0
+
       syntax anything [using/] , [Verbose] [Compact] [noClear] [Debug] [Suppress(passthru)]
 
       /*****************************************************************************
