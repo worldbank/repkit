@@ -110,6 +110,9 @@ qui {
     * Print user output
     noi print_output, adopath("`adopath'") mode("`mode'") `lessverbose'
 
+    return local repado_mode "`mode'"
+    return local repado_path "`adopath'"
+
 }  //quietly
 end
 
