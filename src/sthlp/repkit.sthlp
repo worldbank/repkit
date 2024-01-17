@@ -1,5 +1,5 @@
 {smcl}
-{* 01 Jan 1960}{...}
+{* 17 Jan 2024}{...}
 {hline}
 {pstd}help file for {hi:repkit}{p_end}
 {hline}
