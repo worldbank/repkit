@@ -1,18 +1,39 @@
-*! version 1.0 05NOV2023 DIME Analytics dimeanalytics@worldbank.org
+*! version 1.1 17DEC2024 DIME Analytics dimeanalytics@worldbank.org
 
 cap program drop   repado
-    program define repado
+    program define repado, rclass
 
 qui {
-    syntax , adopath(string) mode(string) [lessverbose]
 
     version 13.0
+
+    syntax [using/], ///
+      /// Optional commands
+      [ ///
+      nostrict ///
+      lessverbose ///
+      /// Old undocumented but still supported yntax
+      adopath(string) ///
+      mode(string) ///
+      ]
 
     /***************************************************************************
     ****************************************************************************
       TEST INPUT
     ****************************************************************************
     ***************************************************************************/
+
+    * If using is used, use that path, otherwise use old syntax
+    if !missing("`using'") {
+      local adopath "`using'"
+    }
+
+    * Mimic stata's built in check for using
+    if missing("`adopath'") {
+      noi di as error "using required"
+      error 100
+      exit
+    }
 
     * Test adopath input
     mata : st_numscalar("r(dirExist)", direxists("`adopath'"))
@@ -21,10 +42,29 @@ qui {
       error 99
     }
 
-    * Test mode input
-    if !inlist("`mode'","strict","nostrict") {
-      noi di as error `"{phang}The mode {inp:`mode'} specified in {inp:mode(`mode')} is not valid. Only {inp:strict} and {inp:strict} is allowed. See helpfile {help repado} for more details.{p_end}"'
+
+    * Test that if the old undocumented option mode() was used,
+    * its value is still strict/nostrict or missing
+    if !inlist("`mode'","strict","nostrict","") {
+      noi di as error `"{phang}When using the old and undocumented but still supported option {inp:mode()}, its value  must be {inp:strict} or {inp:nostrict}. See helpfile {help repado} for the option {inp:nostrict} that replaced the option {inp:mode()}.{p_end}"'
       error 99
+    }
+
+    *** Handling supporting the old undocumented command mode
+    * Option nostrict not used
+    if missing("`strict'") {
+      * Neither is mode, so use default strict mode
+      if missing("`mode'") local mode "strict"
+      //else: kept value from mode() already in `mode'
+    }
+    * Option nostrict is used
+    else {
+      * test that mode(strict) was not used with nostrict
+      if ("`mode'" != "strict") local mode "nostrict"
+      else {
+        * nostrict was used with strict - thats ambigious
+        noi di as error `"{pstd}Option {inp:nostrict} cannot be used together with value {sf:"strict"} in the old undocummented option {inp:mode()}.{p_end}"'
+      }
     }
 
     /***************************************************************************
@@ -69,6 +109,9 @@ qui {
 
     * Print user output
     noi print_output, adopath("`adopath'") mode("`mode'") `lessverbose'
+
+    return local repado_mode "`mode'"
+    return local repado_path "`adopath'"
 
 }  //quietly
 end

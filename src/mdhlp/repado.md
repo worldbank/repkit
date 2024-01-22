@@ -4,13 +4,13 @@ __repado__ - a command to handle ado-file dependencies
 
 # Syntax
 
-__repado__ , __adopath__(_string_) __mode__(_string_) [__lessverbose__]
+__repado__ __using__ _adopath_ , [__nostrict__ __lessverbose__]
 
 | _options_ | Description |
 |-----------|-------------|
-| adopath(_string_) | The file path to the ado-folder to use   |
-| mode(_string_)    | Indicate _strict_ or _nostrict_ mode |
-| lessverbose       | Have less explanatory details in the output |
+| __using__ _adopath_ | The file path to the ado-folder to use |
+| __nostrict__        | Use _nostrict_ mode instead of the default _strict_ mode |
+| __lessverbose__     | Have less explanatory details in the output |
 
 # Description
 
@@ -27,30 +27,49 @@ While it might seem more convenient to use the _nostrict_ as default as it makes
 
 # Options
 
-__adopath__(_string_) is used to specify where the ado-folder is located within the project folder. To make this reproducible across computers we recommend using a reproducible way of setting the root paths.
+__using__ _adopath_ is used to specify where the ado-folder is located within the project folder. To make this reproducible across computers we recommend using a reproducible way of setting the root paths.
+By sharing the folder _adopath_ points to through OneDrive/DropBox etc.,
+a network drive or a Git repository, you can set up a project environment
+where all project dependencies are stable across all users.
 
-__mode__(_string_) is used to specify which mode is used. It must be specified and can either be _strict_ or _nostrict_. See the Description section above for a description of the differences between the two modes.
+__nostrict__ is used to switch to the _nostrict_ mode
+instead of the default _strict_ mode.
+See the Description section above for a description of
+the differences between the two modes.
 
 __lessverbose__ is used to reduce the output that this command produces. The default without this option is that this command outputs how the adopaths has been modified and how that makes running your code different.
+
+## Note on old and undocumented but still supported options
+
+In earlier versions of `repado`, __adopath__(_adopath_)
+and __mode__(_{_ _strict_ _|_ _nostrict_ _}_) were two documented options.
+These two options are replaced by __using__ _adopath_ and __nostrict__,
+but they are still supported for the sake of backward compatibility.
 
 # Examples
 
 ## Example 1
 
-In this example the ado-folder is a folder called `ado` in the folder that the global `myproj` is pointing to.
+In this example, the ado-folder is a folder called `ado` in the folder that the global `myproj` is pointing to.
 
 ```
-repado , adopath("${myproj}/ado") mode("strict")
+repado using "${myproj}/ado"
 ```
 
+## Example 2
+
+Similarly to example 1, in this example,
+the ado-folder is a folder called `ado` in the folder
+that the global `myproj` is pointing to.
+In this example the _nostrict_ mode is used.
+
+```
+repado using "${myproj}/ado", nostrict
+```
 
 # Feedback, bug reports and contributions
 
-Read more about the commands in this package at https://dime-worldbank.github.io/repkit.
-
-Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit.
-
-PRs with suggestions for improvements are also greatly appreciated.
+Read more about these commands on [this repo](https://github.com/dime-worldbank/repkit) where this package is developed. Please provide any feedback by [opening an issue](https://github.com/dime-worldbank/repkit/issues). PRs with suggestions for improvements are also greatly appreciated.
 
 # Authors
 

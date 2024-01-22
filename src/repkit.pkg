@@ -1,6 +1,6 @@
 * This package file is generated in the adodown workflow. Do not edit directly.
 *** version
-v 0.0
+v 1.1
 *** name
 d repkit
 *** description
@@ -20,10 +20,13 @@ d
 d Distribution-Date: 20230822
 d
 *** adofiles
+f ado/reprun_dataline.ado
+f ado/reprun.ado
 f ado/repado.ado
 f ado/repkit.ado
 
 *** helpfiles
+f sthlp/reprun.sthlp
 f sthlp/repado.sthlp
 f sthlp/repkit.sthlp
 

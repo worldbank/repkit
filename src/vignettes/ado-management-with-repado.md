@@ -346,7 +346,7 @@ global root "C:\Users\user123\github\myproject"
 
 * Set PLUS to adopath and list it first, then list BASE first.
 * This means that BASE is first and PLUS is second.
-sysdir set  PLUS "${root}/code/ado"'
+sysdir set  PLUS "${root}/code/ado"
 adopath ++  PLUS
 adopath ++  BASE
 

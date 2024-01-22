@@ -1,33 +1,37 @@
-*! version XX XXXXXXXXX ADAUTHORNAME ADCONTACTINFO
+*! version 1.1 17DEC2024 DIME Analytics dimeanalytics@worldbank.org
 
 cap program drop   reprun
     program define reprun, rclass
 
     qui {
+
+      version 13.0
+
       syntax anything [using/] , [Verbose] [Compact] [noClear] [Debug] [Suppress(passthru)]
 
       /*****************************************************************************
         Syntax parsing and setup
       *****************************************************************************/
 
+      * Get the name of just the file without the path
       local dofile `anything'
-        local ofname = substr(`"`dofile'"',strrpos(`"`dofile'"',"/")+1,.)
+      local orig_fname = substr(`"`dofile'"',strrpos(`"`dofile'"',"/")+1,.)
 
       local output `using'
-        if `"`output'"' == `""' {
-          local output = substr(`"`dofile'"',1,strrpos(`"`dofile'"',"/"))
-        }
+      if `"`output'"' == `""' {
+        local output = substr(`"`dofile'"',1,strrpos(`"`dofile'"',"/"))
+      }
 
-      di `"`dofile' || `output'"'
+      if !missing("`debug'") di `"`dofile' || `output'"'
 
       if missing(`"`clear'"') {
         clear          // Data matches, zeroed out by default
         set seed 12345 // Use Stata default setting when starting routine
       }
 
-      /*****************************************************************************
+      /*************************************************************************
         Test input
-      *****************************************************************************/
+      *************************************************************************/
 
       *Test that output location exist
       mata : st_numscalar("r(dirExist)", direxists("`output'"))
@@ -40,9 +44,9 @@ cap program drop   reprun
       * Cannot choose verbose and compact
       if !missing(`"`verbose'"') local compact ""
 
-      /*****************************************************************************
+      /*************************************************************************
         Set up output structure
-      *****************************************************************************/
+      *************************************************************************/
 
       local dirout "`output'/reprun"
       * Remove existing output if it exists
@@ -52,38 +56,42 @@ cap program drop   reprun
       mkdir "`dirout'"
 
       * Create the subfolders in the output folder structure
-      foreach odir in run1 run2 {
-        local d`odir' "`dirout'/`odir'"   //Create a local to folder path
-        mkdir "`d`odir''"                  //Create this folder
+      foreach outdir_run in run1 run2 {
+        * Create a local to folder path and create the folder
+        local d`outdir_run' "`dirout'/`outdir_run'"
+        mkdir "`d`outdir_run''"
       }
 
-      /*****************************************************************************
+      /*************************************************************************
         Generate the run 1 and run 2 do-files
-      *****************************************************************************/
+      *************************************************************************/
 
       noi di as res ""
-      noi di as res "{phang}Starting reprun. Creating the do-files for run 1 and run 2.{p_end}"
+      noi di as err "{phang}Starting reprun. Creating the do-files for run 1 and run 2.{p_end}"
       noi reprun_recurse, dofile("`dofile'") output("`dirout'") stub("m")
       local code_file_run1 "`r(code_file_run1)'"
       local code_file_run2 "`r(code_file_run2)'"
-      noi di as res "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
+      noi di as err "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
 
-      /*****************************************************************************
+      /*************************************************************************
         Execute the run 1 and run 2 file to write the data files
-      *****************************************************************************/
+      *************************************************************************/
 
-      noi di as res "{phang}Executing the do-file for run 1.{p_end}"
+      * Run 1
+      noi di as err `"{phang}Executing "`orig_fname'" for run 1.{p_end}"'
       clear
       do "`code_file_run1'"
-      noi di as res "{phang}Done executing the do-file for run 1.{p_end}"
-      noi di as res "{phang}Executing the do-file for run 2.{p_end}"
+      noi di as err `"{phang}Done executing "`orig_fname'" for run 1.{p_end}"'
+
+      * Run 2
+      noi di as err `"{phang}Executing "`orig_fname'" for run 2.{p_end}"'
       clear
       do "`code_file_run2'"
-      noi di as res "{phang}Done executing the do-file for run 2.{p_end}"
+      noi di as err `"{phang}Done executing "`orig_fname'" for run 2.{p_end}"'
 
-      /*****************************************************************************
+      /*************************************************************************
         Compare the data files and output the result
-      *****************************************************************************/
+      *************************************************************************/
 
       * Output locals
       local outputcolumns "10 37 64 91 110"
@@ -122,77 +130,80 @@ cap program drop   reprun
           Write smcl file to disk and clean up intermediate files unless debugging
     *****************************************************************************/
 
-      copy `f_smcl' "`dirout'/`ofname'.reprun.smcl" , replace
+      copy `f_smcl' "`dirout'/`orig_fname'.reprun.smcl" , replace
       noi di as res ""
-      noi di as res `"{phang}SMCL-file with report written to: {view "`dirout'/`ofname'.reprun.smcl"}{p_end}"'
+      noi di as res `"{phang}SMCL-file with report written to: {view "`dirout'/`orig_fname'.reprun.smcl"}{p_end}"'
 
       if missing("`debug'") {
         rm_output_dir , folder("`dirout'/run1/")
         rm_output_dir , folder("`dirout'/run2/")
       }
-
     }
+
+    // Remove then command is no longer in beta
+    noi repkit "beta reprun"
 
     end
 
-    /*****************************************************************************
-    ******************************************************************************
+    /***************************************************************************
+    ****************************************************************************
 
      Sub-programs for: Writing run 1 and run 2 dofile
 
-    ******************************************************************************
-    *****************************************************************************/
+    ****************************************************************************
+    ***************************************************************************/
 
-    * Go over the do-file to create run 1 and run 2 do-files. Run 1 and 2 are identical with each other and the orginal file with two exceptions. Run 1 and run 2 writes after each line of code the states to a data file each.
+    * Go over the do-file to create run 1 and run 2 do-files.
+    * Run 1 and 2 are identical to each other.
     cap program drop reprun_recurse
     program define   reprun_recurse, rclass
     qui {
+
       syntax, dofile(string) output(string) stub(string)
 
-      /*****************************************************************************
+      /*************************************************************************
         Create the files that this recursive call needs
-      *****************************************************************************/
+      *************************************************************************/
 
-      * For each run there will be a code and a data file. The code file is what
-      * is being run in each run, and the data file is where the states
-      * will be written to
+      * For each run there will be two files file.
+      * One code do-file that is a copy of the original file but writes states.
+      * One data txt-file that the states are written to
       foreach run in 1 2 {
         * Create code and data output file for each run
-        tempname handle_c`run' handle_d`run'
+        tempname code_`run' data_`run'
         *Create locals for the file
-        local file_c`run' "`output'/run`run'/`stub'.do"
-        local file_d`run' "`output'/run`run'/`stub'.txt"
+        local code_f`run' "`output'/run`run'/`stub'.do"
+        local data_f`run' "`output'/run`run'/`stub'.txt"
         * Create the files
-        file open `handle_c`run'' using "`file_c`run''", write
-        file open `handle_d`run'' using "`file_d`run''", write
+        file open `code_`run'' using "`code_f`run''", write
+        file open `data_`run'' using "`data_f`run''", write
       }
 
-      /*****************************************************************************
-        Loop over the do-file to create the write and check files
-      *****************************************************************************/
-
-      *Read orginal file and create fun file 1 and create write file and check file
+      /*************************************************************************
+        Loop over all lines in the do-file
+      *************************************************************************/
 
       * Line write locals
-      local lnum = 1
-      local leof = 0
-      local subf_n = 0
+      local lnum   = 1 // line number tracker
+      local leof   = 0 // end-of file tracker
+      local subf_n = 0 // tracker of sub-dofiles
 
       * Line parse locals
-      local block_stack  ""
-      local loopblock    0
-      local commentblock 0
-      local last_line    ""
-      local loop_stack ""
+      local block_stack      ""
+      local loopblock        0
+      local commentblock     0
+      local last_line        ""
+      local loop_stack       ""
+      local lastline_capture 0
 
       * Open the orginal file
-      tempname handle_o
-      file open `handle_o' using "`dofile'", read
+      tempname   code_orig
+      file open `code_orig' using "`dofile'", read
 
       * Loop until end of file
       while `leof' == 0 {
           * Read next line
-          file read `handle_o' line
+          file read `code_orig' line
           local leof = `r(eof)'
 
           /* Lines with /// are concatenated to long single lines.
@@ -200,17 +211,19 @@ cap program drop   reprun
           in the last_line local which is here concatenated. */
           local line = `"`macval(last_line)' `macval(line)'"'
 
-          * Analyze line in parser to see if this line needs and special handling
+          * Analyze line in parser to see if this line needs
+          * and special handling
           org_line_parse, line(`"`macval(line)'"')
           local write_dataline = `r(write_dataline)'
-          local firstw        = `"`r(firstw)'"'
-          local secondw       = `"`r(secondw)'"'
-          local thirdw        = `"`r(thirdw)'"'
-          local line_wrap     = `r(line_wrap)'
-          local block_end     = `r(block_end)'
-          local block_add     = `"`r(block_add)'"'
+          local firstw         = `"`r(firstw)'"'
+          local secondw        = `"`r(secondw)'"'
+          local thirdw         = `"`r(thirdw)'"'
+          local line_wrap      = `r(line_wrap)'
+          local block_end      = `r(block_end)'
+          local block_add      = `"`r(block_add)'"'
+          local has_rc         = `"`r(has_rc)'"'
 
-          * If this row is closed curly bracket then
+          * If this row is a closed curly bracket then
           * remove most recent word from stack
           if (`r(block_end)' == 1) {
             local block_pop : word 1 of `block_stack'
@@ -225,8 +238,8 @@ cap program drop   reprun
           }
 
           * Add if/else/noi/qui to block stack
-          if (!missing("`r(block_add)'")) {
-            local block_stack   "`r(block_add)' `block_stack' "
+          if !missing("`r(block_add)'") {
+            local block_stack "`r(block_add)' `block_stack' "
           }
 
           * Reset default locals for this line
@@ -245,12 +258,35 @@ cap program drop   reprun
             *Reset the last line local
             local last_line = ""
             get_command, word("`firstw'")
-            local lcmd = "`r(command)'"
+            local line_command = "`r(command)'"
+
+            * If using capture, log it and take second word as command
+            if (inlist("`line_command'","capture")) {
+              local lastline_capture = 1
+              local write_dataline = 0
+              * Move forward each word
+              local firstw = "`secondw'"
+              local secondw = "`thirdw'"
+              get_command, word("`firstw'")
+              local line_command = "`r(command)'"
+            }
+            * Handle row that is not capture
+            else {
+              * Test if _rc was used on line that is
+              * not immedeatly after line with capture
+              if `lastline_capture' == 0 & `has_rc' == 1 {
+                noi di as error "{pstd}To make sure that {cmd:reprun} runs correctly, {cmd:_rc} is only allowed to be used immedeatly after the line where {cmd:capture} was used. See this article (TODO) for examples on how code can be rewritten to satisfy this requirement. Line number `lnum'.{p_end}"
+                error 99
+                exit
+              }
+              * Make sure that is capture local is reset
+              local lastline_capture = 0
+            }
 
             * Line is do or run, so call recursive function
-            if (inlist("`lcmd'","do","run")) {
+            if (inlist("`line_command'","do","run")) {
 
-              * Write line handline recursion in data file
+              * Write line handling recursion in data file
               local write_recline = 1
               * Keep working on the stub
               local recursestub "`stub'_`++subf_n'"
@@ -259,60 +295,60 @@ cap program drop   reprun
               local file = `"`macval(secondw)'"'
 
               noi reprun_recurse, dofile("`file'")     ///
-                                   output("`output'")   ///
-                                   stub("`recursestub'")
+                                  output("`output'")   ///
+                                  stub("`recursestub'")
               local sub_f1 "`r(code_file_run1)'"
               local sub_f2 "`r(code_file_run2)'"
 
               * Substitute the original sub-dofile with the check/write ones
-              local fwrite_line = subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
-              local fcheck_line = subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
+              local run1_line = ///
+                subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
+              local run2_line = ///
+                subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
 
               *Correct potential ""path"" to "path"
-              local fcheck_line = subinstr(`"`fcheck_line'"',`""""',`"""',.)
-              local fwrite_line = subinstr(`"`fwrite_line'"',`""""',`"""',.)
+              local run1_line = subinstr(`"`run1_line'"',`""""',`"""',.)
+              local run2_line = subinstr(`"`run2_line'"',`""""',`"""',.)
             }
 
             * No special thing with row needing alteration, write row as is
             else {
 
               * Copy the lines as is
-              local fwrite_line `"`macval(line)'"'
-              local fcheck_line `"`macval(line)'"'
+              local run1_line `"`macval(line)'"'
+              local run2_line `"`macval(line)'"'
 
               * Load the local in memory - important to
               * build file paths in recursive calls
-              if inlist("`lcmd'","local","global") {
+              if inlist("`line_command'","local","global") {
                 `line'
               }
 
               * Write foreach/forvalues to block stack and
               * it's macro name to loop stack
-              if inlist("`lcmd'","foreach","forvalues") {
-                local block_stack   "`lcmd' `block_stack' "
+              if inlist("`line_command'","foreach","forvalues") {
+                local block_stack   "`line_command' `block_stack' "
                 local loop_stack = trim("`loop_stack' `secondw'")
               }
 
               * Write while to block stack and
               * also "while" to loop stack as it does not have a macro name
-              if inlist("`lcmd'","while") {
-                local block_stack   "`lcmd' `block_stack' "
-                local loop_stack = trim("`loop_stack' `lcmd'")
+              if inlist("`line_command'","while") {
+                local block_stack   "`line_command' `block_stack' "
+                local loop_stack = trim("`loop_stack' `line_command'")
               }
             }
 
             if (`write_recline' == 1) {
-
-              file write `handle_c1' `"reprun_dataline, run(1) lnum(`lnum') datatmp("`file_d1'") recursestub(`recursestub') orgsubfile(`file')"' _n
-              file write `handle_c2' `"reprun_dataline, run(2) lnum(`lnum') datatmp("`file_d2'") recursestub(`recursestub') orgsubfile(`file')"' _n
+              file write `code_1' `"reprun_dataline, run(1) lnum(`lnum') datatmp("`data_f1'") recursestub(`recursestub') orgsubfile(`file')"' "`macval(rcout)'" _n
+              file write `code_2' `"reprun_dataline, run(2) lnum(`lnum') datatmp("`data_f2'") recursestub(`recursestub') orgsubfile(`file')"' "`macval(rcout)'" _n
             }
 
             * Write the line copied from original file
-            file write `handle_c1' `"`macval(fwrite_line)'"' _n
-            file write `handle_c2' `"`macval(fcheck_line)'"' _n
+            file write `code_1' `"`macval(run1_line)'"' _n "`macval(rcin)'" _n
+            file write `code_2' `"`macval(run2_line)'"' _n "`macval(rcin)'" _n
 
             if (`write_dataline' == 1) {
-
               * prepare loop_string with macros
               local loop_str = ""
               foreach loop_macname of local loop_stack {
@@ -326,27 +362,26 @@ cap program drop   reprun
               }
 
               * Write lines to run file 1 and 2
-
-              file write `handle_c1' `"reprun_dataline, run(1) lnum(`lnum') datatmp("`file_d1'") looptracker("`macval(loop_str)'")"' _n
-              file write `handle_c2' `"reprun_dataline, run(2) lnum(`lnum') datatmp("`file_d2'") looptracker("`macval(loop_str)'")"' _n
+              file write `code_1' `"reprun_dataline, run(1) lnum(`lnum') datatmp("`data_f1'") looptracker("`macval(loop_str)'")"' _n "`macval(rcout)'" _n
+              file write `code_2' `"reprun_dataline, run(2) lnum(`lnum') datatmp("`data_f2'") looptracker("`macval(loop_str)'")"' _n "`macval(rcout)'" _n
             }
           }
           local ++lnum
       }
 
-      /*****************************************************************************
+      /*************************************************************************
         Close all tempfiles
-      *****************************************************************************/
+      *************************************************************************/
 
-      foreach fh in `handle_o' `handle_c1' `handle_c2' `handle_da' `handle_db' {
-          file close `fh'
+      foreach fh in `code_orig' `code_1' `code_2' `data_1' `data_2' {
+        file close `fh'
       }
 
-      /*****************************************************************************
+      /*************************************************************************
         Return tempfiles so they can be used in when the test is run
-      *****************************************************************************/
-      return local code_file_run1 "`file_c1'"
-      return local code_file_run2 "`file_c2'"
+      *************************************************************************/
+      return local code_file_run1 "`code_f1'"
+      return local code_file_run2 "`code_f2'"
     }
     end
 
@@ -363,6 +398,7 @@ cap program drop   reprun
       local line_wrap     0
       local block_add     ""
       local block_end     0
+      local has_rc        0
 
       * Get the first words
       tokenize `" `macval(line)' "'
@@ -372,12 +408,12 @@ cap program drop   reprun
       ***********************************
 
       get_command , word(`"`1'"')
-      local lcmd = "`r(command)'"
+      local line_command = "`r(command)'"
 
-      if inlist("`lcmd'","quietly","noisily") {
+      if inlist("`line_command'","quietly","noisily") {
         * Test if beginning of a noi/qui block
         if strpos(`"`macval(line)'"',"{") {
-          local block_add "`lcmd'"
+          local block_add "`line_command'"
         }
         * Retokenize without the noi/qui syntax (including the ":")
         local nline = subinstr(`"`macval(line)'"',"`1'","",1)
@@ -392,9 +428,9 @@ cap program drop   reprun
       * Handle if-else
       ***********************************
 
-      if inlist("`lcmd'","if","else") {
+      if inlist("`line_command'","if","else") {
         if strpos(`"`macval(line)'"',"{") {
-          local block_add "`lcmd'"
+          local block_add "`line_command'"
         }
       }
 
@@ -418,7 +454,10 @@ cap program drop   reprun
       }
 
       /* /// line wrap  */
-      if (strpos(`"`macval(line)'"',"///")) local line_wrap 1
+      if (strpos(`"`macval(line)'"',"///"))   local line_wrap 1
+
+      /* Uses _rc  */
+      if (strpos(`"`macval(line)'"'," _rc ")) local has_rc 1
 
       * Return all info
       return local write_dataline `write_dataline'
@@ -428,14 +467,14 @@ cap program drop   reprun
       return local line_wrap      `line_wrap'
       return local block_end      `block_end'
       return local block_add      "`block_add'"
-
+      return local has_rc         "`has_rc'"
 
     end
 
     * This program see if the string passed in word() is a match
     * (full word or abbreviation) to a command that toggles some
     * special beavior when writing the write and check files
-    cap program drop get_command
+    cap program drop   get_command
         program define get_command, rclass
 
         syntax, [word(string)]
@@ -448,6 +487,7 @@ cap program drop   reprun
         local commands "`commands' if else"                    // Logic
         local commands "`commands' loc:al gl:obal"             // Macros
         local commands "`commands' qui:etly n:oisily"          // Qui/noi
+        local commands "`commands' cap:ture"                   // Qui/noi
         local match = 0
 
         foreach command of local commands {
@@ -603,7 +643,7 @@ cap program drop   reprun
                   local write_outputline 1
                 * Test if any line is "Missmatch"
                 local any_mismatch = ///
-                  max(strpos("`r(`matchtype'_m)'","NO"),strpos("`r(`matchtype'_m)'","|"))
+                  max(strpos("`r(`matchtype'_m)'","ERR"),strpos("`r(`matchtype'_m)'","DIFF"))
                 if (`any_mismatch' > 0) & missing(`"`compact'"') local write_outputline 1
                 * Compact display
                 if (`any_mismatch' > 0) & (`any_change' > 0) local write_outputline 1
@@ -668,7 +708,7 @@ cap program drop   reprun
 
         // Suppress loop info
         if ("`l1_loopt'" == "`pl1_loopt'") & !missing("`l1_loopt'") & strpos("`suppress'","loop") ///
-          local l1_loopt "{c |}"
+          local l1_loopt ""
         return local loopt "`l1_loopt'"
 
         * Logic for minimal SRNG checker
@@ -684,53 +724,67 @@ cap program drop   reprun
             local pl2_srng = "`pl1_srngstate'"
           }
 
+        local arrow "{c -}{c -}{c -}{c -}{c -}>"
+
         * Comparing all states since previous line and between runs
         foreach state in rng srng dsig {
 
           * Compare state in each run compared to previous line
-            local `state'_c1 = " "
-            if ("`l1_`state''" != "`pl1_`state''") {
-              local `state'_c1 = "Change"
-            }
+          local `state'_c1 = ""
+          local change1 0
+          if ("`l1_`state''" != "`pl1_`state''") {
+            local `state'_c1 = "Change"
+            local change1 1
+          }
 
-            local `state'_c2 = " "
-            if ("`l2_`state''" != "`pl2_`state''") {
-              if "``state'_c1'" == "Change" local `state'_c2 = "{c -}{c -}{c -}{c -}{c -}>"
-              else local `state'_c2 = "{err:Error!}"
-            }
+          local `state'_c2 = ""
+          local change2 0
+          if ("`l2_`state''" != "`pl2_`state''") {
+            local `state'_c2 = "Change"
+            local change2 1
+          }
 
-            // Ignore if starting on default seed setting
+          // Ignore RNG if seed is still on default seed
+          if ("`state'" == "rng") {
             set seed 12345
             if ("`l1_`state''" == "`c(rngstate)'") {
-              local `state'_c1 = " "
-              local `state'_c2 = " "
+              local `state'_c1 = ""
+              local `state'_c2 = ""
               local l1_`state' = "DEFAULT"
               local l2_`state' = "DEFAULT"
+              local change1 0
+              local change2 0
             }
-
-        }
-
-        foreach state in rng srng dsig {
-
-          * Compare state between runs
-          if !strpos(" `suppress' " , " `state' ") {
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>")) return local `state'_m "   OK!"
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" != "Change") & ("``state'_c2'" != "{c -}{c -}{c -}{c -}{c -}>")) return local `state'_m "      "
-          }
-          if strpos(" `suppress' " , " `state' ") {
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>")) local `state'_c2 = ""
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" != "Change") & ("``state'_c2'" != "{c -}{c -}{c -}{c -}{c -}>")) local `state'_c2 = ""
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>")) local `state'_c1 = ""
-            if ("`l1_`state''" == "`l2_`state''") & (("``state'_c1'" != "Change") & ("``state'_c2'" != "{c -}{c -}{c -}{c -}{c -}>")) local `state'_c1 = ""
           }
 
-          if ("`l1_`state''" != "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>")) return local `state'_m "{err:{c TRC}NO}"
-          if ("`l1_`state''" != "`l2_`state''") & (("``state'_c1'" != "Change") & ("``state'_c2'" != "{c -}{c -}{c -}{c -}{c -}>")) return local `state'_m "{err:{c |}}"
-
-          if ("`l1_`state''" != "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>"))  local `state'_c1 "{err:``state'_c1'}"
-          if ("`l1_`state''" != "`l2_`state''") & (("``state'_c1'" == "Change") | ("``state'_c2'" == "{c -}{c -}{c -}{c -}{c -}>"))  local `state'_c2 "{err:``state'_c2'}"
+          * Return the labels for each state
           return local `state'_c1 "``state'_c1'"
           return local `state'_c2 "``state'_c2'"
+
+          ************************************************************
+          * Compare states across runs
+
+          * Match
+          if ("`l1_`state''" == "`l2_`state''") {
+            if !missing("``state'_c1'``state'_c2'") return local `state'_m "OK!"
+          }
+
+          * Not matching
+          else {
+            * Stata changes in both runs, but to different values
+            if (`change1' & `change2') {
+              return local `state'_m "{err:DIFF}"
+            }
+            * Neither value changed, they were different from before
+            else if (!`change1' & !`change2') {
+              return local `state'_m ""
+            }
+            * Only one value changed - that is an error
+            else {
+              return local `state'_m "{err:ERR}"
+            }
+          }
+
 
         }
     end
