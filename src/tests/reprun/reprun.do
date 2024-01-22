@@ -1,4 +1,5 @@
 
+    * TODO: replace with reproot
     * Kristoffer's root path
     if "`c(username)'" == "wb462869" {
         global clone "C:\Users\wb462869\github\repkit"
@@ -19,11 +20,11 @@
     global wca       "${run_fldr}/with-clear-all"
     global waf       "${run_fldr}/with-ado-folder"
 
-    * Install the version of this package in 
+    * Install the version of this package in
     * the plus-ado folder in the test folder
-    repado , adopath("${test_fldr}/plus-ado/") mode(strict)
+    repado "${test_fldr}/dev-env/"
     cap net uninstall repkit
-    net install repkit, from("${src_fldr}") replace
+    net       install repkit, from("${src_fldr}") replace
 
     file close _all
 
@@ -34,8 +35,8 @@
     cap mkdir "${tf}/output-3"
     reprun "${tf}/target-1.do" using "${tf}/output-1" , debug
     reprun "${tf}/target-1.do" using "${tf}/output-2" , s(srng loop)
-    reprun "${tf}/target-1.do" using "${tf}/output-3" , compact  s(rng srng dsig)
-    reprun "${tf}/target-1.do"  ,  verbose
+    reprun "${tf}/target-1.do" using "${tf}/output-3" , compact s(rng srng dsig)
+    reprun "${tf}/target-1.do" ,  verbose
 
     * Example A - single file
     cap mkdir "${sf}/output"
@@ -58,4 +59,4 @@
     reprun "${wca}/main.do" using "${wca}/output" , debug
 
     * Example F - with project ado-folder
-    reprun "${waf}/main.do" using "${waf}/output" , debug 
+    reprun "${waf}/main.do" using "${waf}/output" , debug

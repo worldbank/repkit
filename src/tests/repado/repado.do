@@ -1,18 +1,51 @@
 
+  * TODO: replace with reproot
+  local repkit "C:/Users\wb462869\github\repkit\"
+  local out    "`repkit'/src/tests/repado/output"
 
-global repkit "/Users/bbdaniels/GitHub/repkit"
+  * Load the commands
+  do "`repkit'/src/ado/repado.ado"
 
-repado , adopath("${repkit}/src/tests/plus-ado") mode(strict)
+  ***********************************************
+  **** Test all different mode settings
 
-copy "https://github.com/graykimbrough/uncluttered-stata-graphs/raw/master/schemes/scheme-uncluttered.scheme" ///
-  "${repkit}/src/tests/plus-ado/scheme-uncluttered.scheme" , replace
+  repado , adopath("`out'/ado") mode("nostrict")
+  return list
+  assert "`r(repado_mode)'" == "nostrict"
+  assert "`r(repado_path)'" == "`out'/ado"
 
-  set scheme uncluttered , perm
-  graph set eps fontface "Helvetica"
+  repado using "`out'/ado", mode("nostrict")
+  assert "`r(repado_mode)'" == "nostrict"
+  assert "`r(repado_path)'" == "`out'/ado"
 
-  sysuse auto, clear
-  scatter price mpg
+  repado using "`out'/ado"
+  assert "`r(repado_mode)'" == "strict"
+  assert "`r(repado_path)'" == "`out'/ado"
 
+  repado , adopath("`out'/ado") mode("strict")
+  assert "`r(repado_mode)'" == "strict"
+  assert "`r(repado_path)'" == "`out'/ado"
 
+  repado , adopath("`out'/ado") nostrict
+  assert "`r(repado_mode)'" == "nostrict"
+  assert "`r(repado_path)'" == "`out'/ado"
 
-// End
+  repado , adopath("`out'/ado")
+  assert "`r(repado_mode)'" == "strict"
+  assert "`r(repado_path)'" == "`out'/ado"
+
+  repado using "`out'/ado", mode("nostrict")
+  assert "`r(repado_mode)'" == "nostrict"
+  assert "`r(repado_path)'" == "`out'/ado"
+
+  repado using "`out'/ado", mode("strict")
+  assert "`r(repado_mode)'" == "strict"
+  assert "`r(repado_path)'" == "`out'/ado"
+
+  repado using "`out'/ado",
+  assert "`r(repado_mode)'" == "strict"
+  assert "`r(repado_path)'" == "`out'/ado"
+
+  repado using "`out'/ado", nostrict
+  assert "`r(repado_mode)'" == "nostrict"
+  assert "`r(repado_path)'" == "`out'/ado"

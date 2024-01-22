@@ -14,6 +14,7 @@ Currently, this toolkit has the following commands:
 | --- | --- |
 | [repado](https://dime-worldbank.github.io/repkit/reference/repado.html) | Command used to manage project ado command dependencies. This command provides a way to make sure that all team members as well as future reproducers of the projects code use the exact same version of all command dependencies. |
 | [repkit](https://dime-worldbank.github.io/repkit/reference/repkit.html) | Command named the same as the package. Most important purpose is that this command makes the code `which repkit` work. |
+| [reprun](https://dime-worldbank.github.io/repkit/reference/reprun.html) | This command is used to automate reproducibility checks by running a do-file or a set of do-files and compare all state values (RNG-value, datasignature etc.) between the two runs. This command is currently only release as a beta-version. |
 
 # Installation
 
