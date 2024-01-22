@@ -118,10 +118,14 @@ ul.task-list{list-style: none;}
   <li><a href="#title" id="toc-title" class="nav-link active" data-scroll-target="#title">Title</a></li>
   <li><a href="#syntax" id="toc-syntax" class="nav-link" data-scroll-target="#syntax">Syntax</a></li>
   <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
-  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options">Options</a></li>
+  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options">Options</a>
+  <ul class="collapse">
+  <li><a href="#note-on-old-and-undocumented-but-still-supported-options" id="toc-note-on-old-and-undocumented-but-still-supported-options" class="nav-link" data-scroll-target="#note-on-old-and-undocumented-but-still-supported-options">Note on old and undocumented but still supported options</a></li>
+  </ul></li>
   <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a>
   <ul class="collapse">
   <li><a href="#example-1" id="toc-example-1" class="nav-link" data-scroll-target="#example-1">Example 1</a></li>
+  <li><a href="#example-2" id="toc-example-2" class="nav-link" data-scroll-target="#example-2">Example 2</a></li>
   </ul></li>
   <li><a href="#feedback-bug-reports-and-contributions" id="toc-feedback-bug-reports-and-contributions" class="nav-link" data-scroll-target="#feedback-bug-reports-and-contributions">Feedback, bug reports and contributions</a></li>
   <li><a href="#authors" id="toc-authors" class="nav-link" data-scroll-target="#authors">Authors</a></li>
@@ -139,8 +143,12 @@ ul.task-list{list-style: none;}
 </section>
 <section id="syntax" class="level1">
 <h1>Syntax</h1>
-<p><strong>repado</strong> , <strong>adopath</strong>(<em>string</em>) <strong>mode</strong>(<em>string</em>) [<strong>lessverbose</strong>]</p>
+<p><strong>repado</strong> <strong>using</strong> <em>adopath</em> , [<strong>nostrict</strong> <strong>lessverbose</strong>]</p>
 <table class="table">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 54%">
+</colgroup>
 <thead>
 <tr class="header">
 <th><em>options</em></th>
@@ -149,15 +157,15 @@ ul.task-list{list-style: none;}
 </thead>
 <tbody>
 <tr class="odd">
-<td>adopath(<em>string</em>)</td>
+<td><strong>using</strong> <em>adopath</em></td>
 <td>The file path to the ado-folder to use</td>
 </tr>
 <tr class="even">
-<td>mode(<em>string</em>)</td>
-<td>Indicate <em>strict</em> or <em>nostrict</em> mode</td>
+<td><strong>nostrict</strong></td>
+<td>Use <em>nostrict</em> mode instead of the default <em>strict</em> mode</td>
 </tr>
 <tr class="odd">
-<td>lessverbose</td>
+<td><strong>lessverbose</strong></td>
 <td>Have less explanatory details in the output</td>
 </tr>
 </tbody>
@@ -172,23 +180,30 @@ ul.task-list{list-style: none;}
 </section>
 <section id="options" class="level1">
 <h1>Options</h1>
-<p><strong>adopath</strong>(<em>string</em>) is used to specify where the ado-folder is located within the project folder. To make this reproducible across computers we recommend using a reproducible way of setting the root paths.</p>
-<p><strong>mode</strong>(<em>string</em>) is used to specify which mode is used. It must be specified and can either be <em>strict</em> or <em>nostrict</em>. See the Description section above for a description of the differences between the two modes.</p>
+<p><strong>using</strong> <em>adopath</em> is used to specify where the ado-folder is located within the project folder. To make this reproducible across computers we recommend using a reproducible way of setting the root paths. By sharing the folder <em>adopath</em> points to through OneDrive/DropBox etc., a network drive or a Git repository, you can set up a project environment where all project dependencies are stable across all users.</p>
+<p><strong>nostrict</strong> is used to switch to the <em>nostrict</em> mode instead of the default <em>strict</em> mode. See the Description section above for a description of the differences between the two modes.</p>
 <p><strong>lessverbose</strong> is used to reduce the output that this command produces. The default without this option is that this command outputs how the adopaths has been modified and how that makes running your code different.</p>
+<section id="note-on-old-and-undocumented-but-still-supported-options" class="level2">
+<h2 class="anchored" data-anchor-id="note-on-old-and-undocumented-but-still-supported-options">Note on old and undocumented but still supported options</h2>
+<p>In earlier versions of <code>repado</code>, <strong>adopath</strong>(<em>adopath</em>) and <strong>mode</strong>(<em>{</em> <em>strict</em> <em>|</em> <em>nostrict</em> <em>}</em>) were two documented options. These two options are replaced by <strong>using</strong> <em>adopath</em> and <strong>nostrict</strong>, but they are still supported for the sake of backward compatibility.</p>
+</section>
 </section>
 <section id="examples" class="level1">
 <h1>Examples</h1>
 <section id="example-1" class="level2">
 <h2 class="anchored" data-anchor-id="example-1">Example 1</h2>
-<p>In this example the ado-folder is a folder called <code>ado</code> in the folder that the global <code>myproj</code> is pointing to.</p>
-<pre><code>repado , adopath("${myproj}/ado") mode("strict")</code></pre>
+<p>In this example, the ado-folder is a folder called <code>ado</code> in the folder that the global <code>myproj</code> is pointing to.</p>
+<pre><code>repado using "${myproj}/ado"</code></pre>
+</section>
+<section id="example-2" class="level2">
+<h2 class="anchored" data-anchor-id="example-2">Example 2</h2>
+<p>Similarly to example 1, in this example, the ado-folder is a folder called <code>ado</code> in the folder that the global <code>myproj</code> is pointing to. In this example the <em>nostrict</em> mode is used.</p>
+<pre><code>repado using "${myproj}/ado", nostrict</code></pre>
 </section>
 </section>
 <section id="feedback-bug-reports-and-contributions" class="level1">
 <h1>Feedback, bug reports and contributions</h1>
-<p>Read more about the commands in this package at https://dime-worldbank.github.io/repkit.</p>
-<p>Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit.</p>
-<p>PRs with suggestions for improvements are also greatly appreciated.</p>
+<p>Read more about these commands on <a href="https://github.com/dime-worldbank/repkit">this repo</a> where this package is developed. Please provide any feedback by <a href="https://github.com/dime-worldbank/repkit/issues">opening an issue</a>. PRs with suggestions for improvements are also greatly appreciated.</p>
 </section>
 <section id="authors" class="level1">
 <h1>Authors</h1>

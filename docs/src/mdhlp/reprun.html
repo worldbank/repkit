@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>repkit – repkit</title>
+<title>repkit – reprun</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -118,7 +118,12 @@ ul.task-list{list-style: none;}
   <li><a href="#title" id="toc-title" class="nav-link active" data-scroll-target="#title">Title</a></li>
   <li><a href="#syntax" id="toc-syntax" class="nav-link" data-scroll-target="#syntax">Syntax</a></li>
   <li><a href="#description" id="toc-description" class="nav-link" data-scroll-target="#description">Description</a></li>
-  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options">Options</a></li>
+  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options">Options</a>
+  <ul class="collapse">
+  <li><a href="#line-flagging-options" id="toc-line-flagging-options" class="nav-link" data-scroll-target="#line-flagging-options">Line flagging options</a></li>
+  <li><a href="#reporting-and-debugging-options" id="toc-reporting-and-debugging-options" class="nav-link" data-scroll-target="#reporting-and-debugging-options">Reporting and debugging options</a></li>
+  <li><a href="#other-options" id="toc-other-options" class="nav-link" data-scroll-target="#other-options">Other options</a></li>
+  </ul></li>
   <li><a href="#feedback-bug-reports-and-contributions" id="toc-feedback-bug-reports-and-contributions" class="nav-link" data-scroll-target="#feedback-bug-reports-and-contributions">Feedback, bug reports and contributions</a></li>
   <li><a href="#authors" id="toc-authors" class="nav-link" data-scroll-target="#authors">Authors</a></li>
   </ul>
@@ -131,19 +136,69 @@ ul.task-list{list-style: none;}
 
 <section id="title" class="level1">
 <h1>Title</h1>
-<p><strong>repkit</strong> - Package command with utilities for the rest of the package</p>
+<p><strong>reprun</strong> - This command is used to automate a reproducibility check for a single Stata do-file, or a set of do-files called by a main do-file. The command should be used interactively; <strong>reprun</strong> will execute one run of the do-file and record the state of Stata after the execution of each line. It will then run the entire do-file a second time and flag all potential reproducibility error causes by comparing the Stata state to the first run <em>after each line</em>. Debugging and reporting options are available.</p>
 </section>
 <section id="syntax" class="level1">
 <h1>Syntax</h1>
-<p><strong>repkit</strong></p>
+<p><strong>reprun</strong> “<em>do-file.do</em>” [using “<em>/directory/</em>”] , [<strong><strong>v</strong>erbose</strong>] [<strong><strong>c</strong>ompact</strong>] [<strong><strong>s</strong>uppress(rng|srng|dsig|loop)</strong>] [<strong><strong>d</strong>ebug</strong>] [<strong><strong>noc</strong>lear</strong>]</p>
+<p>By default, <strong>reprun</strong> will execute the complete do-file specified in “<em>do-file.do</em>” once (Run 1), and record the “seed RNG state”, “sort order RNG”, and “data signature” after the execution of every line, as well as the exact data in certain cases. <strong>reprun</strong> will then execute the do-file a second time (Run 2), and find all <em>changes</em> and <em>mismatches</em> in these states throughout Run 2. A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called <code>/reprun/</code> in the same location as the do-file. If the <code>using</code> argument is supplied, the <code>/reprun/</code> directory containing the SMCL file will be stored in that location instead.</p>
+<table class="table">
+<colgroup>
+<col style="width: 45%">
+<col style="width: 54%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><em>options</em></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><strong>v</strong>erbose</strong></td>
+<td>Report all lines where Run 1 and Run 2 mismatch <strong>or</strong> change for any value</td>
+</tr>
+<tr class="even">
+<td><strong><strong>c</strong>ompact</strong></td>
+<td>Report only lines where Run 1 and Run 2 mismatch <strong>and</strong> change for any value</td>
+</tr>
+<tr class="odd">
+<td><strong><strong>s</strong>uppress(types)</strong></td>
+<td>Suppress reporting of state changes that do not result in mismatches for seed RNG state (<code>rng</code>), sort order RNG (<code>srng</code>), and/or data signature (<code>dsig</code>), for any reporting setting</td>
+</tr>
+<tr class="even">
+<td><strong><strong>d</strong>ebug</strong></td>
+<td>Save all records of Stata states in Run 1 and Run 2 for inspection in the <code>/reprun/</code> folder</td>
+</tr>
+<tr class="odd">
+<td><strong><strong>noc</strong>lear</strong></td>
+<td>Do not reset the Stata state before beginning reproducibility Run 1</td>
+</tr>
+</tbody>
+</table>
 </section>
 <section id="description" class="level1">
 <h1>Description</h1>
-<p>This command only returns the version number and version data to the user. This command has little application for the user. For packages installed on SSC it is important that a there is a command in the package that has the same name as the package. That is the main purpose of this command.</p>
+<p>The <strong>reprun</strong> command is intended to be used to check the reproducibility of a do-file or set of do-files (called by a main do-file) that are ready to be transferred to other users or published. The command will ensure that the outputs produced by the do-file or set of do-files are stable across runs, such that they do not produce reproducibility errors caused by incorrectly managed randomness in Stata. To do so, <strong>reprun</strong> will check three key sources of reproducibility failure at each point in execution of the do-file(s): the state of the random number generator, the sort order of the data, and the contents of the data itself.</p>
+<p>After completing Run 2, <strong>reprun</strong> will report all lines where there are mismatches in any of these values between Run 1 and Run 2. Lines where <em>changes</em> lead to <em>mismatches</em> will be highlighted, and an indicator for potentially “cascading” mismatches (those caused by previous changes) will be shown by a vertical line and the absence of the change flag. In general, this structure means that problems should be, to a first approximation, approached top-to-bottom, as solving an earlier issue will often resolve later ones (since later changes may not be the ones causing the mismatches). In addition, we have set things up so that problems should also in general be approached from left-to-right in this table. RNG states are responsible for most errors; then unstable sorts; and data mismatches are typically symptoms of these reproducibility failures, rather than causes in and of themselves.</p>
 </section>
 <section id="options" class="level1">
 <h1>Options</h1>
-<p>This command has no options.</p>
+<p>By default, <strong>reprun</strong> returns a list of <em>mismatches</em> in Stata state between Run 1 and Run 2. This means that any time the state of the random number generator, the sort order of the data, or the contents of the data itself do not match Run 1 during Run 2, a flag will be generated for the corresponding line of code. The user may modify this reporting in several ways using options.</p>
+<section id="line-flagging-options" class="level2">
+<h2 class="anchored" data-anchor-id="line-flagging-options">Line flagging options</h2>
+<p>The <strong><strong>v</strong>erbose</strong> option can be used to produce even more detail than the default. If the <strong><strong>v</strong>erbose</strong> option is specified, then any line in which the state changes <em>during</em> Run 1 or Run 2; or mismatches <em>between</em> the runs will be flagged and reported. This is intended to allow the user to do a deep-dive into the function and structure of the do-file’s execution.</p>
+<p>The <strong><strong>c</strong>ompact</strong> option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the <strong><strong>c</strong>ompact</strong> option is specified, then <em>only</em> those lines which have changes <em>during</em> Run 1 or Run 2 <strong>and</strong> mismatches <em>between</em> the runs will be flagged and reported. This is intended to reduce the reporting of “cascading” flags, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run.</p>
+<p>The <strong><strong>s</strong>uppress()</strong> option is used to hide the reporting of changes that do not lead to mismatches (especially when the <strong><strong>v</strong>erbose</strong> option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should <em>not</em> be forced to match between runs, it will very often have changes that do not produce errors, specifying <strong><strong>s</strong>uppress(srng)</strong> will remove a great deal of unhelpful output from the reporting table. To do this for all states, write <strong><strong>s</strong>uppress(rng srng dsig)</strong>. Suppressing <code>loop</code> will clean up the display of loops so that the titles are only shown on the first line; but if combined with <code>compact</code> may not display at all.</p>
+</section>
+<section id="reporting-and-debugging-options" class="level2">
+<h2 class="anchored" data-anchor-id="reporting-and-debugging-options">Reporting and debugging options</h2>
+<p>The <strong><strong>d</strong>ebug</strong> option allows the user to save all of the underlying materials used by <strong>reprun</strong> in the <code>/reprun/</code> folder where the reporting SMCL file will be written. This will include copies of all do-files for each run for manual inspection, text files of the states of Stata after each line, and copies of the dataset at specific lines when it is needed. This can take a lot of space, and is automatically cleaned up after execution if <strong><strong>d</strong>ebug</strong> is not specified.</p>
+</section>
+<section id="other-options" class="level2">
+<h2 class="anchored" data-anchor-id="other-options">Other options</h2>
+<p>By default, <strong>reprun</strong> invokes <strong>clear</strong> and <strong>set seed 12345</strong> to match the default Stata state before beginning Run 1. <strong><strong>noc</strong>lear</strong> prevents this behavior. It is not recommended unless you have a rare issue that you need to check at the very beginning of the file, because most projects should very quickly set these states appropriately for reproducibility.</p>
+</section>
 </section>
 <section id="feedback-bug-reports-and-contributions" class="level1">
 <h1>Feedback, bug reports and contributions</h1>
