@@ -22,7 +22,9 @@
 
     * Install the version of this package in
     * the plus-ado folder in the test folder
-    repado "${test_fldr}/dev-env/"
+    
+    cap mkdir    "${test_fldr}/dev-env/"
+    repado using "${test_fldr}/dev-env/"
     cap net uninstall repkit
     net       install repkit, from("${src_fldr}") replace
 
