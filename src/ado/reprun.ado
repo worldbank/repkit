@@ -598,7 +598,7 @@ cap program drop   reprun
               l1("`r(botline)'") l2(" ") ///
               l3(`"{pstd} Stepping into sub-file:{p_end}"')
             noi print_filetree_and_verbose_title, ///
-              files(`" `orgfile' "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
+              files(`" "`orgfile'" "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
             output_writetitle , outputcolumns("`outputcolumns'")
             noi write_and_print_output, h_smcl(`h_smcl') ///
               l1("`r(topline)'") l2("`r(state_titles)'") ///
