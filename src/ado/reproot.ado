@@ -148,6 +148,9 @@ cap program drop   reproot
 
     * Return all root dires found regardless if they were for this project
     return local rootdirs "`rootdirs'"
+
+    // Remove then command is no longer in beta
+    noi repkit "beta reproot"
 end
 
 
