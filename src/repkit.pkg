@@ -24,12 +24,16 @@ d
 d Distribution-Date: 20230822
 d
 *** adofiles
+f ado/reproot_search.ado
+f ado/reproot_parse.ado
+f ado/reproot.ado
 f ado/reprun_dataline.ado
 f ado/reprun.ado
 f ado/repado.ado
 f ado/repkit.ado
 
 *** helpfiles
+f sthlp/reproot.sthlp
 f sthlp/reprun.sthlp
 f sthlp/repado.sthlp
 f sthlp/repkit.sthlp
