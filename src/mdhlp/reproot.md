@@ -4,13 +4,15 @@ __reproot__ - Cammand for root file path management.
 
 # Syntax
 
-__reproot__ , __**p**roject__(_string_) __**r**oots__(_string_) [__clear__]
+__reproot__ , __**p**roject__(_string_) __**r**oots__(_string_) [ __**pre**fix__(_string_) __clear__]
 
 | _options_ | Description |
 |-----------|-------------|
 | __**p**roject__(_string_) | The name of the project to search roots for |
 | __**r**oots__(_string_) | The name of the root(s) that are expected to be found |
-| __clear__ | Overwrite root globals already defined |
+| __**pre**fix__(_string_) | Adds project-specific prefix to root globals |
+| __**clear**__ | Overwrite root globals already defined |
+
 
 # Description
 
@@ -49,7 +51,20 @@ Unless the option `clear` is used, the command does not overwrite any global tha
 Finally, the command tests that there is a global named after each root
 and that all of them are non-empty.
 
- __clear__ overwrites globals that already existed with the same name as the roots listed in `roots()`. The default behavior is to not overwrite these globals. If all globals are already set then the command does not execute the search and is completed instantly.
+__**pre**fix__(_string_) allows the user to set a project-specific prefix.
+This is strongly recommend to make sure that a global from another project
+is not mistaken as a global for the current project.
+Unless option __clear__ is used, a global already set with a common name,
+such as `data` or `code`, will be interpreted as a root global with that name
+for the current project. The `prefix()` option allows a project-specific prefix
+that is set to all globals. So, if `prefix("abc_")` is used, then the globals
+`data` and `code` will be set to `abc_data` and `abc_code`.
+
+ __clear__ overwrites globals that already exists
+ with the same name as the roots listed in `roots()`.
+ The default behavior to not search for roots that already are set up.
+ If all globals are already set then the command does not
+ execute the search for roots..
 
 # Examples
 

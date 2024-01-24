@@ -2,7 +2,7 @@ cap program drop   reproot
     program define reproot, rclass
 
     * Update the syntax. This is only a placeholder to make the command run
-    syntax , Project(string) Roots(string) [clear]
+    syntax , Project(string) Roots(string) [prefix(string) clear]
 
     noi di _n "{hline}"
 
@@ -21,14 +21,23 @@ cap program drop   reproot
     local roots_set ""
     local roots_notset ""
 
-      * Test which roots if any are already loaded
-    foreach root of local roots {
-      if missing("`clear'") {
-        if missing("${`root'}") local roots_notset : list roots_notset | root
+    * If clear is used, then add all roots to roots_notset,
+    * and search for all of them again
+    if !missing("`clear'") {
+      local roots_notset "`roots'"
+    }
+
+    * If clear is not used, test what root globals are already set,
+    * and search only for roots not already set in root globals
+    else {
+        * Test which roots if any are already loaded
+      foreach root of local roots {
+        * Test if root exists with prefix
+        if missing("${`prefix'`root'}") {
+          local roots_notset : list roots_notset | root
+        }
         else local roots_set : list roots_set | root
       }
-      * IF clear is used, then add all roots to roots_notset
-      else local roots_notset : list roots_notset | root
     }
 
 
@@ -122,7 +131,8 @@ cap program drop   reproot
 
       foreach rootdir of local rootdirs {
         reproot_parse root, file("`rootdir'/`root_file'")
-        local this_root_path    "`r(root)'"
+        local this_root         "`r(root)'"
+        local this_root_global  "`prefix'`this_root'"
         local this_root_project "`r(project)'"
 
         * Test if this root belongs the relevant project
