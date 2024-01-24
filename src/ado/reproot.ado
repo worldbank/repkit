@@ -40,31 +40,40 @@ cap program drop   reproot
       }
     }
 
-
-
     /***************************************************
-      Output if all roots are already found
+      Output any roots are already set
     ***************************************************/
 
-    if (missing("`roots_notset'")) {
-      noi di _n "{pstd}All required roots are already loaded. File stystem will not be searched.{p_end}" ///
-      _n _n "{pstd}These required roots were found in these globals:{p_end}"
+    if !missing("`roots_set'") {
+      noi di as text _n "{pstd}These roots were already set in these globals:{p_end}"
       foreach root of local roots_set {
-        noi di as text "{pmore}Global: {result:`root'} - Root: {result:${`root'}}{p_end}"
+        local prefix_root "`prefix'`root'"
+        noi di as text "{phang2}- Global: {result:`prefix_root'} - Root: {result:${`prefix_root'}}{p_end}"
       }
-      noi di _n "{hline}"
     }
+
+    /***************************************************
+      Output if all roots are already set
+    ***************************************************/
+
+    if missing("`roots_notset'") {
+      noi di as result _n "{pstd}All required roots are already loaded. No search for roots will be done.{p_end}" _n _n "{hline}"
+
+      ** The command ends here
+    }
+
+    * There are roots to search for
     else {
 
-      /***************************************************
-        Output that at least some roots were not loaded
-      ***************************************************/
+    /***************************************************
+      Output that at least some roots were not loaded
+    ***************************************************/
 
-      noi di _n "{pstd}These required roots were not already loaded:.{p_end}"
+      noi di as text _n "{pstd}These required roots were not already loaded:{p_end}"
       foreach root of local roots_notset {
-        noi di as text "{pmore}{result:`root'}{p_end}"
+        noi di as text  "{pmore}- {bf:`root'}{p_end}"
       }
-      noi di _n "{pstd}Starting search of file system.{p_end}"
+      noi di as text _n "{pstd}Starting search of file system.{p_end}" _n
 
       /***************************************************
         Read env file before search
@@ -97,7 +106,7 @@ cap program drop   reproot
         local search_path = substr("`search_path'",2,.)
 
         * Search next folder
-        noi di as smcl  `"{pstd}{ul:Searching folder: `search_path'}{p_end}"'
+        noi di as result  `"{pstd}{ul:Searching folder: `search_path', with folder depth: `maxrecs'}{p_end}"'
         reproot_search, ///
           path(`"`search_path'"') skipdirs(`"`skipdirs'"') recsleft(`maxrecs')
 
@@ -138,18 +147,18 @@ cap program drop   reproot
         * Test if this root belongs the relevant project
         if "`project'" == "`this_root_project'" {
 
-          * Output that a relevant root has been found
-          noi di _n as text "{pstd}Root {result:`this_root_path'} for project {result:`this_root_project'} found at: {result:`rootdir'/`root_file'}.{p_end}"
+          local found_str "Root {result:`this_root'} for project {result:`this_root_project'} found"
 
-          * Test if this root is required
-          if (`: list this_root_path in roots') {
-            * Set global for this required root
-            noi di as text "{pmore}Setting global {result:{c S|}{c -(}`this_root_path'{c )-}} to: {result:`rootdir'}.{p_end}"
-            global `this_root_path' "`rootdir'"
+
+          if (`: list this_root in roots') {
+            * Output that a relevant root has been found
+            noi di _n as text "{pstd}`found_str'. Setting global {result:{c S|}{c -(}`this_root_global'{c )-}} to: {result:`rootdir'}{p_end}"
+
+            global `this_root_global' "`rootdir'"
           }
           * Root not required - just skip it
           else {
-            noi di "{pmore}Root {result:`this_root_path'} not required.{p_end}"
+            noi di _n as text "{pstd}`found_str', but root not required, so no global is set for this root.{p_end}"
           }
         }
       }
@@ -172,16 +181,13 @@ cap program drop   di_search_results
   local time: display %8.2f `time'
   local dcount: display %14.0fc `dcount'
 
+  local rcount: list sizeof rootdirs
+
   local time   = trim("`time'")
   local dcount = trim("`dcount'")
 
   if missing("`total'") local intro_str "In this search directory"
   else local intro_str "In total"
 
-  if missing(`"`rootdirs'"') local dirs_str `"No rootdirs were found."'
-  else {
-    local dirs_str `"The following rootdirs were found: [`rootdirs']."'
-  }
-
-  noi di as result _n `"{pstd}`intro_str', `dcount' directories were searched in `time' seconds. `dirs_str'{p_end}"' _n
+  noi di as result _n `"{pstd}`intro_str', `dcount' directories were searched in `time' seconds, and `rcount' reproot   root(s) were found.{p_end}"' _n
 end

@@ -41,6 +41,16 @@
     net install repkit, from("${src}") replace
 
     * Test basic case of the command reproot
-    reproot
 
-    // Add more tests here...
+    global data ""
+    global clone ""
+    global kb_data ""
+    global kb_clone ""
+
+    reproot, project("repkit") roots("clone") prefix("kb_")
+    di "${clone}"
+    di "${kb_clone}"
+    
+    reproot, project("repkit") roots("clone data") prefix("kb_")
+    
+    reproot, project("repkit") roots("clone data") prefix("kb_")

@@ -35,8 +35,7 @@ cap program drop   reproot_search
     cap confirm file "`path'/`root_file'"
     * File found, handle it
     if (_rc == 0) {
-      noi di as text _n "{phang}{inp:reproot root file found in: `path'}{p_end}"
-
+      noi di as text "{phang}{bf:root:} {it:`path'}{p_end}"
       local rootdirs `""`path'""'
     }
 
