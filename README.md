@@ -2,7 +2,7 @@
 
 This Stata module is package providing a utility toolkit
 for reproducibility best-practices.
-The motivation for this package is to make DIME Analytics'
+The motivation for this package is to make the World Bank's
 reproducibility best-practices more accessible to a wider Stata community.
 The best-practices promoted in this package appreciated
 identified and implemented as part of the
@@ -63,9 +63,16 @@ with contribution to the code.
 # Authors
 
 This package is written and published by
-[DIME Analytics](https://www.worldbank.org/en/research/dime/data-and-analytics).
+[DIME Analytics](https://www.worldbank.org/en/research/dime/data-and-analytics)
+and the [LSMS Team](https://www.worldbank.org/en/programs/lsms).
+Both teams are teams within the [World Bank](https://www.worldbank.org/)
 DIME Analytics is a research data methodology team part of the
-[Development Impact](https://www.worldbank.org/en/research/dime)
-department within the [World Bank](https://www.worldbank.org/).
+[Development Impact](https://www.worldbank.org/en/research/dime) department.
+The Living Standards Measurement Study (LSMS) is the World Bank's
+flagship household survey program and is
+part of the World Bank’s
+[Development Data Group](https://www.worldbank.org/en/about/unit/unit-dec/dev).
 
-Contact: dimeanalytics@worldbank.org
+Contact:
+- dimeanalytics@worldbank.org
+- lsms@worldbank.org
