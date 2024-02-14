@@ -138,6 +138,8 @@ cap program drop   reproot
         Parse the root files
       ***************************************************/
 
+      local found_roots ""
+
       foreach rootdir of local rootdirs {
         reproot_parse root, file("`rootdir'/`root_file'")
         local this_root         "`r(root)'"
@@ -146,6 +148,15 @@ cap program drop   reproot
 
         * Test if this root belongs the relevant project
         if "`project'" == "`this_root_project'" {
+
+          * Test if root was already found, if not then add to found_roots
+          if (`: list this_root in found_roots') {
+            noi di as error _n "{pstd}A second root called {result:`this_root)'} was found for this project found in folder {result:`rootdir'}.{p_end}"
+            error 99
+            exit
+          }
+          local found_roots : list found_roots | this_root
+          noi di "found_roots `found_roots'"
 
           local found_str "Root {result:`this_root'} for project {result:`this_root_project'} found"
 
