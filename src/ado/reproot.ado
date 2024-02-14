@@ -79,11 +79,16 @@ cap program drop   reproot
         Read env file before search
       ***************************************************/
 
+      * Get home dir
+      local pwd = "`c(pwd)'"
+      cd ~
+      local homedir = "`c(pwd)'"
+      cd "`pwd'"
+
       * Test if this location has a root file
       cap confirm file "`env_file'"
-      * File found, handle it
       if (_rc) {
-        noi di as text "{phang}No file {inp:reproot-env.yaml} found in home directory.{p_end}"
+        noi di as text `"{phang}No file {inp:reproot-env.yaml} found in home directory {it:`homedir'}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file here (TODO: LINK).{p_end}"' _n
         error 601
         exit
       }
