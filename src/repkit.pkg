@@ -4,16 +4,19 @@ v 1.1
 *** title
 d 'REPKIT': a module facilitating collaboration and reproducibility
 *** description
-d A Stata package with tools related to computational reproducibility
+d repkit is a package that aims to standardize best practices for
+d reproducibility and collaboration as well as making them more accessible to
+d the wider Stata community. This includes everything from root-path
+d management, dependencies management and other tools that will help ensure the
+d reproducibility of a project.
 d
 *** stata
-d Version: Stata 14.1
+d Requires: Stata version 14.1
 d
 *** author
-d Author: DIME Analytics & LSMS Team, World Bank
+d Author: DIME Analytics & LSMS Team, The World Bank
 *** contact
-d Contact: dimeanalytics@worldbank.org
-d Contact: lsms@worldbank.org
+d Contact: dimeanalytics@@worldbank.org, lsms@@worldbank.org
 *** url
 d URL: https://github.com/worldbank/repkit
 d
