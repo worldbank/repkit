@@ -35,22 +35,32 @@
     cap which adodown
     if _rc == 111 ssc install adodown
     */
-
+  
     * Install the latest version of repkit to the dev environment
-    cap net uninstall repkit
+     net uninstall repkit
     net install repkit, from("${src}") replace
 
-    * Test basic case of the command reproot
-
-    global data ""
-    global clone ""
-    global kb_data ""
-    global kb_clone ""
-
-    reproot, project("repkit") roots("clone") prefix("kb_")
-    di "${clone}"
-    di "${kb_clone}"
+    * Test 1 - this should all work without error
+    local prj "reproot-test-1"
+    local pref "test1_"
     
-    reproot, project("repkit") roots("clone data") prefix("kb_")
+    * Reset globals
+    global `pref'clone ""
+    global `pref'data ""
+   
+    * Run command
+    reproot, project("`prj'") roots("clone") prefix("`pref'")
+    reproot, project("`prj'") roots("clone data") prefix("`pref'")
+    reproot, project("`prj'") roots("clone data") prefix("`pref'")
+   
+    * Test 2 - this project has two clone roots
+    local prj "reproot-test-2"
+    local pref "test2_"    
     
-    reproot, project("repkit") roots("clone data") prefix("kb_")
+    * Reset globals
+    global `pref'clone ""
+    
+    * Run command
+    cap reproot, project("`prj'") roots("clone") prefix("`pref'")
+    di _rc
+    if !(_rc == 99) reproot, project("`prj'") roots("clone") prefix("`pref'") clear
