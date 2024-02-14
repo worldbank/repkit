@@ -8,36 +8,48 @@ __reproot__ , __**p**roject__(_string_) __**r**oots__(_string_) [ __**pre**fix__
 
 | _options_ | Description |
 |-----------|-------------|
-| __**p**roject__(_string_) | The name of the project to search roots for |
-| __**r**oots__(_string_) | The name of the root(s) that are expected to be found |
+| __**p**roject__(_string_) | The project name to search roots for |
+| __**r**oots__(_string_) | The root name(s) to search for |
 | __**pre**fix__(_string_) | Adds project-specific prefix to root globals |
-| __**clear**__ | Overwrite root globals already defined |
+| __**clear**__ | Always search for roots even if already loaded |
 
-
-# Description
 
 `reproot` is a framework for automatically handle file paths
 across teams where users need to do no project specific setup.
-Each user only need to set up `reproot` once on their computer,
-and then the same setting can be used across all users.
+Each user only need to set up `reproot` once on their computer
+(see next paragraph).
+After that, a user can automatically load root path with no manual set up,
+in all projects that are using `reproot`.
 
-The user needs to configure a `reproot-env` file where
-they list what high level folders to search.
-Examples of high-level folders are the Dropbox/OneDrive folder,
-the Git folder with all clones, a network drive etc.
-This setting is needed as it is too slow too search
-all folders on the computer.
+`reproot` works by the team saving a root-file in root folders required in the project.
+Such root folder could be the root of a Git clone folder,
+the root of a OneDrive/DropBox folder where data is shared,
+the root of a project folder of a network drive where files are shared, etc.
+As long as the folder is accessible from the file-system,
+a root can be placed in that folder.
+File paths to specific files can then in the code be expressed as
+relative paths from that any of those roots.
+
+In order to not have to search the full file-system for roots
+(that would take too long time)
+each user needs to configure a `reproot-env` file.
+This file lists which folders and how many sub-folders of those folders
+`reproot` should search for root files.
+This should make the search take less than a second.
+
+The `reproot-env` file should be created in the folder that Stata outputs
+when running the code `cd ~`.
+This location can be accessed for all users without
+having to set any root-paths first.
+
 Read more about how to set up this file in this article (TODO TODO).
 
 # Options
-<!-- Longer description (paragraph length) of all options, their intended use case and best practices related to them. -->
 
-__**p**roject__(_string_) is used to
-indicate the project name to search for roots.
-Since this command is intended to
-be used for many projects on a computer,
-each root file will have a project name value that
-will identify for which project this root is relevant.
+__**p**roject__(_string_) indicates the name of the current project.
+When searching for root-files,
+only root-files for this project will be considered.
+Use a project name that will remain unique across all team members' computers.
 
 __**r**oots__(_string_) indicates what
 roots are expected to be found for this project.
@@ -60,11 +72,11 @@ for the current project. The `prefix()` option allows a project-specific prefix
 that is set to all globals. So, if `prefix("abc_")` is used, then the globals
 `data` and `code` will be set to `abc_data` and `abc_code`.
 
- __clear__ overwrites globals that already exists
- with the same name as the roots listed in `roots()`.
- The default behavior to not search for roots that already are set up.
- If all globals are already set then the command does not
- execute the search for roots..
+__clear__ overwrites globals that already exists
+with the same name as the roots listed in `roots()`.
+The default behavior to not search for roots that already are set up.
+If all globals are already set then the command does not
+execute the search for roots..
 
 # Examples
 
