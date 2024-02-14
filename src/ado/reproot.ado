@@ -1,6 +1,10 @@
 cap program drop   reproot
     program define reproot, rclass
 
+qui {
+
+    version 14.1
+
     * Update the syntax. This is only a placeholder to make the command run
     syntax , Project(string) Roots(string) [prefix(string) clear]
 
@@ -112,7 +116,7 @@ cap program drop   reproot
 
         * Search next folder
         noi di as result  `"{pstd}{ul:Searching folder: `search_path', with folder depth: `maxrecs'}{p_end}"'
-        reproot_search, ///
+        noi reproot_search, ///
           path(`"`search_path'"') skipdirs(`"`skipdirs'"') recsleft(`maxrecs')
 
         * Get time, dir_count, and roots found
@@ -121,7 +125,7 @@ cap program drop   reproot
         local this_rootdirs = `"`r(rootdirs)'"'
 
         * Output this search
-        di_search_results, ///
+        noi di_search_results, ///
           time(`time') dcount(`dirs') rootdirs(`"`this_rootdirs'"')
 
         * Add these rootdirs to the list of all dirs
@@ -134,7 +138,7 @@ cap program drop   reproot
 
       * Output the grand total
       noi di as smcl `"{hline}"'
-      di_search_results, total ///
+      noi di_search_results, total ///
         time(`tot_time') dcount(`tot_dirs') rootdirs(`"`rootdirs'"')
       noi di as smcl `"{hline}"'
 
@@ -186,6 +190,8 @@ cap program drop   reproot
 
     // Remove then command is no longer in beta
     noi repkit "beta reproot"
+
+}
 end
 
 
