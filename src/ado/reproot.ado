@@ -83,7 +83,7 @@ cap program drop   reproot
       cap confirm file "`env_file'"
       * File found, handle it
       if (_rc) {
-        noi di as text "{phang}No file {inp:reproot-env.json} found in home directory.{p_end}"
+        noi di as text "{phang}No file {inp:reproot-env.yaml} found in home directory.{p_end}"
         error 601
         exit
       }
