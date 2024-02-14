@@ -1,8 +1,8 @@
 * This package file is generated in the adodown workflow. Do not edit directly.
 *** version
 v 1.1
-*** name
-d repkit
+*** title
+d 'REPKIT': a module facilitating collaboration and reproducibility
 *** description
 d A Stata package with tools related to computational reproducibility
 d
