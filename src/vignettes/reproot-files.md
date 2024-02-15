@@ -15,6 +15,7 @@ In a single-rooted project, there might be only one root folder. For example, th
 A project can also be multi-rooted. A common example of a multi-rooted project is when a team collaborates on code using Git but shares data over a network drive or a sync service like DropBox/OneDrive. In such a project, file paths need to be expressed as relative paths from either the root of the Git clone or the top folder in the project folder on DropBox/OneDrive.
 
 The motivation behind `reproot` was to develop a tool that can handle multi-rooted projects without requiring more than minimal manual input.
+
 ## reproot files
 
 ### `reproot.yaml` - the root file
@@ -44,7 +45,7 @@ root_name    : "code"
 
 If these files are shared over DropBox/OneDrive/Git/Network, etc. among the other files shared in that method, then the root file only needs to be set up once per location by a single member of the project. Then all other project members can use the same files.
 
-A template root file can be downloaded from here (TODO) for you to download it and modify it to your needs.
+A template root file can be downloaded from [here](https://github.com/dime-worldbank/repkit/blob/main/src/dev/reproot.yaml) for you to download it and modify it to your needs.
 
 ### `reproot-env.yaml` - the settings file
 
@@ -104,4 +105,4 @@ skipdirs:
     - ".git"
 ```
 
-This file can be downloaded from here (TODO) for you to download it and modify it to your needs.
+This file can be downloaded from [here](https://github.com/dime-worldbank/repkit/blob/main/src/dev/reproot-env.yaml) for you to download it and modify it to your needs.
