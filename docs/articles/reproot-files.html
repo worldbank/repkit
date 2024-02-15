@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>repkit - reproot-files</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../images/logo.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../index.html">
+    <img src="../images/logo.png" alt="">
+    <span class="navbar-title">repkit</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../reference/index.html">Reference</a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">Articles</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../articles/ado-management-with-repado.html">
+ <span class="dropdown-text">ado-management-with-repado</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../articles/reproot-files.html">
+ <span class="dropdown-text">reproot-files</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../articles/schemes-with-repado.html">
+ <span class="dropdown-text">schemes-with-repado</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/worldbank/repkit"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#reproot-files" id="toc-reproot-files" class="nav-link active" data-scroll-target="#reproot-files">reproot files</a>
+  <ul class="collapse">
+  <li><a href="#what-is-a-root-folder" id="toc-what-is-a-root-folder" class="nav-link" data-scroll-target="#what-is-a-root-folder">What is a “root folder”?</a></li>
+  <li><a href="#reproot-files-1" id="toc-reproot-files-1" class="nav-link" data-scroll-target="#reproot-files-1">reproot files</a>
+  <ul class="collapse">
+  <li><a href="#reproot.yaml---the-root-file" id="toc-reproot.yaml---the-root-file" class="nav-link" data-scroll-target="#reproot.yaml---the-root-file"><code>reproot.yaml</code> - the root file</a></li>
+  <li><a href="#reproot-env.yaml---the-settings-file" id="toc-reproot-env.yaml---the-settings-file" class="nav-link" data-scroll-target="#reproot-env.yaml---the-settings-file"><code>reproot-env.yaml</code> - the settings file</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title">reproot-files</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+    
+  </div>
+  
+
+</header>
+
+<section id="reproot-files" class="level1">
+<h1>reproot files</h1>
+<p>For the <code>reproot</code> command, there are two files that need to be set up in order to use the command: <code>reproot-env.yaml</code> and <code>reproot.yaml</code>. This article will explain these files.</p>
+<p>The first file, <code>reproot-env.yaml</code>, needs to be set up once per computer that is using <code>reproot</code>. So, each user needs to set it up once, but then the same file can be used on that computer for all projects using <code>reproot</code>.</p>
+<p>The other file, <code>reproot.yaml</code>, needs to be set up once for each project in each “<em>root folder</em>” location (see the next section for an explanation of the concept of root folders). So, if one user in a project sets up these files, then all users in that project can use those files as long as those files are shared in the project folder over GitHub, OneDrive/DropBox, network drives, or whatever sharing technology the team is using</p>
+<section id="what-is-a-root-folder" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-a-root-folder">What is a “root folder”?</h2>
+<p>A root folder is a folder from which other file paths required by the project’s code can be expressed as a relative file path from that root folder.</p>
+<p>In a single-rooted project, there might be only one root folder. For example, the top folder of a project folder on DropBox/OneDrive, or the root of a project’s Git clone. <code>reproot</code> handles single-rooted projects well, but there are other tools with minimal manual input that handle them just as well.</p>
+<p>A project can also be multi-rooted. A common example of a multi-rooted project is when a team collaborates on code using Git but shares data over a network drive or a sync service like DropBox/OneDrive. In such a project, file paths need to be expressed as relative paths from either the root of the Git clone or the top folder in the project folder on DropBox/OneDrive.</p>
+<p>The motivation behind <code>reproot</code> was to develop a tool that can handle multi-rooted projects without requiring more than minimal manual input.</p>
+</section>
+<section id="reproot-files-1" class="level2">
+<h2 class="anchored" data-anchor-id="reproot-files-1">reproot files</h2>
+<section id="reproot.yaml---the-root-file" class="level3">
+<h3 class="anchored" data-anchor-id="reproot.yaml---the-root-file"><code>reproot.yaml</code> - the root file</h3>
+<p>A <code>reproot.yaml</code> file, from here-on called the <em>root file</em>, is placed in each root folder. <code>reproot</code> works by searching a computer’s file system for these root files. Each root file needs to be a <code>.yaml</code> file with the exact name <code>reproot.yaml</code>, and its content should be:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">project_name </span><span class="kw">:</span><span class="at"> &lt;project_name&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">root_name    </span><span class="kw">:</span><span class="at"> &lt;root_name&gt;</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><code>&lt;project_name&gt;</code> is the name of the project this root belongs to. Two projects using <code>reproot</code> on the same computer may not have the same project name. <code>&lt;root_name&gt;</code> is a name to describe that root folder. The root name may not be duplicated within a project. Common names for roots are <code>data</code> or <code>code</code>.</p>
+<p>Let’s go back using the multi-rooted example project where data is shared on DropBox/OneDrive and code on Git. Let’s call this project <code>my-research-project</code>. The root file in the top folder of the DropBox/OneDrive folder would look like this:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">project_name </span><span class="kw">:</span><span class="at"> </span><span class="st">"my-resarch-project"</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">root_name    </span><span class="kw">:</span><span class="at"> </span><span class="st">"data"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>And the root file in the top-folder of the Git clone would look like this:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">project_name </span><span class="kw">:</span><span class="at"> </span><span class="st">"my-resarch-project"</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">root_name    </span><span class="kw">:</span><span class="at"> </span><span class="st">"code"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>If these files are shared over DropBox/OneDrive/Git/Network, etc. among the other files shared in that method, then the root file only needs to be set up once per location by a single member of the project. Then all other project members can use the same files.</p>
+<p>A template root file can be downloaded from <a href="https://github.com/dime-worldbank/repkit/blob/main/src/dev/reproot.yaml">here</a> for you to download it and modify it to your needs.</p>
+</section>
+<section id="reproot-env.yaml---the-settings-file" class="level3">
+<h3 class="anchored" data-anchor-id="reproot-env.yaml---the-settings-file"><code>reproot-env.yaml</code> - the settings file</h3>
+<p>Searching all folders on a computer file system would make <code>reproot</code> prohibitively slow. However, with some simple settings, the number of folders that need to be searched can be drastically reduced. These settings are done in the <code>reproot-env.yaml</code> file.</p>
+<p>The settings file needs to be saved in your home folder. It cannot be saved in a custom location as the problem that <code>reproot</code> is solving is to define custom file paths with minimal manual setup. If a user needs to manually define the file path to the <code>reproot-env.yaml</code>file before using <code>reproot</code>, then <code>reproot</code> has not solved the problem it intends to solve.</p>
+<p>The home folder is a folder that on Windows, Mac, and Linux computers can be expressed using the <code>~</code>. You can check what your home folder is in Stata by running <code>cd ~</code>. The output you see on your screen is your home folder.</p>
+<p>The <code>reproot-env.yaml</code> file has three settings: <code>recursedepth</code>, <code>searchpaths</code> and <code>skipdirs</code>.</p>
+<section id="recursedepth" class="level4">
+<h4 class="anchored" data-anchor-id="recursedepth"><code>recursedepth</code></h4>
+<ul>
+<li>Required: Yes</li>
+<li>Format: A single integer</li>
+</ul>
+<p>The recurse depth sets how many sub-folders <code>reproot</code> should look into from each <em>search path</em> (see below). If the recurse depth is set to 1, then <code>reproot</code> will only look for root files in the folder of the search path. If it is set to 2, it will look for root files in the folder of the search path as well as in that folder’s sub-folder. If it is set to 3, it will also look in those sub-folders’ sub-folder and so on.</p>
+<p>A lower recurse depth will be faster, but it might prevent <code>reproot</code> from finding all root files. The higher recurse depth, the more folders will be searched for root paths, but that will slow down the search.</p>
+<p>It is typically better to add more search paths rather than increasing the recurse depth a lot. However, the best trade-off between the number of search paths and depends on how you have organized the files on your computer. You should experiment until you’ve found a combination of search paths and recurse depth that both find all the root files and do so within a reasonable time.</p>
+</section>
+<section id="searchpaths" class="level4">
+<h4 class="anchored" data-anchor-id="searchpaths"><code>searchpaths</code></h4>
+<ul>
+<li>Required: Yes</li>
+<li>Format: A list of strings that are absolute file paths</li>
+</ul>
+<p>This setting <code>reproot-env.yaml</code> file lists one or several start locations for <code>reproot</code> to search. These locations should be parent folders (or ancestor folders) of the root folders.</p>
+<p>For example, if you have root files in all your git clones in a folder called <code>C:/Users/home-folder/github</code>, as in <code>C:/Users/home-folder/github/project-A/reproot.yaml</code> and <code>C:/Users/home-folder/github/project-B/reproot.yaml</code>, then the <code>C:/Users/home-folder/github</code> folder would be an excellent path to include in the search paths as the root files for both <em>project-A</em> and <em>project-B</em> can be quickly found from there.</p>
+<p>Similarly, if you have a lot of projects with root files in your <code>C:/Users/home-folder/OneDrive/work</code> folder might want to add that search path as well. You might notice that both <code>C:/Users/home-folder/github</code> and C<code>:/Users/home-folder/OneDrive/work</code> include the path <code>C:/Users/home-folder</code>. Does that mean that <code>C:/Users/home-folder</code> is a good folder to use as a search path? No! It is not.</p>
+<p><code>C:/Users/home-folder</code> will also include folders like <code>Documents</code>, <code>Downloads</code>, <code>Images</code>, <code>Desktop</code>, etc. in addition to a lot of system folders where you never would have project files. In this case, it is much better to have the two search paths <code>C:/Users/home-folder/github</code> and <code>C:/Users/home-folder/OneDrive</code> instead of just the one <code>C:/Users/home-folder</code>.</p>
+<p>So pick the most restrictive path as a search path that still will include a lot of root files. Again, the most optimal setting will depend on how you organize your files on your computer. Experiment until you have found a balance that works well for you.</p>
+<p>It is possible to set a different recurse depth for a specific search path. If you include a number and then a colon at the beginning of your search path, as in <code>3:C:/Users/wb462869/github</code>, then the recurse depth for that search path will be 3 no matter what the <code>recursedepth</code> setting says.</p>
+</section>
+<section id="skipdirs" class="level4">
+<h4 class="anchored" data-anchor-id="skipdirs"><code>skipdirs</code></h4>
+<ul>
+<li>Required: No</li>
+<li>Format: A list of strings that are folder names</li>
+</ul>
+<p>There are some folders that never include root files. Skipping such folders reduces the time it takes for <code>reproot</code> to search for root files. If you are using Git, then each of your clones will have a folder called <code>.git</code>. This folder is typically hidden, but if you are using Git, it is there. <code>reproot</code> will search this folder that typically has a lot of sub-folders. By including this folder in skip dirs, <code>reproot</code> will not spend time searching that folder.</p>
+</section>
+<section id="example" class="level4">
+<h4 class="anchored" data-anchor-id="example">Example</h4>
+<p>n this example, the default recurse depth is set to 4. Two search paths are included. The first one has a recurse depth set to 2 that overrides the default recurse depth for that search path. Lastly, this setting is set to skip all folders with the name <code>.git</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">recursedepth</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">searchpaths</span><span class="kw">:</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"2:C:/Users/home-folder/github"</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"C:/Users/home-folder/OneDrive/work"</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">skipdirs</span><span class="kw">:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">".git"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This file can be downloaded from <a href="https://github.com/dime-worldbank/repkit/blob/main/src/dev/reproot-env.yaml">here</a> for you to download it and modify it to your needs.</p>
+
+
+</section>
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
