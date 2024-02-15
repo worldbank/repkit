@@ -30,6 +30,12 @@
 !CONTRIBUTING.md
 !LICENSE*
 
+* Unignore reproot files
+!reproot*.yaml
+
+* In repkit, ignore reproot files in test files
+/**/tests/**/reproot.yaml
+
 #######################
 # For performance reasons, if a folder is already ignored, then
 # GitHub does not check the content for that folder for matches
