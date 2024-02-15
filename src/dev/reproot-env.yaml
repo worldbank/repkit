@@ -1,0 +1,6 @@
+recursedepth: 4
+searchpaths:
+    - "2:C:/Users/home-folder/github"
+    - "C:/Users/home-folder/OneDrive/work"
+skipdirs:
+    - ".git"
