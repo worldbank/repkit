@@ -92,7 +92,7 @@ qui {
       * Test if this location has a root file
       cap confirm file "`env_file'"
       if (_rc) {
-        noi di as text `"{phang}No file {inp:reproot-env.yaml} found in home directory {it:`homedir'}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file here (TODO: LINK).{p_end}"' _n
+        noi di as text `"{phang}No file {inp:reproot-env.yaml} found in home directory {it:`homedir'}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file {browse "https://dime-worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' _n
         error 601
         exit
       }
