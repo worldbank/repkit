@@ -15,6 +15,5 @@
   net install adodown, from("`ad_src'") replace
  
   
-  //ad_command create reproot , adf("`rk'") pkg(repkit) 
+  ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline")
   
-  ad_command create testasdsad , adf("`rk'") pkg(repkit) undoc

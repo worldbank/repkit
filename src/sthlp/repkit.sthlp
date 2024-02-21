@@ -1,5 +1,5 @@
 {smcl}
-{* 17 Jan 2024}{...}
+{* *! version 1.1 21FEB2024}{...}
 {hline}
 {pstd}help file for {hi:repkit}{p_end}
 {hline}

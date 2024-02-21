@@ -1,5 +1,11 @@
+*! version 1.1 20230822 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+
 cap program drop   reproot_search
     program define reproot_search, rclass
+
+qui {
+
+    version 14.1
 
     syntax ,                  ///
         path(string)          ///
@@ -89,5 +95,5 @@ cap program drop   reproot_search
       qui timer list 68
       return local timer `r(t68)'
     }
-
+}
 end

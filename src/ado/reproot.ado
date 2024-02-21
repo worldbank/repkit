@@ -1,3 +1,5 @@
+*! version 1.1 20230822 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+
 cap program drop   reproot
     program define reproot, rclass
 

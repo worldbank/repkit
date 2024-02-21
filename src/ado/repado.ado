@@ -1,11 +1,11 @@
-*! version 1.1 17DEC2024 DIME Analytics dimeanalytics@worldbank.org
+*! version 1.1 20230822 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   repado
     program define repado, rclass
 
 qui {
 
-    version 13.0
+    version 14.1
 
     syntax [using/], ///
       /// Optional commands

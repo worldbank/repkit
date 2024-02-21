@@ -1,8 +1,12 @@
-*! version XX XXXXXXXXX ADAUTHORNAME ADCONTACTINFO
+*! version 1.1 20230822 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reproot_parse
     program define reproot_parse, rclass
 
+qui {
+
+    version 14.1
+    
     * Update the syntax. This is only a placeholder to make the command run
     syntax anything, file(string)
 
@@ -21,6 +25,7 @@ cap program drop   reproot_parse
       error 198
       exit
     }
+}
 end
 
 cap program drop   reproot_parse_env
