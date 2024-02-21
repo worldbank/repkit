@@ -45,7 +45,7 @@ root_name    : "code"
 
 If these files are shared over DropBox/OneDrive/Git/Network, etc. among the other files shared in that method, then the root file only needs to be set up once per location by a single member of the project. Then all other project members can use the same files.
 
-A template root file can be downloaded from [here](https://github.com/dime-worldbank/repkit/blob/main/src/dev/reproot.yaml) for you to download it and modify it to your needs.
+A template root file can be downloaded from [here](https://github.com/worldbank/repkit/blob/main/src/dev/reproot.yaml) for you to download it and modify it to your needs.
 
 ### `reproot-env.yaml` - the settings file
 
@@ -105,4 +105,4 @@ skipdirs:
     - ".git"
 ```
 
-This file can be downloaded from [here](https://github.com/dime-worldbank/repkit/blob/main/src/dev/reproot-env.yaml) for you to download it and modify it to your needs.
+This file can be downloaded from [here](https://github.com/worldbank/repkit/blob/main/src/dev/reproot-env.yaml) for you to download it and modify it to your needs.

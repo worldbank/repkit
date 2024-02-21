@@ -1,7 +1,7 @@
 
 **********************************************************************
 
-* Read about this code segment here: https://dime-worldbank.github.io/repkit/articles/ado-management-with-repado.html#alternative
+* Read about this code segment here: https://worldbank.github.io/repkit/articles/ado-management-with-repado.html#alternative
 
 sysdir set  PLUS "${waf}/ado"
 adopath ++  PLUS

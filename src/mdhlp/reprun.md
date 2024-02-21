@@ -46,7 +46,7 @@ By default, __reprun__ invokes __clear__ and __set seed 12345__ to match the def
 
 # Feedback, bug reports and contributions
 
-Read more about these commands on [this repo](https://github.com/dime-worldbank/repkit) where this package is developed. Please provide any feedback by [opening an issue](https://github.com/dime-worldbank/repkit/issues). PRs with suggestions for improvements are also greatly appreciated.
+Read more about these commands on [this repo](https://github.com/worldbank/repkit) where this package is developed. Please provide any feedback by [opening an issue](https://github.com/worldbank/repkit/issues). PRs with suggestions for improvements are also greatly appreciated.
 
 # Authors
 

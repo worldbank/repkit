@@ -1,6 +1,6 @@
 # Using `repado` for Ado-File Management
 
-_This is a comprehensive guide on how to use `repado`. For a shorter and more technical syntax documentation, refer to the [helpfile](https://dime-worldbank.github.io/repkit/reference/repado.html)._
+_This is a comprehensive guide on how to use `repado`. For a shorter and more technical syntax documentation, refer to the [helpfile](https://worldbank.github.io/repkit/reference/repado.html)._
 
 ## Background
 
@@ -330,7 +330,7 @@ Both examples assume the same folder structure as previously outlined.
 
 Before using any of these examples, ensure they are utilizing
 the most recent version of the code used in the `repado` command
-[here](https://github.com/dime-worldbank/repkit/blob/main/src/ado/repado.ado).
+[here](https://github.com/worldbank/repkit/blob/main/src/ado/repado.ado).
 
 **Example 1:** In this example, the same results are achieved
 as when using `repado` in strict mode.

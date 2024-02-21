@@ -1,8 +1,8 @@
 * This package file is generated in the adodown workflow. Do not edit directly.
 *** version
 v 1.1
-*** name
-d repkit
+*** Title
+d 'REPKIT': A module with tools related to collaboration and computational reproducibility
 *** description
 d A Stata package with tools related to computational reproducibility
 d
@@ -10,9 +10,9 @@ d
 d Version: Stata 14.1
 d
 *** author
-d Author: DIME Analytics
+d Author: DIME Analytics, LSMS Team
 *** contact
-d Contact: dimeanalytics@worldbank.org
+d Contact: dimeanalytics@@worldbank.org, lsms@@worldbank.org
 *** url
 d URL: https://github.com/worldbank/repkit
 d
