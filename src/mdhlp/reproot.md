@@ -1,6 +1,6 @@
 # Title
 
-__reproot__ - Cammand for root file path management.
+__reproot__ - Command for root file path management.
 
 # Syntax
 
@@ -92,12 +92,13 @@ reproot , project("my_proj") roots("data clone")
 
 # Feedback, bug reports and contributions
 
-Read more about the commands in this package at https://dime-worldbank.github.io/repkit.
+Read more about the commands in this package at https://worldbank.github.io/repkit.
 
-Please provide any feed back by opening and issue at https://github.com/dime-worldbank/repkit.
+Please provide any feed back by opening and issue at https://github.com/worldbank/repkit.
 
 PRs with suggestions for improvements are also greatly appreciated.
 
 # Authors
 
+LSMS Team, The World Bank lsms@worldbank.org
 DIME Analytics, The World Bank dimenalytics@worldbank.org
