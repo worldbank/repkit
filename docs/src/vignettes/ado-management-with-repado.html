@@ -214,7 +214,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 
 <section id="using-repado-for-ado-file-management" class="level1">
 <h1>Using <code>repado</code> for Ado-File Management</h1>
-<p><em>This is a comprehensive guide on how to use <code>repado</code>. For a shorter and more technical syntax documentation, refer to the <a href="https://dime-worldbank.github.io/repkit/reference/repado.html">helpfile</a>.</em></p>
+<p><em>This is a comprehensive guide on how to use <code>repado</code>. For a shorter and more technical syntax documentation, refer to the <a href="https://worldbank.github.io/repkit/reference/repado.html">helpfile</a>.</em></p>
 <section id="background" class="level2">
 <h2 class="anchored" data-anchor-id="background">Background</h2>
 <p>To create a fully reproducible reproducibility package for a research project, you need the following four elements:</p>
@@ -327,7 +327,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <section id="alternative" class="level3">
 <h3 class="anchored" data-anchor-id="alternative">Alternative</h3>
 <p>As an alternative, the code from <code>repado</code> can be copied into the project’s main file. <code>repkit</code> is published using the MIT license where this is perfectly allowed. The ado-folder must still be created in the same way as described above. Afterward, you can add that folder using one of the two examples below. Both examples assume the same folder structure as previously outlined.</p>
-<p>Before using any of these examples, ensure they are utilizing the most recent version of the code used in the <code>repado</code> command <a href="https://github.com/dime-worldbank/repkit/blob/main/src/ado/repado.ado">here</a>.</p>
+<p>Before using any of these examples, ensure they are utilizing the most recent version of the code used in the <code>repado</code> command <a href="https://github.com/worldbank/repkit/blob/main/src/ado/repado.ado">here</a>.</p>
 <p><strong>Example 1:</strong> In this example, the same results are achieved as when using <code>repado</code> in strict mode. This version maintains only the project ado-folder and the <code>BASE</code> folder in the ado-paths. After running this code, you can still install commands in the project ado-folder using <code>ssc install</code> and use other commands that use the <code>PLUS</code> folder.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>* Set user root folder</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> root <span class="st">"C:\Users\user123\github\myproject"</span></span>

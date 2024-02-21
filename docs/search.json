@@ -18,7 +18,7 @@
     "href": "index.html#install-from-github-repo",
     "title": "repkit",
     "section": "Install from GitHub repo",
-    "text": "Install from GitHub repo\nYou can install older versions of repkit directly from the GitHub repository. To do so, start by finding the tag corresponding to the version you want to install here: https://github.com/dime-worldbank/repkit/tags. Update the local “tag” in the code below with the value of the tag you picked, and then run the code.\nlocal tag \"v1.0\"\nnet install repkit, ///\n  from(\"https://raw.githubusercontent.com/dime-worldbank/repkit/`tag'/src\")"
+    "text": "Install from GitHub repo\nYou can install older versions of repkit directly from the GitHub repository. To do so, start by finding the tag corresponding to the version you want to install here: https://github.com/worldbank/repkit/tags. Update the local “tag” in the code below with the value of the tag you picked, and then run the code.\nlocal tag \"v1.0\"\nnet install repkit, ///\n  from(\"https://raw.githubusercontent.com/worldbank/repkit/`tag'/src\")"
   },
   {
     "objectID": "src/vignettes/schemes-with-repado.html",
