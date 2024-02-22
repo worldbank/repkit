@@ -10,10 +10,9 @@
   local rk "${clone}/repkit"
   local ad_src "${clone}/adodown/src"
 
-  
   cap net uninstall adodown
   net install adodown, from("`ad_src'") replace
  
   
-  ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline")
+  ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline") ssczip
   
