@@ -6,7 +6,7 @@ cap program drop   reproot_parse
 qui {
 
     version 14.1
-    
+
     * Update the syntax. This is only a placeholder to make the command run
     syntax anything, file(string)
 
@@ -51,76 +51,78 @@ cap program drop   reproot_parse_env
     * Read YAML content into string
     while r(eof)==0 {
 
-      // noi di ""
-      // noi di `"`line'"'
-      local this_indent = 0
-      local this_keyword = ""
-      local this_value   = ""
-      local valid_value = 0
+      * Skip comments
+      if (substr(`"`line'"',1,1) !=  "#") {
 
-      * Count indent of this line - and set indent dependent locals
-      count_indent, line(`"`line'"')
-      local this_indent = "`r(indent)'"
-      if (`this_indent' == 0) {
-        local is_list 0
-        local list_of ""
-      }
+        local this_indent = 0
+        local this_keyword = ""
+        local this_value   = ""
+        local valid_value = 0
 
-      * Trim line to remove indent
-      local line = trim(`"`line'"')
-
-      *****************************************
-      * Parse items that are part of a list
-      if (`is_list' == 1) {
-        parse_listitem, line(`"`line'"') allowed_value("string")
-        local this_value   = `"`r(list_value)'"'
-        if (`r(valid_value)' == 0) {
-          noi di as error `"{pstd}Invalid list item on line `linenum' in file [`file']: [`line']{p_end}"'
-          error 98
+        * Count indent of this line - and set indent dependent locals
+        count_indent, line(`"`line'"')
+        local this_indent = "`r(indent)'"
+        if (`this_indent' == 0) {
+          local is_list 0
+          local list_of ""
         }
-        * Add to local named after the key word this list is part of, paths etc.
-        local `list_of' `"``list_of'' `this_value'"'
-      }
 
-      *****************************************
-      * Parse top level keywords
+        * Trim line to remove indent
+        local line = trim(`"`line'"')
 
-      else {
-        parse_keyword, line(`"`line'"') ///
-          allowed_keys("paths skipdirs recursedepth")
-        local this_keyword = "`r(keyword)'"
-        local this_value   = `"`r(value)'"'
+        *****************************************
+        * Parse items that are part of a list
+        if (`is_list' == 1) {
+          parse_listitem, line(`"`line'"') allowed_value("string")
+          local this_value   = `"`r(list_value)'"'
+          if (`r(valid_value)' == 0) {
+            noi di as error `"{pstd}Invalid list item on line `linenum' in file [`file']: [`line']{p_end}"'
+            error 98
+          }
+          * Add to local named after the key word this list is part of, paths etc.
+          local `list_of' `"``list_of'' `this_value'"'
+        }
 
-        if ("`this_keyword'" == "paths") {
-          parse_value, value(`"`this_value'"') allowed_values("list string")
-          local valid_value = `r(valid_value)'
-        }
-        else if ("`this_keyword'" == "skipdirs") {
-          parse_value, value(`"`this_value'"') allowed_values("list string")
-          local valid_value = `r(valid_value)'
-        }
-        else if ("`this_keyword'" == "recursedepth") {
-          parse_value, value(`"`this_value'"') allowed_values("number")
-          local valid_value = `r(valid_value)'
-        }
+        *****************************************
+        * Parse top level keywords
+
         else {
-          noi di as error `"{pstd}Icorrect keyword used on line `linenum' in file [`file']: [`line']{p_end}"'
-          error 98
-        }
+          parse_keyword, line(`"`line'"') ///
+            allowed_keys("paths skipdirs recursedepth")
+          local this_keyword = "`r(keyword)'"
+          local this_value   = `"`r(value)'"'
 
-        * Output error if invalid value
-        if (`valid_value' == 0) {
-          noi di as error `"{pstd}In valid value in file [`file'] on line `linenum': [`line']{p_end}"'
-          error 98
-        }
+          if ("`this_keyword'" == "paths") {
+            parse_value, value(`"`this_value'"') allowed_values("list string")
+            local valid_value = `r(valid_value)'
+          }
+          else if ("`this_keyword'" == "skipdirs") {
+            parse_value, value(`"`this_value'"') allowed_values("list string")
+            local valid_value = `r(valid_value)'
+          }
+          else if ("`this_keyword'" == "recursedepth") {
+            parse_value, value(`"`this_value'"') allowed_values("number")
+            local valid_value = `r(valid_value)'
+          }
+          else {
+            noi di as error `"{pstd}Icorrect keyword used on line `linenum' in file [`file']: [`line']{p_end}"'
+            error 98
+          }
 
-        * Unless value is beginning of list, add the value to this keyword
-        if (`"`this_value'"' != "begin_list") {
-          local `this_keyword' `"`this_value'"'
-        }
-        else {
-          local is_list = 1
-          local list_of = "`this_keyword'"
+          * Output error if invalid value
+          if (`valid_value' == 0) {
+            noi di as error `"{pstd}In valid value in file [`file'] on line `linenum': [`line']{p_end}"'
+            error 98
+          }
+
+          * Unless value is beginning of list, add the value to this keyword
+          if (`"`this_value'"' != "begin_list") {
+            local `this_keyword' `"`this_value'"'
+          }
+          else {
+            local is_list = 1
+            local list_of = "`this_keyword'"
+          }
         }
       }
 
@@ -163,42 +165,46 @@ cap program drop   reproot_parse_root
 
     while r(eof)==0 {
 
-      local this_indent = 0
-      local this_keyword = ""
-      local this_value   = ""
-      local valid_value = 0
+      * Skip comments
+      if (substr(`"`line'"',1,1) !=  "#") {
 
-      * Make sure that the root file does not have any indent
-      count_indent, line(`"`line'"')
-      if (`r(indent)' != 0) {
-        noi di as error `"{pstd}The root file [`file'] has an indent in line `linenum': [`line']. The root file is not allowed to have any indents.{p_end}"'
-        error 98
-        exit
+        local this_indent = 0
+        local this_keyword = ""
+        local this_value   = ""
+        local valid_value = 0
+
+        * Make sure that the root file does not have any indent
+        count_indent, line(`"`line'"')
+        if (`r(indent)' != 0) {
+          noi di as error `"{pstd}The root file [`file'] has an indent in line `linenum': [`line']. The root file is not allowed to have any indents.{p_end}"'
+          error 98
+          exit
+        }
+
+        * Trim line to remove indent
+        local line = trim(`"`line'"')
+
+        * Parse the line for keyword and value
+        parse_keyword, line(`"`line'"') allowed_keys("project_name root_name")
+        local this_keyword = trim("`r(keyword)'")
+        local this_value   = trim("`r(value)'")
+
+        if ("`this_keyword'" == "project_name") {
+          parse_value, value(`"`this_value'"') allowed_values("string")
+          local valid_value = `r(valid_value)'
+        }
+        else if ("`this_keyword'" == "root_name") {
+          parse_value, value(`"`this_value'"') allowed_values("string")
+          local valid_value = `r(valid_value)'
+        }
+        else {
+          noi di as error `"{pstd}Incorrect keyword used on line `linenum' in file [`file']: [`line']{p_end}"'
+          error 98
+        }
+
+        * Add value named after this
+        local `this_keyword' `"`this_value'"'
       }
-
-      * Trim line to remove indent
-      local line = trim(`"`line'"')
-
-      * Parse the line for keyword and value
-      parse_keyword, line(`"`line'"') allowed_keys("project_name root_name")
-      local this_keyword = trim("`r(keyword)'")
-      local this_value   = trim("`r(value)'")
-
-      if ("`this_keyword'" == "project_name") {
-        parse_value, value(`"`this_value'"') allowed_values("string")
-        local valid_value = `r(valid_value)'
-      }
-      else if ("`this_keyword'" == "root_name") {
-        parse_value, value(`"`this_value'"') allowed_values("string")
-        local valid_value = `r(valid_value)'
-      }
-      else {
-        noi di as error `"{pstd}Incorrect keyword used on line `linenum' in file [`file']: [`line']{p_end}"'
-        error 98
-      }
-
-      * Add value named after this
-      local `this_keyword' `"`this_value'"'
 
       * Read next line
       file read `re_file' line
