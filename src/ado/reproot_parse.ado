@@ -52,7 +52,7 @@ cap program drop   reproot_parse_env
     while r(eof)==0 {
 
       * Skip comments
-      if (substr(`"`line'"',1,1) !=  "#") {
+      if (substr(trim(`"`line'"'),1,1) !=  "#") {
 
         local this_indent = 0
         local this_keyword = ""
@@ -166,7 +166,7 @@ cap program drop   reproot_parse_root
     while r(eof)==0 {
 
       * Skip comments
-      if (substr(`"`line'"',1,1) !=  "#") {
+      if (substr(trim(`"`line'"'),1,1) !=  "#") {
 
         local this_indent = 0
         local this_keyword = ""
