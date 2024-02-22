@@ -133,7 +133,7 @@ ul.task-list{list-style: none;}
 
 <section id="repkit" class="level1">
 <h1>repkit</h1>
-<p>This Stata module is package providing a utility toolkit for reproducibility best-practices. The motivation for this package is to make DIME Analytics’ reproducibility best-practices more accessible to a wider Stata community. The best-practices promoted in this package appreciated identified and implemented as part of the <a href="https://reproducibility.worldbank.org/">World Bank’s reproducibility effort</a>.</p>
+<p>This Stata module is package providing a utility toolkit for reproducibility best-practices. The motivation for this package is to make the World Bank’s reproducibility best-practices more accessible to a wider Stata community. The best-practices promoted in this package appreciated identified and implemented as part of the <a href="https://reproducibility.worldbank.org/">World Bank’s reproducibility effort</a>.</p>
 <p>Currently, this toolkit has the following commands:</p>
 <table class="table">
 <thead>
@@ -155,8 +155,13 @@ ul.task-list{list-style: none;}
 <td><a href="https://worldbank.github.io/repkit/reference/reprun.html">reprun</a></td>
 <td>This command is used to automate reproducibility checks by running a do-file or a set of do-files and compare all state values (RNG-value, datasignature etc.) between the two runs. This command is currently only release as a beta-version.</td>
 </tr>
+<tr class="even">
+<td><a href="https://dime-worldbank.github.io/repkit/reference/reproot.html">reproot</a></td>
+<td></td>
+</tr>
 </tbody>
 </table>
+<p>This command allows teams to set up dynamic root-paths that require no manual user-specific set-up. It also supports root-paths in multi-rooted projects, meaning projects that use different tools to collaborate on, for example, code and data. | | <a href="https://dime-worldbank.github.io/repkit/reference/reprun.html">reprun</a> | This command is used to automate reproducibility checks by running a do-file or a set of do-files and compare all state values (RNG-value, data signature etc.) between the two runs. This command is currently only release as a beta-version. |</p>
 </section>
 <section id="installation" class="level1">
 <h1>Installation</h1>
@@ -182,8 +187,8 @@ net install repkit, ///
 </section>
 <section id="authors" class="level1">
 <h1>Authors</h1>
-<p>This package is written and published by <a href="https://www.worldbank.org/en/research/dime/data-and-analytics">DIME Analytics</a>. DIME Analytics is a research data methodology team part of the <a href="https://www.worldbank.org/en/research/dime">Development Impact</a> department within the <a href="https://www.worldbank.org/">World Bank</a>.</p>
-<p>Contact: dimeanalytics@worldbank.org</p>
+<p>This package is written and published by <a href="https://www.worldbank.org/en/research/dime/data-and-analytics">DIME Analytics</a> and the <a href="https://www.worldbank.org/en/programs/lsms">LSMS Team</a>. Both teams are teams within the <a href="https://www.worldbank.org/">World Bank</a> DIME Analytics is a research data methodology team part of the <a href="https://www.worldbank.org/en/research/dime">Development Impact</a> department. The Living Standards Measurement Study (LSMS) is the World Bank’s flagship household survey program and is part of the World Bank’s <a href="https://www.worldbank.org/en/about/unit/unit-dec/dev">Development Data Group</a>.</p>
+<p>Contact: - dimeanalytics@worldbank.org - lsms@worldbank.org</p>
 
 
 </section>
