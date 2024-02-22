@@ -14,13 +14,8 @@ Currently, this toolkit has the following commands:
 | --- | --- |
 | [repado](https://worldbank.github.io/repkit/reference/repado.html) | Command used to manage project ado command dependencies. This command provides a way to make sure that all team members as well as future reproducers of the projects code use the exact same version of all command dependencies. |
 | [repkit](https://worldbank.github.io/repkit/reference/repkit.html) | Command named the same as the package. Most important purpose is that this command makes the code `which repkit` work. |
+| [reproot](https://dime-worldbank.github.io/repkit/reference/reproot.html) | This command allows teams to dynamically set root-paths with no manual user-specific set-up, in both single-rooted and multi-rooted projects. |
 | [reprun](https://worldbank.github.io/repkit/reference/reprun.html) | This command is used to automate reproducibility checks by running a do-file or a set of do-files and compare all state values (RNG-value, datasignature etc.) between the two runs. This command is currently only release as a beta-version. |
-| [reproot](https://dime-worldbank.github.io/repkit/reference/reproot.html) |
-This command allows teams to set up dynamic root-paths that require
-no manual user-specific set-up. It also supports root-paths in
-multi-rooted projects, meaning projects that use different tools to
-collaborate on, for example, code and data. |
-| [reprun](https://dime-worldbank.github.io/repkit/reference/reprun.html) | This command is used to automate reproducibility checks by running a do-file or a set of do-files and compare all state values (RNG-value, data signature etc.) between the two runs. This command is currently only release as a beta-version. |
 
 # Installation
 
