@@ -1,7 +1,7 @@
 
     cap which repkit
     if _rc == 111 {
-        di as error `"{pstd}This test file use features from the package {browse "https://dime-worldbank.github.io/repkit/":repkit}. Click {stata ssc install repkit} to install it and run this file again.{p_end}"'
+        di as error `"{pstd}This test file use features from the package {browse "https://worldbank.github.io/repkit/":repkit}. Click {stata ssc install repkit} to install it and run this file again.{p_end}"'
     }
 
     *************************************
