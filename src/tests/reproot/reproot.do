@@ -37,7 +37,7 @@
     */
   
     * Install the latest version of repkit to the dev environment
-     net uninstall repkit
+    net uninstall repkit
     net install repkit, from("${src}") replace
 
     * Test 1 - this should all work without error
@@ -60,7 +60,7 @@
     * Reset globals
     global `pref'clone ""
     
-    * Run command
+    * Run command - expected error as two roots named clone exist
     cap reproot, project("`prj'") roots("clone") prefix("`pref'")
     di _rc
     if !(_rc == 99) reproot, project("`prj'") roots("clone") prefix("`pref'") clear
