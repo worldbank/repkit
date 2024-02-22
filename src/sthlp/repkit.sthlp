@@ -1,5 +1,5 @@
 {smcl}
-{* 17 Jan 2024}{...}
+{* *! version 1.2 20240222}{...}
 {hline}
 {pstd}help file for {hi:repkit}{p_end}
 {hline}
@@ -30,7 +30,7 @@ That is the main purpose of this command.
 
 {title:Feedback, bug reports and contributions}
 
-{pstd}Read more about these commands on {browse "https://github.com/dime-worldbank/repkit":this repo} where this package is developed. Please provide any feedback by {browse "https://github.com/dime-worldbank/repkit/issues":opening an issue}. PRs with suggestions for improvements are also greatly appreciated.
+{pstd}Read more about these commands on {browse "https://github.com/worldbank/repkit":this repo} where this package is developed. Please provide any feedback by {browse "https://github.com/worldbank/repkit/issues":opening an issue}. PRs with suggestions for improvements are also greatly appreciated.
 {p_end}
 
 {title:Authors}

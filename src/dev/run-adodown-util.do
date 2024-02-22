@@ -1,14 +1,17 @@
   * Kristoffer's root path
   if "`c(username)'" == "wb462869" {
-      global clone "C:/Users/wb462869/github/repkit"
+      global clone "C:/Users/wb462869/github/"
   }
   * Fill in your root path here
   if "`c(username)'" == "bbdaniels" {
-      global clone "/Users/bbdaniels/GitHub/repkit"
+      global clone "/Users/bbdaniels/GitHub/"
   }
+  
+  local rk "${clone}/repkit"
+  local ad_src "${clone}/adodown/src"
 
-  do "https://raw.githubusercontent.com/lsms-worldbank/adodown/main/src/ado/ad_sthlp.ado"
-
-  ad_sthlp , adf("${clone}")
-
-  //ad_command create reprun_dataline , adf("`repkit'") pkg(repkit)
+  cap net uninstall adodown
+  net install adodown, from("`ad_src'") replace
+ 
+  ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline") ssczip
+  

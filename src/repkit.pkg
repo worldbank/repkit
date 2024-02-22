@@ -1,31 +1,39 @@
 * This package file is generated in the adodown workflow. Do not edit directly.
 *** version
-v 1.1
-*** Title
-d 'REPKIT': A module with tools related to collaboration and computational reproducibility
+v 1.2
+*** title
+d 'REPKIT': a module facilitating collaboration and computational reproducibility
 *** description
-d A Stata package with tools related to computational reproducibility
+d repkit is a package that aims to standardize best practices for
+d reproducibility and collaboration as well as making them more accessible to
+d the wider Stata community. This includes features ranging from root-path
+d management, dependencies management and other tools that will help ensure the
+d reproducibility of a project.
 d
 *** stata
-d Version: Stata 14.1
+d Requires: Stata version 14.1
 d
 *** author
-d Author: DIME Analytics, LSMS Team
+d Author: DIME Analytics & LSMS Team, The World Bank
 *** contact
 d Contact: dimeanalytics@@worldbank.org, lsms@@worldbank.org
 *** url
 d URL: https://github.com/worldbank/repkit
 d
 *** date
-d Distribution-Date: 20230822
+d Distribution-Date: 20240222
 d
 *** adofiles
+f ado/reproot_search.ado
+f ado/reproot_parse.ado
+f ado/reproot.ado
 f ado/reprun_dataline.ado
 f ado/reprun.ado
 f ado/repado.ado
 f ado/repkit.ado
 
 *** helpfiles
+f sthlp/reproot.sthlp
 f sthlp/reprun.sthlp
 f sthlp/repado.sthlp
 f sthlp/repkit.sthlp
