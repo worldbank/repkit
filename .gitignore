@@ -55,6 +55,13 @@
 !src/dev/assets/*.png
 !src/dev/assets/*.css
 
+####################################
+# Ignore ssc outputs
+src/dev/ssc
+
+# Ignore test outputs
+src/tests/outputs/
+
 * Ignore the local dev env set up by repado
 src/tests/dev-env/
 
