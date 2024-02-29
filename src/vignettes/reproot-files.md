@@ -55,7 +55,7 @@ The settings file needs to be saved in your home folder. It cannot be saved in a
 
 The home folder is a folder that on Windows, Mac, and Linux computers can be expressed using the `~`. You can check what your home folder is in Stata by running `cd ~`. The output you see on your screen is your home folder.
 
-The `reproot-env.yaml` file has three settings: `recursedepth`, `searchpaths` and `skipdirs`.
+The `reproot-env.yaml` file has three settings: `recursedepth`, `paths` and `skipdirs`.
 
 #### `recursedepth`
 
@@ -68,12 +68,12 @@ A lower recurse depth will be faster, but it might prevent `reproot` from findin
 
 It is typically better to add more search paths rather than increasing the recurse depth a lot. However, the best trade-off between the number of search paths and depends on how you have organized the files on your computer. You should experiment until you've found a combination of search paths and recurse depth that both find all the root files and do so within a reasonable time.
 
-#### `searchpaths`
+#### `paths`
 
 * Required: Yes
 * Format: A list of strings that are absolute file paths
 
-This setting `reproot-env.yaml` file lists one or several start locations for `reproot` to search. These locations should be parent folders (or ancestor folders) of the root folders.
+This setting `reproot-env.yaml` file lists one or several start locations for `reproot` to search. These locations should be parent folders (or ancestor folders) of the root folders. The paths should always be absolute paths starting at `C:/` on Windows machines or `/Users/` on Mac.
 
 For example, if you have root files in all your git clones in a folder called `C:/Users/home-folder/github`, as in `C:/Users/home-folder/github/project-A/reproot.yaml` and `C:/Users/home-folder/github/project-B/reproot.yaml`, then the `C:/Users/home-folder/github` folder would be an excellent path to include in the search paths as the root files for both _project-A_ and _project-B_ can be quickly found from there.
 
@@ -94,11 +94,11 @@ There are some folders that never include root files. Skipping such folders redu
 
 #### Example
 
-n this example, the default recurse depth is set to 4. Two search paths are included. The first one has a recurse depth set to 2 that overrides the default recurse depth for that search path. Lastly, this setting is set to skip all folders with the name `.git`.
+In this example, the default recurse depth is set to 4. Two search paths are included. The first one has a recurse depth set to 2 that overrides the default recurse depth for that search path. Lastly, this setting is set to skip all folders with the name `.git`.
 
 ```yaml
 recursedepth: 4
-searchpaths:
+paths:
     - "2:C:/Users/home-folder/github"
     - "C:/Users/home-folder/OneDrive/work"
 skipdirs:

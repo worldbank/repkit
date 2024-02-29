@@ -1,5 +1,5 @@
 recursedepth: 4
-searchpaths:
+paths:
     - "2:C:/Users/home-folder/github"
     - "C:/Users/home-folder/OneDrive/work"
 skipdirs:
