@@ -229,7 +229,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>Searching all folders on a computer file system would make <code>reproot</code> prohibitively slow. However, with some simple settings, the number of folders that need to be searched can be drastically reduced. These settings are done in the <code>reproot-env.yaml</code> file.</p>
 <p>The settings file needs to be saved in your home folder. It cannot be saved in a custom location as the problem that <code>reproot</code> is solving is to define custom file paths with minimal manual setup. If a user needs to manually define the file path to the <code>reproot-env.yaml</code>file before using <code>reproot</code>, then <code>reproot</code> has not solved the problem it intends to solve.</p>
 <p>The home folder is a folder that on Windows, Mac, and Linux computers can be expressed using the <code>~</code>. You can check what your home folder is in Stata by running <code>cd ~</code>. The output you see on your screen is your home folder.</p>
-<p>The <code>reproot-env.yaml</code> file has three settings: <code>recursedepth</code>, <code>searchpaths</code> and <code>skipdirs</code>.</p>
+<p>The <code>reproot-env.yaml</code> file has three settings: <code>recursedepth</code>, <code>paths</code> and <code>skipdirs</code>.</p>
 <section id="recursedepth" class="level4">
 <h4 class="anchored" data-anchor-id="recursedepth"><code>recursedepth</code></h4>
 <ul>
@@ -240,13 +240,13 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <p>A lower recurse depth will be faster, but it might prevent <code>reproot</code> from finding all root files. The higher recurse depth, the more folders will be searched for root paths, but that will slow down the search.</p>
 <p>It is typically better to add more search paths rather than increasing the recurse depth a lot. However, the best trade-off between the number of search paths and depends on how you have organized the files on your computer. You should experiment until you’ve found a combination of search paths and recurse depth that both find all the root files and do so within a reasonable time.</p>
 </section>
-<section id="searchpaths" class="level4">
-<h4 class="anchored" data-anchor-id="searchpaths"><code>searchpaths</code></h4>
+<section id="paths" class="level4">
+<h4 class="anchored" data-anchor-id="paths"><code>paths</code></h4>
 <ul>
 <li>Required: Yes</li>
 <li>Format: A list of strings that are absolute file paths</li>
 </ul>
-<p>This setting <code>reproot-env.yaml</code> file lists one or several start locations for <code>reproot</code> to search. These locations should be parent folders (or ancestor folders) of the root folders.</p>
+<p>This setting <code>reproot-env.yaml</code> file lists one or several start locations for <code>reproot</code> to search. These locations should be parent folders (or ancestor folders) of the root folders. The paths should always be absolute paths starting at <code>C:/</code> on Windows machines or <code>/Users/</code> on Mac.</p>
 <p>For example, if you have root files in all your git clones in a folder called <code>C:/Users/home-folder/github</code>, as in <code>C:/Users/home-folder/github/project-A/reproot.yaml</code> and <code>C:/Users/home-folder/github/project-B/reproot.yaml</code>, then the <code>C:/Users/home-folder/github</code> folder would be an excellent path to include in the search paths as the root files for both <em>project-A</em> and <em>project-B</em> can be quickly found from there.</p>
 <p>Similarly, if you have a lot of projects with root files in your <code>C:/Users/home-folder/OneDrive/work</code> folder might want to add that search path as well. You might notice that both <code>C:/Users/home-folder/github</code> and C<code>:/Users/home-folder/OneDrive/work</code> include the path <code>C:/Users/home-folder</code>. Does that mean that <code>C:/Users/home-folder</code> is a good folder to use as a search path? No! It is not.</p>
 <p><code>C:/Users/home-folder</code> will also include folders like <code>Documents</code>, <code>Downloads</code>, <code>Images</code>, <code>Desktop</code>, etc. in addition to a lot of system folders where you never would have project files. In this case, it is much better to have the two search paths <code>C:/Users/home-folder/github</code> and <code>C:/Users/home-folder/OneDrive</code> instead of just the one <code>C:/Users/home-folder</code>.</p>
@@ -263,9 +263,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </section>
 <section id="example" class="level4">
 <h4 class="anchored" data-anchor-id="example">Example</h4>
-<p>n this example, the default recurse depth is set to 4. Two search paths are included. The first one has a recurse depth set to 2 that overrides the default recurse depth for that search path. Lastly, this setting is set to skip all folders with the name <code>.git</code>.</p>
+<p>In this example, the default recurse depth is set to 4. Two search paths are included. The first one has a recurse depth set to 2 that overrides the default recurse depth for that search path. Lastly, this setting is set to skip all folders with the name <code>.git</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="sourceCode yaml code-with-copy"><code class="sourceCode yaml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">recursedepth</span><span class="kw">:</span><span class="at"> </span><span class="dv">4</span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">searchpaths</span><span class="kw">:</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">paths</span><span class="kw">:</span></span>
 <span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"2:C:/Users/home-folder/github"</span></span>
 <span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="at">    </span><span class="kw">-</span><span class="at"> </span><span class="st">"C:/Users/home-folder/OneDrive/work"</span></span>
 <span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu">skipdirs</span><span class="kw">:</span></span>
