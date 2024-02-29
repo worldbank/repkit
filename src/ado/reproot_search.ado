@@ -52,7 +52,7 @@ qui {
     * test if recursion depth is met
     if (`next_recsleft'>=0) {
       * List all sub-folders (if any) in this directory
-      cap local dir_list : dir `"`path'"' dirs  "*"
+      cap local dir_list : dir `"`path'"' dirs  "*", respectcase
 
       * Handle file not found error
       if (_rc == 601) {
@@ -61,7 +61,7 @@ qui {
       }
 
       *Run command again to throw unandled error to user
-      else if (_rc == 0) local dir_list : dir `"`path'"' dirs  "*"
+      else if (_rc == 0) local dir_list : dir `"`path'"' dirs  "*", respectcase
 
       * Recure into dirs unless it is part of skip folders
       foreach dir of local dir_list {
