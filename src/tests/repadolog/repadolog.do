@@ -12,10 +12,10 @@
     version 14.1
 
     * Use reproot to manage root path
-    reproot, project("repkit") roots("clone") prefix("repkit_")
+    reproot, project("repkit") roots("clone data robsfolder") prefix("repkit_")
 
     * Use locals for all non-root paths
-    local testfldr "${adwn_clone}/src/tests"
+    local testfldr "${repkit_clone}/src/tests"
 
     * Use the /dev-env folder as a dev environment
     cap mkdir    "`testfldr'/dev-env"
@@ -31,8 +31,18 @@
 
     ************************
     * Run tests
+    
+    pause on
 
     * Test basic case of the command repadolog
     repadolog
+    pause
+    repadolog using "`testfldr'/repadolog/test-trk-files/test1"
+    pause
+    repadolog using "`testfldr'/repadolog/test-trk-files/test2"
+    pause
+    repadolog using "`testfldr'/repadolog/test-trk-files/test3"
+    pause
+    repadolog using "`testfldr'/repadolog/test-trk-files/test4"
 
     // Add more tests here...
