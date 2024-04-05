@@ -1,18 +1,8 @@
-    * This test file use utilities from the repkit package - https://github.com/worldbank/repkit
-    * Test if package is installed, otherwise throw error telling user to install repkit
-    cap which repkit
-    if _rc == 111 {
-        di as error "{pstd}You need to have {cmd:repkit} installed to run this reproducibility package. Click {stata ssc install repkit, replace} to do so.{p_end}"
-    }
-
-    ************************
-    * Set up root paths (if not already set), and set up dev environment
-
     * Always important to version control built-in Stata functions
     version 14.1
 
     * Use reproot to manage root path
-    reproot, project("repkit") roots("clone data robsfolder") prefix("repkit_")
+    global repkit_clone "C:\Users\WB462869\github\repkit"
 
     * Use locals for all non-root paths
     local testfldr "${repkit_clone}/src/tests"
@@ -32,11 +22,9 @@
     ************************
     * Run tests
     
-    pause on
+    pause off // set to pause on to run one at the time
 
-    * Test basic case of the command repadolog
-    repadolog
-    pause
+    * Test the command repadolog on four example files
     repadolog using "`testfldr'/repadolog/test-trk-files/test1"
     pause
     repadolog using "`testfldr'/repadolog/test-trk-files/test2"
@@ -44,5 +32,10 @@
     repadolog using "`testfldr'/repadolog/test-trk-files/test3"
     pause
     repadolog using "`testfldr'/repadolog/test-trk-files/test4"
-
+    
+    * Test on the stata.trk in the current PLUS folder
+    pause
+    repadolog
+    
+    
     // Add more tests here...
