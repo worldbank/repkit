@@ -1,0 +1,152 @@
+* 00000003
+*! version 1.0.0
+* Do not erase or edit this file
+* It is used by Stata to track the ado and help
+* files you have installed.
+
+S http://fmwww.bc.edu/repec/bocode/r
+N repkit.pkg
+D 21 Mar 2024
+U 1
+d 'REPKIT': module providing utility toolkit for reproducibility
+d 
+d  repkit is a package that aims to standardize best practices for
+d reproducibility and make them more accessible to the wider Stata
+d community. Currently, the package consists of one command called
+d repado. The purpose of repado is to manage command dependencies
+d within a project, ensuring that any user running the project code
+d utilizes the exact same version of command dependencies. This
+d intended to be used both across all team members in a project,
+d and by any future user reproducing the results of the project.
+d 
+d KW: reproducibility
+d KW: ado
+d KW: ado-management
+d 
+d Requires: Stata version 14.1
+d 
+d Distribution-Date: 20240222
+d 
+d Author: DIME Analytics, The World Bank, DECIE
+d Support: email dimeanalytics@@worldbank.org
+d 
+f r\repkit.ado
+f r\repkit.sthlp
+f r\repado.ado
+f r\repado.sthlp
+f r\reprun_dataline.ado
+f r\reprun.ado
+f r\reprun.sthlp
+f r\reproot.ado
+f r\reproot.sthlp
+f r\reproot_parse.ado
+f r\reproot_search.ado
+e
+S http://fmwww.bc.edu/repec/bocode/a
+N adodown.pkg
+D 25 Mar 2024
+U 2
+d 'ADODOWN': module making Stata packages easier to develop and document using modern tools
+d 
+d  For developers, adodown offers workflow commands that automate
+d manual tasks at each stage of development.  At project's start,
+d adodown creates the necessary scaffolding for the package (e.g.,
+d folders, `pkg` file, etc).  For each package command, it uses
+d templates to create necessary files (i.e., ado, documentation,
+d unit test) and  adds appropriate entries in the pkg file. For
+d documentation, it allows developers draft in plain Markdown while
+d  creating standard help files in SMCL. And for publication,
+d adodown collects the required files, puts them in proper  format,
+d and prepares a zip file for SSC submission.  Also, adodown
+d automatically deploys a package documentation website. For users,
+d this provides an easy way to discover  packages, to understand
+d what they do, and to explore how commands work--all without
+d installing the package. For  developers, this provides packages
+d with a welcome web presence and offers a home for additional
+d documentation  (e.g., how-to guides, technical notes, FAQs), and
+d keeps HTML documentation up to date with SMCL documentation
+d through  continuous deployment via GitHub Actions.
+d 
+d KW: package management
+d KW: templates
+d KW: SSC
+d 
+d Requires: Stata version 14.1
+d 
+d Distribution-Date: 20240225
+d 
+d Author: LSMS Team, The World Bank
+d Support: email lsms@@worldbank.org
+d 
+f a\ad_update.ado
+f a\ad_pkg_meta.ado
+f a\adodown.ado
+f a\ad_publish.ado
+f a\ad_setup.ado
+f a\ad_command.ado
+f a\ad_sthlp.ado
+f a\ad_update.sthlp
+f a\adodown.sthlp
+f a\ad_publish.sthlp
+f a\ad_command.sthlp
+f a\ad_setup.sthlp
+f a\ad_sthlp.sthlp
+f a\ad-cmd-command.ado
+f a\ad-cmd-command.do
+f a\ad-cmd-command.md
+f a\ad-gh-workflows.yaml
+f a\ad-gh.gitignore
+f a\ad-reproot.yaml
+f a\ad-src-ado-readme.md
+f a\ad-src-dev-description.txt
+f a\ad-src-dev-readme.md
+f a\ad-src-mdhlp-readme.md
+f a\ad-src-package.pkg
+f a\ad-src-stata.toc
+f a\ad-src-sthlp-readme.md
+f a\ad-src-tests-readme.md
+f a\ad-src-vignettes-readme.md
+e
+S http://fmwww.bc.edu/repec/bocode/e
+N estout.pkg
+D  1 Apr 2024
+U 3
+d 'ESTOUT': module to make regression tables
+d 
+d  estout produces a table of regression results from one or
+d several models for use with spreadsheets, LaTeX, HTML, or a
+d word-processor table. eststo stores a quick copy of the active
+d estimation results for later tabulation. esttab is a wrapper for
+d estout. It displays a pretty looking publication-style regression
+d table without much typing. estadd adds additional results to the
+d e()-returns for one or several models previously fitted and
+d stored. This package subsumes the previously circulated esto,
+d esta, estadd,  and estadd_plus. An earlier version of estout is
+d available  as estout1.
+d 
+d KW: estimates
+d KW: LaTeX
+d KW: HTML
+d KW: word processor
+d KW: output
+d 
+d Requires: Stata version 8.2
+d 
+d Distribution-Date: 20230212
+d 
+d Author: Ben Jann, University of Bern
+d Support: email jann@@soz.unibe.ch
+d 
+f _\_eststo.ado
+f _\_eststo.hlp
+f e\estadd.ado
+f e\estadd.hlp
+f e\estout.ado
+f e\estout.hlp
+f e\eststo.ado
+f e\eststo.hlp
+f e\estpost.ado
+f e\estpost.hlp
+f e\esttab.ado
+f e\esttab.hlp
+e

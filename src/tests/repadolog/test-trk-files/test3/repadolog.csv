@@ -1,0 +1,13 @@
+package_name,distribution_date,download_date,commands,source
+"iefieldkit.pkg","20230802","7 Mar 2024","commands","http://fmwww.bc.edu/repec/bocode/i"
+"betterbar.pkg","N/A","7 Mar 2024","commands","https://github.com/bbdaniels/stata/raw/main"
+"repkit.pkg","20240222","7 Mar 2024","commands","http://fmwww.bc.edu/repec/bocode/r"
+"binsreg.pkg","20230703","7 Mar 2024","commands","https://raw.githubusercontent.com/nppackages/binsreg/master/stata"
+"winsor.pkg","20060809","7 Mar 2024","commands","http://fmwww.bc.edu/repec/bocode/w"
+"dm0037.pkg","N/A","12 Mar 2024","commands","http://www.stata-journal.com/software/sj8-3"
+"outwrite.pkg","N/A","12 Mar 2024","commands","https://github.com/bbdaniels/stata/raw/main"
+"st0085_2.pkg","N/A","13 Mar 2024","commands","http://www.stata-journal.com/software/sj14-2"
+"st0030_3.pkg","N/A","18 Mar 2024","commands","http://www.stata-journal.com/software/sj7-4"
+"easyirt.pkg","N/A","1 Apr 2024","commands","https://github.com/bbdaniels/stata/raw/main"
+"labelcollapse.pkg","N/A","1 Apr 2024","commands","https://github.com/bbdaniels/stata/raw/main"
+"openirt.pkg","N/A","1 Apr 2024","commands","http://tristanz.github.io/OpenIRT"
