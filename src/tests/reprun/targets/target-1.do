@@ -19,11 +19,11 @@ di as err "Should be 6165... `r(mean)'"
 
 // TEST COMMENT
 
-global do "nothing"
+global something "nothing"
 
-forv run = 1/5 {
-  gen varx`run' = rnormal()
-  if `run' == 3 set seed 847
+forv i = 1/5 {
+  gen varx`i' = rnormal()
+  if `i' == 3 set seed 847
 }
 
 expand 2 , gen(check)
@@ -39,10 +39,10 @@ gen y = rnormal()
 
 
 
-duplicates drop make , force
+cap duplicates drop make , force
 
 
-do "${tf}/target-2.do"
+if (1 == 1) & (1 == 1) do "${tf}/target-2.do"
 
 
 //

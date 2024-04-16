@@ -257,25 +257,31 @@ end
 
           *Reset the last line local
           local last_line = ""
-          get_command, word("`firstw'")
-          local line_command = "`r(command)'"
+          local line_command = "OTHER"
+          local dofile ""
+          local doflag 0
+          foreach w in `macval(line)' {
+            get_command, word("`w'")
+            if `doflag' == 1 local dofile = "`w'"
+            if "`r(command)'" == "do" | "`r(command)'" == "run" {
+              local doflag = 1
+            }
+            else local doflag 0
+            local line_command = "`line_command' `r(command)'"
+          }
+            local line_command : list uniq line_command
 
           * If using capture, log it and take second word as command
-          if (inlist("`line_command'","capture")) {
+          if (strpos("`line_command'","capture")) {
             local lastline_capture = 1
             local write_dataline = 0
-            * Move forward each word
-            local firstw = "`secondw'"
-            local secondw = "`thirdw'"
-            get_command, word("`firstw'")
-            local line_command = "`r(command)'"
           }
           * Handle row that is not capture
           else {
             * Test if _rc was used on line that is
             * not immedeatly after line with capture
             if `lastline_capture' == 0 & `has_rc' == 1 {
-              noi di as error "{pstd}To make sure that {cmd:reprun} runs correctly, {cmd:_rc} is only allowed to be used immedeatly after the line where {cmd:capture} was used. See this article (TODO) for examples on how code can be rewritten to satisfy this requirement. Line number `lnum'.{p_end}"
+              noi di as error "{pstd}To make sure that {cmd:reprun} runs correctly, {cmd:_rc} is only allowed to be used immediately after the line where {cmd:capture} was used. See this article (TODO) for examples on how code can be rewritten to satisfy this requirement. Line number `lnum'.{p_end}"
               error 99
               exit
             }
@@ -284,7 +290,7 @@ end
           }
 
           * Line is do or run, so call recursive function
-          if (inlist("`line_command'","do","run")) {
+          if (strpos("`line_command'","do")) | (strpos("`line_command'","run")) {
 
             * Write line handling recursion in data file
             local write_recline = 1
@@ -292,7 +298,7 @@ end
             local recursestub "`stub'_`++subf_n'"
 
             * Get the file path from the second word
-            local file = `"`macval(secondw)'"'
+            local file = `"`dofile'"'
 
             noi reprun_recurse, dofile("`file'")     ///
                                 output("`output'")   ///
@@ -320,20 +326,20 @@ end
 
             * Load the local in memory - important to
             * build file paths in recursive calls
-            if inlist("`line_command'","local","global") {
+            if strpos("`line_command'","local","global") {
               `line'
             }
 
             * Write foreach/forvalues to block stack and
             * it's macro name to loop stack
-            if inlist("`line_command'","foreach","forvalues") {
+            if strpos("`line_command'","foreach","forvalues") {
               local block_stack   "`line_command' `block_stack' "
               local loop_stack = trim("`loop_stack' `secondw'")
             }
 
             * Write while to block stack and
             * also "while" to loop stack as it does not have a macro name
-            if inlist("`line_command'","while") {
+            if strpos("`line_command'","while") {
               local block_stack   "`line_command' `block_stack' "
               local loop_stack = trim("`loop_stack' `line_command'")
             }
