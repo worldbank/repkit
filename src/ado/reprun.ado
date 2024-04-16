@@ -294,11 +294,8 @@ end
 
             * Write line handling recursion in data file
             local write_recline = 1
-            * Keep working on the stub
-            local recursestub "`stub'_`++subf_n'"
 
             * Get the file path from the second word
-
             local file = `"`dofile'"'
             local file_rev = strreverse("`file'")
             
@@ -314,8 +311,18 @@ end
               local file "`file'.do"
             }
             
+            * Skip recursion instead of error if file not found
+            cap confirm file "`file'"
+            if _rc {
+              local recurse 0
+            }
+            
             * Test if it should recurse or not
             if `recurse' == 1 {
+              
+              * Keep working on the stub
+              local recursestub "`stub'_`++subf_n'"
+              
               noi reprun_recurse, dofile("`file'")     ///
                     output("`output'")   ///
                     stub("`recursestub'")
@@ -343,13 +350,13 @@ end
 
             * Load the local in memory - important to
             * build file paths in recursive calls
-            if strpos("`line_command'","local","global") {
+            if (strpos("`line_command'","local")) | (strpos("`line_command'","global")) {
               `line'
             }
 
             * Write foreach/forvalues to block stack and
             * it's macro name to loop stack
-            if strpos("`line_command'","foreach","forvalues") {
+            if (strpos("`line_command'","foreach")) | (strpos("`line_command'","forvalues")) {
               local block_stack   "`line_command' `block_stack' "
               local loop_stack = trim("`loop_stack' `secondw'")
             }
