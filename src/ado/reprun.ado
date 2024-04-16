@@ -351,7 +351,8 @@ end
             * Load the local in memory - important to
             * build file paths in recursive calls
             if (strpos("`line_command'","local")) | (strpos("`line_command'","global")) {
-              `line'
+              // Capture in case running the macro requires data in memory
+              capture `line' 
             }
 
             * Write foreach/forvalues to block stack and
