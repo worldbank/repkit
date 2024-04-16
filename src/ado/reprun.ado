@@ -293,22 +293,38 @@ end
 
             * Get the file path from the second word
             local file = `"`macval(secondw)'"'
+            local file_rev = strreverse("`file'")
+            
+            * Only recurse on .do files and add .do when no extension is used
+            if (substr("`file_rev'",1,3) == "od.") {
+              local recurse 1
+            } 
+            else if (substr("`file_rev'",1,4) == "oda.") {
+              local recurse 0 // skip recursing reprun on adofiles
+            } 
+            else {
+              local recurse 1
+              local file "`file'.do"
+            }
+            
+            * Test if it should recurse or not
+            if `recurse' == 1 {
+              noi reprun_recurse, dofile("`file'")     ///
+                    output("`output'")   ///
+                    stub("`recursestub'")
+              local sub_f1 "`r(code_file_run1)'"
+              local sub_f2 "`r(code_file_run2)'"
 
-            noi reprun_recurse, dofile("`file'")     ///
-                                output("`output'")   ///
-                                stub("`recursestub'")
-            local sub_f1 "`r(code_file_run1)'"
-            local sub_f2 "`r(code_file_run2)'"
+              * Substitute the original sub-dofile with the check/write ones
+              local run1_line = ///
+                subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
+              local run2_line = ///
+                subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
 
-            * Substitute the original sub-dofile with the check/write ones
-            local run1_line = ///
-              subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
-            local run2_line = ///
-              subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
-
-            *Correct potential ""path"" to "path"
-            local run1_line = subinstr(`"`run1_line'"',`""""',`"""',.)
-            local run2_line = subinstr(`"`run2_line'"',`""""',`"""',.)
+              *Correct potential ""path"" to "path"
+              local run1_line = subinstr(`"`run1_line'"',`""""',`"""',.)
+              local run2_line = subinstr(`"`run2_line'"',`""""',`"""',.)
+            }
           }
 
           * No special thing with row needing alteration, write row as is
