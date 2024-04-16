@@ -275,7 +275,7 @@ end
             * Test if _rc was used on line that is
             * not immedeatly after line with capture
             if `lastline_capture' == 0 & `has_rc' == 1 {
-              noi di as error "{pstd}To make sure that {cmd:reprun} runs correctly, {cmd:_rc} is only allowed to be used immedeatly after the line where {cmd:capture} was used. See this article (TODO) for examples on how code can be rewritten to satisfy this requirement. Line number `lnum'.{p_end}"
+              noi di as error "{pstd}To make sure that {cmd:reprun} runs correctly, {cmd:_rc} is only allowed to be used immediately after the line where {cmd:capture} was used. See this article (TODO) for examples on how code can be rewritten to satisfy this requirement. Line number `lnum'.{p_end}"
               error 99
               exit
             }
