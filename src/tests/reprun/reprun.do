@@ -1,16 +1,17 @@
 
-    * TODO: replace with reproot
+
+    * Do not use reproot when testing commands in repkit
     * Kristoffer's root path
     if "`c(username)'" == "wb462869" {
-        global clone "C:\Users\wb462869\github\repkit"
+        global repkit_clone "C:\Users\wb462869\github\repkit"
     }
     * Fill in your root path here
     if "`c(username)'" == "bbdaniels" {
-        global clone "/Users/bbdaniels/GitHub/repkit"
+        global repkit_clone "/Users/bbdaniels/GitHub/repkit"
     }
 
     * Set global to ado_fldr
-    global src_fldr  "${clone}/src"
+    global src_fldr  "${repkit_clone}/src"
     global test_fldr "${src_fldr}/tests"
     global run_fldr  "${test_fldr}/reprun"
     global tf        "${run_fldr}/targets"
@@ -61,4 +62,7 @@
     reprun "${wca}/main.do" using "${wca}/output" , debug
 
     * Example F - with project ado-folder
+    cap mkdir "${waf}/output"
     reprun "${waf}/main.do" using "${waf}/output" , debug
+
+    net install repkit, from("${src_fldr}") replace

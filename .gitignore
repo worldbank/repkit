@@ -70,6 +70,7 @@ src/tests/outputs/
 
 * Ignore the local dev env set up by repado
 src/tests/dev-env/
+src/tests/reprun/with-ado-folder/ado/
 
 * Ignore local test output
 /**/run1
