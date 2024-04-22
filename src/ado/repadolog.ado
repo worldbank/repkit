@@ -10,7 +10,10 @@ qui {
     * Update the syntax. This is only a placeholder to make the command run
     syntax [using/], [details]
 
-    * Find the trk file
+    ************************
+    * Find trk file to use
+
+    * If no file path was used, find the trk file along the adopaths
     if missing("`using'") {
       findfile stata.trk
       if missing("`r(fn)'") {
@@ -24,9 +27,15 @@ qui {
       }
     }
     else {
+
+      * If user included "stata.trk" in filepath, then remove to standardize
+      if (substr("`using'",-9,9) == "stata.trk") {
+        local using = substr("`using'",1,strlen("`using'")-10)
+      }
+      * Test if a file exists in that location
       cap confirm file "`using'/stata.trk"
       if _rc {
-        noi di as error "No stata.trk file was found at that location"
+        noi di as error `"{pstd}No stata.trk file was found at location provided in using: {inp:`using'}{p_end}"'
         error 99
         exit
       }
