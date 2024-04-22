@@ -23,7 +23,7 @@
     * Run tests
     
     pause off // set to pause on to run one at the time
-
+ if 1 {
     * Test the command repadolog on four example files
     repadolog using "`testfldr'/repadolog/test-trk-files/test1"
     pause
@@ -32,10 +32,12 @@
     repadolog using "`testfldr'/repadolog/test-trk-files/test3"
     pause
     repadolog using "`testfldr'/repadolog/test-trk-files/test4"
-    
+ }
     * Test on the stata.trk in the current PLUS folder
     pause
     repadolog
+    
+    repadolog, details
     
     
     // Add more tests here...

@@ -8,7 +8,7 @@ qui {
     version /* ADD VERSION NUMBER HERE */
 
     * Update the syntax. This is only a placeholder to make the command run
-    syntax [using/], [details]
+    syntax [using/], [Detail]
 
     ************************
     * Find trk file to use
@@ -43,20 +43,24 @@ qui {
       local trkfile   "`trkfolder'/stata.trk"
     }
 
-    * Create a frame for
-    tempname prov_frame
-    frame create `prov_frame' str50(package_name  distribution_date) str50 download_date str2000(commands source)
+    * Create a frame to store all pkg info and command info
+    tempname pkg_frame
+    frame create `pkg_frame' ///
+      str500(package_name distribution_date download_date command_name checksum notes) str2000(commands source) byte(is_cmd)
 
     * Read the trk file
     tempname trk_read
     file open `trk_read'  using "`trkfile'", read
 
+    * Initiate commands local
+    local commands ""
+    local cmd_count = 0
+
     * Read first line
     file read `trk_read' line
 
     * Write lines as-is until section
-    while r(eof)==0 {
-
+    while (r(eof)==0) {
         //noi di `"`macval(line)'"'
 
         * Get the source the command is installed from
@@ -74,6 +78,18 @@ qui {
           local downdate `=trim(substr(`"`line'"',3,.))'
         }
 
+        * Get commands
+        if (lower(substr(`"`macval(line)'"',1,2)) == "f ") {
+          noi parse_command `=trim(substr(`"`line'"',3,.))', trkfolder("`trkfolder'")
+          if ("`r(is_ado)'" == "1") {
+            local cmd_count = `cmd_count' + 1
+            local commands "`commands', `r(command_name)'"
+            local cmd_name_`cmd_count' = "`r(command_name)'"
+            local cmd_chck_`cmd_count' = "`r(checksum)'"
+            local cmd_note_`cmd_count' = "`r(notes)'"
+          }
+        }
+
         * Get distribution date
         if (substr(`"`macval(line)'"',1,21) == "d Distribution-Date: ") {
           local distdate `=trim(substr(`"`line'"',22,.))'
@@ -84,27 +100,112 @@ qui {
           * Distribution date is options, explicitly set N/A when missing
           if missing("`distdate'") local distdate "N/A"
 
-          * Write to the data frame
-          frame post `prov_frame' ("`pkgname'") ("`distdate'") ("`downdate'") ("commands") ("`source'")
+          local commands = trim(subinstr("`commands'",",","",1))
+
+          * Write package line to the data frame
+          frame post `pkg_frame' ("`pkgname'") ("`distdate'") ("`downdate'") ("") ("") ("") ("`commands'") ("`source'") (0)
+
+          * Write command line to the data frame
+          forvalues i = 1/`cmd_count' {
+            frame post `pkg_frame' ("`pkgname'") ("`distdate'") ("`downdate'") ("`cmd_name_`i''") ("`cmd_chck_`i''") ("`cmd_note_`i''") ("") ("`source'") (1)
+          }
 
           * Resetting all locals
           local pkgname  ""
           local distdate ""
           local downdate ""
           local commands ""
+          local cmd_count = 0
           local source   ""
         }
         * Read next line
         file read `trk_read' line
     }
 
-    //noi frames dir
-    noi frame `prov_frame': list
+    * Sort the frame alphabetically
+    frame `pkg_frame' : sort package_name command_name
 
-    frame `prov_frame': export delimited "`trkfolder'/repadolog.csv", replace quote
+    * Handle what to output
+    local first_vars "package_name distribution_date download_date"
+    if missing("`detail'") {
+      local vars "`first_vars' commands source"
+      local cond "is_cmd == 0"
+    }
+    else {
+      local vars "`first_vars' command_name checksum notes source"
+      local cond "is_cmd == 1"
+    }
+
+    * Display and save output
+    noi frame `pkg_frame': list `vars' if `cond', abbreviate(32)
+    frame `pkg_frame': export delimited `vars' using "`trkfolder'/repadolog.csv" if `cond', replace quote
     noi di as text `"{pstd}Ado log report written to {browse "`trkfolder'/repadolog.csv":`trkfolder'/repadolog.csv}.{p_end}"'
 
     // Remove then command is no longer in beta
     noi repkit "beta repadolog"
+}
+end
+
+cap program drop   parse_command
+    program define parse_command, rclass
+
+qui {
+    syntax anything, trkfolder(string)
+    local cpath "`anything'"
+
+    * Test that file is ado-file
+    if (substr("`cpath'",-4,4) == ".ado") {
+      * Extract command name
+      local cname = substr("`cpath'",3,strlen("`cpath'")-6)
+
+      * See if the file is found or if the file path in the trk file is broken
+      cap confirm file "`trkfolder'/`cpath'"
+      if _rc {
+        local cksum "N/A"
+        local notes "N/A"
+      }
+
+      * File path works, generate results based on the file content
+      else {
+        * Get size and checksum of the file content
+        checksum "`trkfolder'/`cpath'"
+        local cksum "`r(filelen)':`r(checksum)'"
+
+        **************************
+        * Read the content of the file and extract all notes,
+        * i.e. lines starting with !*
+
+        * Read the ado-file
+        tempname ado_read
+        file open `ado_read'  using "`trkfolder'/`cpath'", read
+        * Read first line of the ado-file
+        file read `ado_read' line
+
+        * Loop over all lines
+        local notes ""
+        while (r(eof)==0) {
+          * Test if line is a notes line
+          if (substr(trim(`"`macval(line)'"'),1,2) == "*!") {
+            local notes `"`macval(notes)', `macval(line)'"'
+          }
+          * Read next line of the ado-file
+          file read `ado_read' line
+        }
+
+        * Clean up notes
+        local notes = trim(subinstr(`"`macval(notes)'"',",","",1))
+      }
+
+      * Return dofile locals
+      return local is_ado       1
+      return local command_name "`cname'"
+      return local checksum     "`cksum'"
+      return local notes        `"`macval(notes)'"'
+    }
+    
+    * Not an ado file
+    else {
+      return local is_ado       0
+    }
 }
 end
