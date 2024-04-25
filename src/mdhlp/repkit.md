@@ -24,4 +24,5 @@ Read more about these commands on [this repo](https://github.com/worldbank/repki
 
 # Authors
 
+LSMS Team, The World Bank lsms@worldbank.org
 DIME Analytics, The World Bank dimenalytics@worldbank.org
