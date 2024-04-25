@@ -25,19 +25,19 @@
     pause off // set to pause on to run one at the time
  if 1 {
     * Test the command repadolog on four example files
-    repadolog using "`testfldr'/repadolog/test-trk-files/test1"
+    repadolog using "`testfldr'/repadolog/test-trk-files/test1", detail
     pause
-    repadolog using "`testfldr'/repadolog/test-trk-files/test2"
+    repadolog using "`testfldr'/repadolog/test-trk-files/test2", detail
     pause
-    repadolog using "`testfldr'/repadolog/test-trk-files/test3"
+    repadolog using "`testfldr'/repadolog/test-trk-files/test3", detail
     pause
-    repadolog using "`testfldr'/repadolog/test-trk-files/test4"
+    repadolog using "`testfldr'/repadolog/test-trk-files/test4", detail
  }
     * Test on the stata.trk in the current PLUS folder
     pause
-    repadolog
+    repadolog, detail savecsv
     
-    repadolog, detail
+    repadolog, 
     
     
     // Add more tests here...
