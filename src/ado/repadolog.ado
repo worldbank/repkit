@@ -191,7 +191,7 @@ qui {
     noi frame `pkg_frame' {
       sort `roworder'
       order `colorder'
-      noi list `colorder' if `cond', abbreviate(32)
+      if missing("`quietly'") noi list `colorder' if `cond', abbreviate(32)
       if `csvused' == 1 {
         export delimited `colorder' using `"`csvpath'"' if `cond', replace quote
       }
