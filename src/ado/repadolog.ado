@@ -185,21 +185,25 @@ qui {
     if missing("`detail'") {
       local roworder package_name command_name source //package name first - source break ties
       local colorder "`pkg_vars' commands source"
-      local cond "is_cmd == 0"
+      local keepcondition "is_cmd == 0"
     }
     else {
       local roworder command_name package_name source //command name first - source break ties
       local colorder "command_name `pkg_vars' checksum notes source"
-      local cond "is_cmd == 1"
+      local keepcondition "is_cmd == 1"
     }
 
     * Display and save output
     noi frame `pkg_frame' {
+      * Keep only relevant rows, and sort as needed
+      keep if `keepcondition'
       sort `roworder'
       order `colorder'
-      if missing("`quietly'") noi list `colorder' if `cond', abbreviate(32)
+      * Output in result window if applicable
+      if missing("`quietly'") noi list `colorder', abbreviate(32)
+      * Save if applicable
       if `csvused' == 1 {
-        qui export delimited `colorder' using `"`csvpath'"' if `cond', replace quote
+        qui export delimited `colorder' using `"`csvpath'"', replace quote
       }
     }
     if `csvused' == 1 {
