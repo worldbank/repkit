@@ -4,13 +4,13 @@ __repadolog__ - Outputs a report of what commands are installed in the PLUS fold
 
 # Syntax
 
-__repadolog__ [__using__] , [__**d**etail__ __**save**csv__ __**csv**path(_string_)__ __**qui**etly__]
+__repadolog__ [__using__] , [__**d**etail__ __**save**csv__ __**csv**path__(_string_) __**qui**etly__]
 
 | _options_ | Description |
 |-----------|-------------|
 | __**d**etail__ | Display one line per command instead of one line per package |
 | __**save**csv__ | Save the report in the current PLUS folder |
-| __**csv**path(_string_)__ | Define a custom path for the report |
+| __**csv**path__(_string_) | Define a custom path for the report |
 | __**qui**etly__ | Do not display the report in the result window |
 
 # Description
@@ -23,13 +23,13 @@ This command can be used independently, but it also fits very well with the comm
 
 # Options
 
-__using__ is used to use another _stata.trk_ file than the one currently active. This is an advanced use case and this is expected to be rarely used. See the command {browse "https://worldbank.github.io/repkit/reference/repado.html":repado} for how to change which folder to use as the current PLUS folder and thereby change which is the current _stata.trk_ file used.
+__using__ is used to use another _stata.trk_ file than the one currently active. This is an advanced use case and this is expected to be rarely used. See the command [repado](https://worldbank.github.io/repkit/reference/repado.html) for how to change which folder to use as the current PLUS folder and thereby change which is the current _stata.trk_ file used.
 
 __**d**etail__ generates a more detailed report. The default is to generate a report where each row represents a package where all commands in this package is listed in a column. When this option is used each row is a command. The same package meta data is included regardless if this option is used or not. However, command specific meta data is only included if this option is used.
 
-__**save**csv__ is used to save the report generated in a CSV file to disk. Unless `csvpath()` is also used, the report is saved in the same location as the _stata.trk_ file. If `csvpath()` is used, then this option is redundant.
+__**save**csv__ is used to save the report generated in a CSV file to disk. Unless `csvpath()` is also used, the report is saved in the same location as the _stata.trk_ file. If `csvpath()` is used, then this option is redundant. The report is always overwritten if it already exists.
 
-__**csv**path(_string_)__ is used to specify the location and name of the CSV file where the report will be saved to disk.
+__**csv**path__(_string_) is used to specify the location and name of the CSV file where the report will be saved to disk. The report is always overwritten if it already exists.
 
 __**qui**etly__ is used to suppress showing the report in Stata's result window.
 

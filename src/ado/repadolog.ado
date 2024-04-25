@@ -1,11 +1,11 @@
-*! version XX XXXXXXXXX ADAUTHORNAME ADCONTACTINFO
+*! version 1.2 20240222 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   repadolog
     program define repadolog
 
 qui {
 
-    version /* ADD VERSION NUMBER HERE */
+    version 14.1
 
     * Update the syntax. This is only a placeholder to make the command run
     syntax [using/], [Detail SAVEcsv CSVpath(string) QUIetly]
@@ -205,9 +205,6 @@ qui {
     else {
       noi di as text _n `"{pstd}No report saved to disk. To save a {inp:repadolog} report in the same location as your {it:stata.trk} file, {stata `"`full_user_input' savecsv"' :click here}. To save the report in a custom location run this command again using the {opt csvpath()} option.{p_end}"'
     }
-
-    // Remove then command is no longer in beta
-    noi repkit "beta repadolog"
 }
 end
 
