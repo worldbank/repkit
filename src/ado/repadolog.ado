@@ -109,7 +109,10 @@ qui {
 
     * Write lines as-is until section
     while (r(eof)==0) {
-        //noi di `"`macval(line)'"'
+
+        * Escape tricky characters
+        local line : subinstr local line "'"   `"" _char(39) ""', all
+        local line : subinstr local line "`"   `"" _char(96) ""', all
 
         * Get the source the command is installed from
         if (substr(`"`macval(line)'"',1,2) == "S ") {
@@ -246,6 +249,11 @@ qui {
         * Loop over all lines
         local notes ""
         while (r(eof)==0) {
+
+          * Escape tricky characters
+          local line : subinstr local line "'"   `"" _char(39) ""', all
+          local line : subinstr local line "`"   `"" _char(96) ""', all
+
           * Test if line is a notes line
           if (substr(trim(`"`macval(line)'"'),1,2) == "*!") {
             local notes `"`macval(notes)', `macval(line)'"'
