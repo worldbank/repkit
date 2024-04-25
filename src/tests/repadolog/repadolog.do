@@ -37,7 +37,7 @@
     pause
     repadolog
     
-    repadolog, details
+    repadolog, detail
     
     
     // Add more tests here...

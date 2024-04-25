@@ -8,7 +8,16 @@ qui {
     version /* ADD VERSION NUMBER HERE */
 
     * Update the syntax. This is only a placeholder to make the command run
-    syntax [using/], [Detail]
+    syntax [using/], [Detail SAVEcsv CSVpath(string) QUIetly]
+
+    *Get the full user input
+    local full_user_input = "repadolog " + trim(itrim(`"`0'"'))
+    local full_user_input : subinstr local full_user_input "\" "/" , all
+
+    ****************************************************************************
+    ****************************************************************************
+    * Handle input
+    ****************************************************************************
 
     ************************
     * Find trk file to use
@@ -27,7 +36,6 @@ qui {
       }
     }
     else {
-
       * If user included "stata.trk" in filepath, then remove to standardize
       if (substr("`using'",-9,9) == "stata.trk") {
         local using = substr("`using'",1,strlen("`using'")-10)
@@ -43,6 +51,40 @@ qui {
       local trkfile   "`trkfolder'/stata.trk"
     }
 
+    ************************
+    * Handle csv output options
+
+    * Test if either option for outputting csv is used
+    if !missing("`savecsv'`csvpath'") {
+      local csvused 1
+      * Test if csvpath() option is used
+      if !missing("`csvpath'") {
+        * Test if file is a csv file
+        if (substr("`csvpath'",-4,4) != ".csv") {
+          noi di as error `"{pstd}The file in {opt csvpath(`csvpath') is not a CSV-file.}{p_end}"'
+          error 99
+          exit
+        }
+      }
+      * csvpath is not used, save the report in the same location as the trk
+      else {
+        local csvpath   "`trkfolder'/repadolog.csv"
+      }
+    }
+    * Niether savecsv or csvpath is used
+    else {
+      local csvused 0
+    }
+
+
+    ****************************************************************************
+    ****************************************************************************
+    * Execute the command
+    ****************************************************************************
+
+    ************************
+    * Set up the frame
+
     * Create a frame to store all pkg info and command info
     tempname pkg_frame
     frame create `pkg_frame' ///
@@ -55,6 +97,9 @@ qui {
     * Initiate commands local
     local commands ""
     local cmd_count = 0
+
+    ************************
+    * Parse the trk file
 
     * Read first line
     file read `trk_read' line
@@ -122,24 +167,41 @@ qui {
         file read `trk_read' line
     }
 
-    * Sort the frame alphabetically
-    frame `pkg_frame' : sort package_name command_name
+    ****************************************************************************
+    ****************************************************************************
+    * Perform output
+    ****************************************************************************
 
-    * Handle what to output
-    local first_vars "package_name distribution_date download_date"
+    * A list of package info vars always included
+    local pkg_vars "package_name distribution_date download_date"
+
+    * Handle what to include in output based on the option detail used or not
     if missing("`detail'") {
-      local vars "`first_vars' commands source"
+      local roworder package_name command_name //package name first
+      local colorder "`pkg_vars' commands source"
       local cond "is_cmd == 0"
     }
     else {
-      local vars "`first_vars' command_name checksum notes source"
+      local roworder command_name package_name //command name first
+      local colorder "command_name `pkg_vars' checksum notes source"
       local cond "is_cmd == 1"
     }
 
     * Display and save output
-    noi frame `pkg_frame': list `vars' if `cond', abbreviate(32)
-    frame `pkg_frame': export delimited `vars' using "`trkfolder'/repadolog.csv" if `cond', replace quote
-    noi di as text `"{pstd}Ado log report written to {browse "`trkfolder'/repadolog.csv":`trkfolder'/repadolog.csv}.{p_end}"'
+    noi frame `pkg_frame' {
+      sort `roworder'
+      order `colorder'
+      noi list `colorder' if `cond', abbreviate(32)
+      if `csvused' == 1 {
+        export delimited `colorder' using `"`csvpath'"' if `cond', replace quote
+      }
+    }
+    if `csvused' == 1 {
+      noi di as text `"{pstd}Ado log report written to {browse "`trkfolder'/repadolog.csv":`trkfolder'/repadolog.csv}.{p_end}"'
+    }
+    else {
+      // TODO
+    }
 
     // Remove then command is no longer in beta
     noi repkit "beta repadolog"
@@ -202,7 +264,7 @@ qui {
       return local checksum     "`cksum'"
       return local notes        `"`macval(notes)'"'
     }
-    
+
     * Not an ado file
     else {
       return local is_ado       0
