@@ -136,11 +136,11 @@ qui {
 
     if missing("`debug'") {
       rm_output_dir , folder("`dirout'/run1/")
-      rm_output_dir , folder("`dirout'/run2/")
+      mac , folder("`dirout'/run2/")
     }
   }
 
-  // Remove then command is no longer in beta
+  // Remove tmahen command is no longer in beta
   noi repkit "beta reprun"
 
 end
@@ -298,31 +298,31 @@ end
             * Get the file path from the second word
             local file = `"`dofile'"'
             local file_rev = strreverse("`file'")
-            
+
             * Only recurse on .do files and add .do when no extension is used
             if (substr("`file_rev'",1,3) == "od.") {
               local recurse 1
-            } 
+            }
             else if (substr("`file_rev'",1,4) == "oda.") {
               local recurse 0 // skip recursing reprun on adofiles
-            } 
+            }
             else {
               local recurse 1
               local file "`file'.do"
             }
-            
+
             * Skip recursion instead of error if file not found
             cap confirm file "`file'"
             if _rc {
               local recurse 0
             }
-            
+
             * Test if it should recurse or not
             if `recurse' == 1 {
-              
+
               * Keep working on the stub
               local recursestub "`stub'_`++subf_n'"
-              
+
               noi reprun_recurse, dofile("`file'")     ///
                     output("`output'")   ///
                     stub("`recursestub'")
@@ -352,7 +352,7 @@ end
             * build file paths in recursive calls
             if (strpos("`line_command'","local")) | (strpos("`line_command'","global")) {
               // Capture in case running the macro requires data in memory
-              capture `line' 
+              capture `line'
             }
 
             * Write foreach/forvalues to block stack and
