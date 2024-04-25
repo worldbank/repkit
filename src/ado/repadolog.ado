@@ -180,12 +180,12 @@ qui {
 
     * Handle what to include in output based on the option detail used or not
     if missing("`detail'") {
-      local roworder package_name command_name //package name first
+      local roworder package_name command_name source //package name first - source break ties
       local colorder "`pkg_vars' commands source"
       local cond "is_cmd == 0"
     }
     else {
-      local roworder command_name package_name //command name first
+      local roworder command_name package_name source //command name first - source break ties
       local colorder "command_name `pkg_vars' checksum notes source"
       local cond "is_cmd == 1"
     }
