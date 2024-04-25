@@ -13,6 +13,9 @@ qui {
     *Get the full user input
     local full_user_input = "repadolog " + trim(itrim(`"`0'"'))
     local full_user_input : subinstr local full_user_input "\" "/" , all
+    if (!strpos(`"`full_user_input'"',",")) {
+      local full_user_input `"`full_user_input' ,"'
+    }
 
     ****************************************************************************
     ****************************************************************************
@@ -193,14 +196,14 @@ qui {
       order `colorder'
       if missing("`quietly'") noi list `colorder' if `cond', abbreviate(32)
       if `csvused' == 1 {
-        export delimited `colorder' using `"`csvpath'"' if `cond', replace quote
+        qui export delimited `colorder' using `"`csvpath'"' if `cond', replace quote
       }
     }
     if `csvused' == 1 {
-      noi di as text `"{pstd}Ado log report written to {browse "`trkfolder'/repadolog.csv":`trkfolder'/repadolog.csv}.{p_end}"'
+      noi di as text _n `"{pstd}{inp:repadolog} report written to {browse "`trkfolder'/repadolog.csv":`trkfolder'/repadolog.csv}.{p_end}"'
     }
     else {
-      // TODO
+      noi di as text _n `"{pstd}No report saved to disk. To save a {inp:repadolog} report in the same location as your {it:stata.trk} file, {stata `"`full_user_input' savecsv"' :click here}. To save the report in a custom location run this command again using the {opt csvpath()} option.{p_end}"'
     }
 
     // Remove then command is no longer in beta
