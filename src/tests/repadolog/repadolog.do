@@ -35,9 +35,9 @@
  }
     * Test on the stata.trk in the current PLUS folder
     pause
-    repadolog, detail savecsv
+    repadolog, detail save
     
-    repadolog, 
+    repadolog, savepath("`testfldr'/repadolog/testoutput.csv")
     
     
     // Add more tests here...
