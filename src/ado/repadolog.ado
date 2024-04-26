@@ -8,7 +8,7 @@ qui {
     version 14.1
 
     * Update the syntax. This is only a placeholder to make the command run
-    syntax [using/], [Detail SAVEcsv CSVpath(string) QUIetly]
+    syntax [using/], [Detail Save SAVEPath(string) QUIetly]
 
     *Get the full user input
     local full_user_input = "repadolog " + trim(itrim(`"`0'"'))
@@ -58,23 +58,23 @@ qui {
     * Handle csv output options
 
     * Test if either option for outputting csv is used
-    if !missing("`savecsv'`csvpath'") {
+    if !missing("`save'`savepath'") {
       local csvused 1
-      * Test if csvpath() option is used
-      if !missing("`csvpath'") {
+      * Test if savepath() option is used
+      if !missing("`savepath'") {
         * Test if file is a csv file
-        if (substr("`csvpath'",-4,4) != ".csv") {
-          noi di as error `"{pstd}The file in {opt csvpath(`csvpath') is not a CSV-file.}{p_end}"'
+        if (substr("`savepath'",-4,4) != ".csv") {
+          noi di as error `"{pstd}The file in {opt savepath(`savepath') is not a CSV-file.}{p_end}"'
           error 99
           exit
         }
       }
-      * csvpath is not used, save the report in the same location as the trk
+      * savepath is not used, save the report in the same location as the trk
       else {
-        local csvpath   "`trkfolder'/repadolog.csv"
+        local savepath   "`trkfolder'/repadolog.csv"
       }
     }
-    * Niether savecsv or csvpath is used
+    * Niether save or savepath is used
     else {
       local csvused 0
     }
@@ -194,7 +194,7 @@ qui {
     }
 
     * Display and save output
-    noi frame `pkg_frame' {
+    frame `pkg_frame' {
       * Keep only relevant rows, and sort as needed
       keep if `keepcondition'
       sort `roworder'
@@ -203,14 +203,14 @@ qui {
       if missing("`quietly'") noi list `colorder', abbreviate(32)
       * Save if applicable
       if `csvused' == 1 {
-        qui export delimited `colorder' using `"`csvpath'"', replace quote
+        qui export delimited `colorder' using `"`savepath'"', replace quote
       }
     }
     if `csvused' == 1 {
-      noi di as text _n `"{pstd}{inp:repadolog} report written to {browse "`trkfolder'/repadolog.csv":`trkfolder'/repadolog.csv}.{p_end}"'
+      noi di as text _n `"{pstd}{inp:repadolog} report written to {browse "`savepath'":`savepath'}.{p_end}"'
     }
     else {
-      noi di as text _n `"{pstd}No report saved to disk. To save a {inp:repadolog} report in the same location as your {it:stata.trk} file, {stata `"`full_user_input' savecsv"' :click here}. To save the report in a custom location run this command again using the {opt csvpath()} option.{p_end}"'
+      noi di as text _n `"{pstd}No report saved to disk. To save a {inp:repadolog} report in the same location as your {it:stata.trk} file, {stata `"`full_user_input' save"' :click here}. To save the report in a custom location run this command again using the {opt savepath()} option.{p_end}"'
     }
 }
 end
