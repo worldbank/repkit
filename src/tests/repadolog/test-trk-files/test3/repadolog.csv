@@ -1,0 +1,13 @@
+package_name,distribution_date,download_date,commands,source
+"betterbar.pkg","N/A","7 Mar 2024","betterbar, betterbarci","https://github.com/bbdaniels/stata/raw/main"
+"binsreg.pkg","20230703","7 Mar 2024","binsreg, binsqreg, binslogit, binsprobit, binsregselect, binstest, binspwc, binsreg_irecode, binsreg_pctile","https://raw.githubusercontent.com/nppackages/binsreg/master/stata"
+"dm0037.pkg","N/A","12 Mar 2024","xml_tab","http://www.stata-journal.com/software/sj8-3"
+"easyirt.pkg","N/A","1 Apr 2024","easyirt","https://github.com/bbdaniels/stata/raw/main"
+"iefieldkit.pkg","20230802","7 Mar 2024","iefieldkit, iecodebook, iecompdup, iecorrect, ieduplicates, ietestform","http://fmwww.bc.edu/repec/bocode/i"
+"labelcollapse.pkg","N/A","1 Apr 2024","labelcollapse","https://github.com/bbdaniels/stata/raw/main"
+"openirt.pkg","N/A","1 Apr 2024","openirt","http://tristanz.github.io/OpenIRT"
+"outwrite.pkg","N/A","12 Mar 2024","outwrite","https://github.com/bbdaniels/stata/raw/main"
+"repkit.pkg","20240222","7 Mar 2024","repkit, repado, reprun_dataline, reprun, reproot, reproot_parse, reproot_search","http://fmwww.bc.edu/repec/bocode/r"
+"st0030_3.pkg","N/A","18 Mar 2024","ivactest, ivendog, ivhettest, ivreg2, ivreg2_p, ivreg2_cue, ivreset, overid, ranktest","http://www.stata-journal.com/software/sj7-4"
+"st0085_2.pkg","N/A","13 Mar 2024","_eststo, esttab, estadd, eststo, estout, estpost","http://www.stata-journal.com/software/sj14-2"
+"winsor.pkg","20060809","7 Mar 2024","winsor","http://fmwww.bc.edu/repec/bocode/w"
