@@ -9,5 +9,7 @@
   
   local rk "${clone}/repkit"
   
+  //ad_sthlp , adfolder("`rk'") commands(repadolog)
+  
   ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline") //ssczip
   
