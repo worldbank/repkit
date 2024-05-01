@@ -136,7 +136,7 @@ qui {
 
     if missing("`debug'") {
       rm_output_dir , folder("`dirout'/run1/")
-      mac , folder("`dirout'/run2/")
+      rm_output_dir , folder("`dirout'/run2/")
     }
   }
 
