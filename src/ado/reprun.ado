@@ -1,4 +1,4 @@
-mac*! version 1.2 20240222 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 1.2 20240222 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reprun
     program define reprun, rclass
@@ -746,7 +746,7 @@ end
         local l1_srng = "`l1_srngstate'"
         local pl1_srng = "`pl1_srngstate'"
 
-        if ("`l1_srngstate'" != "`pl1_srngstate'") & ("`l2_srngcheck'" != "0") {
+        if ("`l1_srngstate'" != "`pl1_srngstate'") & ("`l2_srngcheck'" != "`l1_srngcheck'") {
           local l2_srng = "`l2_srngstate'"
           local pl2_srng = "`pl2_srngstate'"
         }
@@ -763,14 +763,14 @@ end
         * Compare state in each run compared to previous line
         local `state'_c1 = ""
         local change1 0
-        if ("`l1_`state''" != "`pl1_`state''") {
+        if ("`l1_`state''" != "`pl1_`state''") & ("`pl1_`state''"!="") {
           local `state'_c1 = "Change"
           local change1 1
         }
 
         local `state'_c2 = ""
         local change2 0
-        if ("`l2_`state''" != "`pl2_`state''") {
+        if ("`l2_`state''" != "`pl2_`state''") & ("`pl2_`state''"!="") {
           local `state'_c2 = "Change"
           local change2 1
         }
@@ -927,7 +927,7 @@ end
     local sl "{c |}{col `c1'}"
     local sl "`sl'{c |}{dup 6: }Seed RNG State{col `c2'}"
     local sl "`sl'{c |}{dup 6: }Sort Order RNG{col `c3'}"
-    local sl "`sl'{c |}{dup 6: }Data Signature{col `c4'}"
+    local sl "`sl'{c |}{dup 6: }Data Checksum{col `c4'}"
     return local state_titles "`sl'{c |}"
 
     * Column title line
