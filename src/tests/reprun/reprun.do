@@ -23,7 +23,7 @@
 
     * Install the version of this package in
     * the plus-ado folder in the test folder
-    
+
     cap mkdir    "${test_fldr}/dev-env/"
     repado using "${test_fldr}/dev-env/"
     cap net uninstall repkit
@@ -37,8 +37,9 @@
     cap mkdir "${tf}/output-2"
     cap mkdir "${tf}/output-3"
     reprun "${tf}/target-1.do" using "${tf}/output-1" , debug
-    reprun "${tf}/target-1.do" using "${tf}/output-2" , s(srng loop)
-    reprun "${tf}/target-1.do" using "${tf}/output-3" , compact s(rng srng dsig)
+    reprun "${tf}/target-1.do" using "${tf}/output-1" , v debug
+    reprun "${tf}/target-1.do" using "${tf}/output-2" , s(loop)
+    reprun "${tf}/target-1.do" using "${tf}/output-3" , compact s(rng srng dsum)
     reprun "${tf}/target-1.do" ,  verbose
 
     * Example A - single file

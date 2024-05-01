@@ -666,18 +666,19 @@ end
           local write_outputline 0
 
             * Check each value individually for changes and mismatches
+            local any_mismatch = 0
             foreach matchtype in rng srng dsum {
               * Test if any line is "Change"
               local any_change = ///
                 strpos("`r(`matchtype'_c1)'`r(`matchtype'_c2)'","Change")
               if (`any_change' > 0 & !missing(`"`verbose'"')) ///
                 local write_outputline 1
-              * Test if any line is "Missmatch"
-              local any_mismatch = ///
+              * Test if any line is "Mismatch"
+              local any_mismatch = `any_mismatch' + ///
                 max(strpos("`r(`matchtype'_m)'","ERR"),strpos("`r(`matchtype'_m)'","DIFF"))
               if (`any_mismatch' > 0) & missing(`"`compact'"') local write_outputline 1
               * Compact display
-              if (`any_mismatch' > 0) & (`any_change' > 0) local write_outputline 1
+              if (`any_mismatch' > 6) & (`any_change' > 0) local write_outputline 1
             }
 
           * If line is supposed to be outputted, write line
@@ -795,7 +796,7 @@ end
         * Match
         if ("`l1_`state''" == "`l2_`state''") {
           if !missing("``state'_c1'``state'_c2'") return local `state'_m "OK!"
-          if strpos("`suppress'","`state'") {
+          if strpos(" `suppress' "," `state' ") {
             return local `state'_m ""
             local `state'_c1 = ""
             local `state'_c2 = ""

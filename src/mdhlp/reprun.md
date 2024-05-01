@@ -32,7 +32,7 @@ By default, __reprun__ returns a list of _mismatches_ in Stata state between Run
 
 The __**v**erbose__ option can be used to produce even more detail than the default. If the __**v**erbose__ option is specified, then any line in which the state changes _during_ Run 1 or Run 2; or mismatches _between_ the runs will be flagged and reported. This is intended to allow the user to do a deep-dive into the function and structure of the do-file's execution.
 
-The __**c**ompact__ option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the __**c**ompact__ option is specified, then _only_ those lines which have changes _during_ Run 1 or Run 2 __and__ mismatches _between_ the runs will be flagged and reported. This is intended to reduce the reporting of "cascading" flags, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run.
+The __**c**ompact__ option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the __**c**ompact__ option is specified, then _only_ those lines which have mismatched seed or sort order RNG changes _during_ Run 1 or Run 2 __and__ mismatches in data _between_ the runs will be flagged and reported. This is intended to reduce the reporting of "cascading" flags, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run.
 
 The __**s**uppress()__ option is used to hide the reporting of changes that do not lead to mismatches (especially when the __**v**erbose__ option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should _not_ be forced to match between runs, it will very often have changes that do not produce errors, specifying __**s**uppress(srng)__ will remove a great deal of unhelpful output from the reporting table. To do this for all states, write __**s**uppress(rng srng dsum)__. Suppressing `loop` will clean up the display of loops so that the titles are only shown on the first line; but if combined with `compact` may not display at all.
 
@@ -51,4 +51,4 @@ Read more about these commands on [this repo](https://github.com/worldbank/repki
 # Authors
 
 LSMS Team, The World Bank lsms@worldbank.org
-DIME Analytics, The World Bank dimenalytics@worldbank.org
+DIME Analytics, The World Bank dimeanalytics@worldbank.org
