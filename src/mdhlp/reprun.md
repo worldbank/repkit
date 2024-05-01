@@ -8,13 +8,13 @@ __reprun__ "_do-file.do_" [using "_/directory/_"]
 , [__**v**erbose__] [__**c**ompact__] [__**s**uppress(rng|srng|dsig|loop)__]
 [__**d**ebug__] [__**noc**lear__]
 
-By default, __reprun__ will execute the complete do-file specified in "_do-file.do_" once (Run 1), and record the "seed RNG state", "sort order RNG", and "data signature" after the execution of every line, as well as the exact data in certain cases. __reprun__ will then execute the do-file a second time (Run 2), and find all _changes_ and _mismatches_ in these states throughout Run 2. A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called `/reprun/` in the same location as the do-file. If the `using` argument is supplied, the `/reprun/` directory containing the SMCL file will be stored in that location instead.
+By default, __reprun__ will execute the complete do-file specified in "_do-file.do_" once (Run 1), and record the "seed RNG state", "sort order RNG", and "data checksum" after the execution of every line, as well as the exact data in certain cases. __reprun__ will then execute the do-file a second time (Run 2), and find all _changes_ and _mismatches_ in these states throughout Run 2. A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called `/reprun/` in the same location as the do-file. If the `using` argument is supplied, the `/reprun/` directory containing the SMCL file will be stored in that location instead.
 
 | _options_ | Description |
 |-----------|-------------|
 | __**v**erbose__   | Report all lines where Run 1 and Run 2 mismatch __or__ change for any value  |
 | __**c**ompact__   | Report only lines where Run 1 and Run 2 mismatch __and__ change for any value  |
-| __**s**uppress(types)__   | Suppress reporting of state changes that do not result in mismatches for seed RNG state (`rng`), sort order RNG (`srng`), and/or data signature (`dsig`), for any reporting setting  |
+| __**s**uppress(types)__   | Suppress reporting of state changes that do not result in mismatches for seed RNG state (`rng`), sort order RNG (`srng`), and/or data checksum (`dsum`), for any reporting setting  |
 | __**d**ebug__   | Save all records of Stata states in Run 1 and Run 2 for inspection in the `/reprun/` folder |
 | __**noc**lear__   | Do not reset the Stata state before beginning reproducibility Run 1  |
 

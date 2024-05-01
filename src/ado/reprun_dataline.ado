@@ -33,7 +33,7 @@ cap program drop   reprun_dataline
       *Get the states to be checked
       local srng "`c(sortrngstate)'"
       datasignature
-      local dsig "`r(datasignature)'"
+      local dsum "`r(datasignature)'"
       * Trim looptracker to remove excessive spaces
       local loopt = trim("`looptracker'")
 
@@ -43,10 +43,10 @@ cap program drop   reprun_dataline
         cap qui checksum "`output'.dta"
         cap local srngcheck = `r(checksum)'
           if _rc local srngcheck = 0
-          local dsig "`srngcheck'"
+          local dsum "`srngcheck'"
 
       *Build data line
-      local line "l:`lnum'&rng:`rng'&srngstate:`srng'&data:`output'`data'&dsig:`dsig'&loopt:`loopt'&srngcheck:`srngcheck'"
+      local line "l:`lnum'&rng:`rng'&srngstate:`srng'&data:`output'`data'&dsum:`dsum'&loopt:`loopt'&srngcheck:`srngcheck'"
     }
 
     * Recurse line
