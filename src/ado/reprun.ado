@@ -678,7 +678,7 @@ end
                 max(strpos("`r(`matchtype'_m)'","ERR"),strpos("`r(`matchtype'_m)'","DIFF"))
               if (`any_mismatch' > 0) & missing(`"`compact'"') local write_outputline 1
               * Compact display
-              if (`any_mismatch' > 6) & (`any_change' > 0) local write_outputline 1
+              if ("`matchtype'"!="dsum") & (`any_mismatch' > 0) & (`any_change' > 0) local write_outputline 1
             }
 
           * If line is supposed to be outputted, write line

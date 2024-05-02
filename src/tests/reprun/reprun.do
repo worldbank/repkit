@@ -38,8 +38,9 @@
     cap mkdir "${tf}/output-3"
     reprun "${tf}/target-1.do" using "${tf}/output-1" , debug
     reprun "${tf}/target-1.do" using "${tf}/output-1" , v debug
+    reprun "${tf}/target-1.do" using "${tf}/output-1" , c debug
     reprun "${tf}/target-1.do" using "${tf}/output-2" , s(loop)
-    reprun "${tf}/target-1.do" using "${tf}/output-3" , compact s(rng srng dsum)
+    reprun "${tf}/target-1.do" using "${tf}/output-3" , v s(rng)
     reprun "${tf}/target-1.do" ,  verbose
 
     * Example A - single file
