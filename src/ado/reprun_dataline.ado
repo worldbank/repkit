@@ -32,15 +32,13 @@ cap program drop   reprun_dataline
       local rng "`c(rngstate)'"
       *Get the states to be checked
       local srng "`c(sortrngstate)'"
-      datasignature
-      local dsum "`r(datasignature)'"
       * Trim looptracker to remove excessive spaces
       local loopt = trim("`looptracker'")
 
       * Handle data state
-      local output = subinstr(`"`datatmp'"',".txt",".csv",.)
-        cap export delimited using "`output'.dta" , replace
-        cap qui checksum "`output'.dta"
+      tempfile checksum
+        cap export delimited using `checksum' , replace
+        cap qui checksum `checksum'
         cap local srngcheck = `r(checksum)'
           if _rc local srngcheck = 0
           local dsum "`srngcheck'"
