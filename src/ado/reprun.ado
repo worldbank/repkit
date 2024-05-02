@@ -666,7 +666,6 @@ end
           local write_outputline 0
 
             * Check each value individually for changes and mismatches
-            local any_mismatch = 0
             foreach matchtype in rng srng dsum {
               * Test if any line is "Change"
               local any_change = ///
@@ -674,7 +673,7 @@ end
               if (`any_change' > 0 & !missing(`"`verbose'"')) ///
                 local write_outputline 1
               * Test if any line is "Mismatch"
-              local any_mismatch = `any_mismatch' + ///
+              local any_mismatch = ///
                 max(strpos("`r(`matchtype'_m)'","ERR"),strpos("`r(`matchtype'_m)'","DIFF"))
               if (`any_mismatch' > 0) & missing(`"`compact'"') local write_outputline 1
               * Compact display
