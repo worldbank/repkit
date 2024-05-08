@@ -5,16 +5,16 @@ __reprun__ - This command is used to automate a reproducibility check for a sing
 # Syntax
 
 __reprun__ "_do-file.do_" [using "_/directory/_"]
-, [__**v**erbose__] [__**c**ompact__] [__**s**uppress(rng|srng|dsig|loop)__]
+, [__**v**erbose__] [__**c**ompact__] [__**s**uppress(rng|srng|dsum|loop)__]
 [__**d**ebug__] [__**noc**lear__]
 
-By default, __reprun__ will execute the complete do-file specified in "_do-file.do_" once (Run 1), and record the "seed RNG state", "sort order RNG", and "data signature" after the execution of every line, as well as the exact data in certain cases. __reprun__ will then execute the do-file a second time (Run 2), and find all _changes_ and _mismatches_ in these states throughout Run 2. A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called `/reprun/` in the same location as the do-file. If the `using` argument is supplied, the `/reprun/` directory containing the SMCL file will be stored in that location instead.
+By default, __reprun__ will execute the complete do-file specified in "_do-file.do_" once (Run 1), and record the "seed RNG state", "sort order RNG", and "data checksum" after the execution of every line, as well as the exact data in certain cases. __reprun__ will then execute the do-file a second time (Run 2), and find all _changes_ and _mismatches_ in these states throughout Run 2. A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called `/reprun/` in the same location as the do-file. If the `using` argument is supplied, the `/reprun/` directory containing the SMCL file will be stored in that location instead.
 
 | _options_ | Description |
 |-----------|-------------|
 | __**v**erbose__   | Report all lines where Run 1 and Run 2 mismatch __or__ change for any value  |
-| __**c**ompact__   | Report only lines where Run 1 and Run 2 mismatch __and__ change for any value  |
-| __**s**uppress(types)__   | Suppress reporting of state changes that do not result in mismatches for seed RNG state (`rng`), sort order RNG (`srng`), and/or data signature (`dsig`), for any reporting setting  |
+| __**c**ompact__   | Report only lines where Run 1 and Run 2 mismatch __and__ change for either the seed or sort RNG |
+| __**s**uppress(types)__   | Suppress reporting of state changes that do not result in mismatches for seed RNG state (`rng`), sort order RNG (`srng`), and/or data checksum (`dsum`), for any reporting setting  |
 | __**d**ebug__   | Save all records of Stata states in Run 1 and Run 2 for inspection in the `/reprun/` folder |
 | __**noc**lear__   | Do not reset the Stata state before beginning reproducibility Run 1  |
 
@@ -32,13 +32,13 @@ By default, __reprun__ returns a list of _mismatches_ in Stata state between Run
 
 The __**v**erbose__ option can be used to produce even more detail than the default. If the __**v**erbose__ option is specified, then any line in which the state changes _during_ Run 1 or Run 2; or mismatches _between_ the runs will be flagged and reported. This is intended to allow the user to do a deep-dive into the function and structure of the do-file's execution.
 
-The __**c**ompact__ option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the __**c**ompact__ option is specified, then _only_ those lines which have changes _during_ Run 1 or Run 2 __and__ mismatches _between_ the runs will be flagged and reported. This is intended to reduce the reporting of "cascading" flags, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run.
+The __**c**ompact__ option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the __**c**ompact__ option is specified, then _only_ those lines which have mismatched seed or sort order RNG changes _during_ Run 1 or Run 2 __and__ mismatches _between_ the runs will be flagged and reported. Data checksum mismatches alone will be ignored; as will RNG mismatches not accompanied by a change in the state. This is intended to reduce the reporting of "cascading" differences, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run (making every subsequent data change a mismatch, for example).
 
-The __**s**uppress()__ option is used to hide the reporting of changes that do not lead to mismatches (especially when the __**v**erbose__ option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should _not_ be forced to match between runs, it will very often have changes that do not produce errors, specifying __**s**uppress(srng)__ will remove a great deal of unhelpful output from the reporting table. To do this for all states, write __**s**uppress(rng srng dsig)__. Suppressing `loop` will clean up the display of loops so that the titles are only shown on the first line; but if combined with `compact` may not display at all.
+The __**s**uppress()__ option is used to hide the reporting of changes that do not lead to mismatches (especially when the __**v**erbose__ option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should _not_ be forced to match between runs, it will very often have changes that do not produce errors, specifying __**s**uppress(srng)__ will remove a great deal of unhelpful output from the reporting table. To do this for all states, write __**s**uppress(rng srng dsum)__. Suppressing `loop` will clean up the display of loops so that the titles are only shown on the first line; but if combined with `compact` may not display at all.
 
 ## Reporting and debugging options
 
-The __**d**ebug__ option allows the user to save all of the underlying materials used by __reprun__ in the `/reprun/` folder where the reporting SMCL file will be written. This will include copies of all do-files for each run for manual inspection, text files of the states of Stata after each line, and copies of the dataset at specific lines when it is needed. This can take a lot of space, and is automatically cleaned up after execution if __**d**ebug__ is not specified.
+The __**d**ebug__ option allows the user to save all of the underlying materials used by __reprun__ in the `/reprun/` folder where the reporting SMCL file will be written. This will include copies of all do-files for each run for manual inspection and text files of the states of Stata after each line. This is automatically cleaned up after execution if __**d**ebug__ is not specified.
 
 ## Other options
 
@@ -51,4 +51,4 @@ Read more about these commands on [this repo](https://github.com/worldbank/repki
 # Authors
 
 LSMS Team, The World Bank lsms@worldbank.org
-DIME Analytics, The World Bank dimenalytics@worldbank.org
+DIME Analytics, The World Bank dimeanalytics@worldbank.org

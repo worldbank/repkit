@@ -32,29 +32,19 @@ cap program drop   reprun_dataline
       local rng "`c(rngstate)'"
       *Get the states to be checked
       local srng "`c(sortrngstate)'"
-      datasignature
-      local dsig "`r(datasignature)'"
       * Trim looptracker to remove excessive spaces
       local loopt = trim("`looptracker'")
-      
-      * Handle data line
-      local output = substr(`"`datatmp'"',1,strrpos(`"`datatmp'"',".txt"))
-      local data = "`lnum'`looptracker'"
-      local data = subinstr("`data'"," ","_",.)
-      local data = subinstr("`data'",":","-",.)
-      if `run' == 1 {
-        cap mkdir "`output'"
-        save "`output'/`data'.dta" , replace emptyok
-        local srngcheck = _rc
-      }
-      if `run' == 2 {
-        local output = subinstr(`"`output'"',"run2","run1",.)
-        cap cf _all using "`output'/`data'.dta"
-        local srngcheck = _rc
-      }
+
+      * Handle data state
+      tempfile checksum
+        cap export delimited using `checksum' , replace
+        cap qui checksum `checksum'
+        cap local srngcheck = `r(checksum)'
+          if _rc local srngcheck = 0
+          local dsum "`srngcheck'"
 
       *Build data line
-      local line "l:`lnum'&rng:`rng'&srngstate:`srng'&data:`output'`data'&dsig:`dsig'&loopt:`loopt'&srngcheck:`srngcheck'"
+      local line "l:`lnum'&rng:`rng'&srngstate:`srng'&data:`output'`data'&dsum:`dsum'&loopt:`loopt'&srngcheck:`srngcheck'"
     }
 
     * Recurse line

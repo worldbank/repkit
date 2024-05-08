@@ -1,4 +1,4 @@
-mac*! version 1.2 20240222 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 1.2 20240222 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reprun
     program define reprun, rclass
@@ -136,7 +136,7 @@ qui {
 
     if missing("`debug'") {
       rm_output_dir , folder("`dirout'/run1/")
-      mac , folder("`dirout'/run2/")
+      rm_output_dir , folder("`dirout'/run2/")
     }
   }
 
@@ -666,18 +666,18 @@ end
           local write_outputline 0
 
             * Check each value individually for changes and mismatches
-            foreach matchtype in rng srng dsig {
+            foreach matchtype in rng srng dsum {
               * Test if any line is "Change"
               local any_change = ///
                 strpos("`r(`matchtype'_c1)'`r(`matchtype'_c2)'","Change")
               if (`any_change' > 0 & !missing(`"`verbose'"')) ///
                 local write_outputline 1
-              * Test if any line is "Missmatch"
+              * Test if any line is "Mismatch"
               local any_mismatch = ///
                 max(strpos("`r(`matchtype'_m)'","ERR"),strpos("`r(`matchtype'_m)'","DIFF"))
               if (`any_mismatch' > 0) & missing(`"`compact'"') local write_outputline 1
               * Compact display
-              if (`any_mismatch' > 0) & (`any_change' > 0) local write_outputline 1
+              if ("`matchtype'"!="dsum") & (`any_mismatch' > 0) & (`any_change' > 0) local write_outputline 1
             }
 
           * If line is supposed to be outputted, write line
@@ -686,7 +686,7 @@ end
               outputcolumns("`outputcolumns'") lnum("`r(lnum)'")               ///
               rng1("`r(rng_c1)'")   rng2("`r(rng_c2)'")   rngm("`r(rng_m)'")   ///
               srng1("`r(srng_c1)'") srng2("`r(srng_c2)'") srngm("`r(srng_m)'") ///
-              dsig1("`r(dsig_c1)'") dsig2("`r(dsig_c2)'") dsigm("`r(dsig_m)'") ///
+              dsum1("`r(dsum_c1)'") dsum2("`r(dsum_c2)'") dsumm("`r(dsum_m)'") ///
               loopiteration("`r(loopt)'")
             noi write_and_print_output, h_smcl(`h_smcl') l1("`r(outputline)'")
           }
@@ -746,7 +746,7 @@ end
         local l1_srng = "`l1_srngstate'"
         local pl1_srng = "`pl1_srngstate'"
 
-        if ("`l1_srngstate'" != "`pl1_srngstate'") & ("`l2_srngcheck'" != "0") {
+        if ("`l1_srngstate'" != "`pl1_srngstate'") & ("`l2_srngcheck'" != "`l1_srngcheck'") {
           local l2_srng = "`l2_srngstate'"
           local pl2_srng = "`pl2_srngstate'"
         }
@@ -758,19 +758,19 @@ end
       local arrow "{c -}{c -}{c -}{c -}{c -}>"
 
       * Comparing all states since previous line and between runs
-      foreach state in rng srng dsig {
+      foreach state in rng srng dsum {
 
         * Compare state in each run compared to previous line
         local `state'_c1 = ""
         local change1 0
-        if ("`l1_`state''" != "`pl1_`state''") {
+        if ("`l1_`state''" != "`pl1_`state''") & ("`pl1_`state''"!="") {
           local `state'_c1 = "Change"
           local change1 1
         }
 
         local `state'_c2 = ""
         local change2 0
-        if ("`l2_`state''" != "`pl2_`state''") {
+        if ("`l2_`state''" != "`pl2_`state''") & ("`pl2_`state''"!="") {
           local `state'_c2 = "Change"
           local change2 1
         }
@@ -788,9 +788,6 @@ end
           }
         }
 
-        * Return the labels for each state
-        return local `state'_c1 "``state'_c1'"
-        return local `state'_c2 "``state'_c2'"
 
         ************************************************************
         * Compare states across runs
@@ -798,7 +795,16 @@ end
         * Match
         if ("`l1_`state''" == "`l2_`state''") {
           if !missing("``state'_c1'``state'_c2'") return local `state'_m "OK!"
+          if strpos(" `suppress' "," `state' ") {
+            return local `state'_m ""
+            local `state'_c1 = ""
+            local `state'_c2 = ""
+          }
         }
+
+        * Return the labels for each state
+        return local `state'_c1 "``state'_c1'"
+        return local `state'_c2 "``state'_c2'"
 
         * Not matching
         else {
@@ -862,7 +868,7 @@ end
     syntax , outputcolumns(numlist) lnum(string) ///
       [rng1(string)  rng2(string)  rngm(string) ///
       srng1(string) srng2(string) srngm(string) ///
-      dsig1(string) dsig2(string) dsigm(string) ///
+      dsum1(string) dsum2(string) dsumm(string) ///
       loopiteration(string)]
 
     local c1 : word 1 of `outputcolumns'
@@ -890,10 +896,10 @@ end
 
     * Datasignature
     local c3 = (`c3' + 9)
-    local out_line "`out_line'{c |} `dsig1'{col `c3'}"
+    local out_line "`out_line'{c |} `dsum1'{col `c3'}"
     local c3 = (`c3' + 9)
-    local out_line "`out_line'  `dsig2'{col `c3'}"
-    local out_line "`out_line'  `dsigm'{col `c4'}"
+    local out_line "`out_line'  `dsum2'{col `c3'}"
+    local out_line "`out_line'  `dsumm'{col `c4'}"
 
 
     local out_line "`out_line'{c |} `loopiteration'"
@@ -927,7 +933,7 @@ end
     local sl "{c |}{col `c1'}"
     local sl "`sl'{c |}{dup 6: }Seed RNG State{col `c2'}"
     local sl "`sl'{c |}{dup 6: }Sort Order RNG{col `c3'}"
-    local sl "`sl'{c |}{dup 6: }Data Signature{col `c4'}"
+    local sl "`sl'{c |}{dup 6: }Data Checksum{col `c4'}"
     return local state_titles "`sl'{c |}"
 
     * Column title line
