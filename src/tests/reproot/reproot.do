@@ -6,12 +6,13 @@
 
     *************************************
     * Set root path
-    * TODO: Update with reprun once published
+    * This is the only test file that cannot 
+    * use reproot as it is testing reproot
 
     di "Your username: `c(username)'"
     * Set each user's root path
     if "`c(username)'" == "`c(username)'" {
-        global root "C:/Users/wb462869/github//repkit"
+        global root "C:/Users/wb462869/github/repkit"
     }
     * Set all other user's root paths on this format
     if "`c(username)'" == "" {

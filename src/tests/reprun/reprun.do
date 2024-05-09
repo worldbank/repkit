@@ -1,16 +1,17 @@
 
-    * TODO: replace with reproot
+
+    * Do not use reproot when testing commands in repkit
     * Kristoffer's root path
     if "`c(username)'" == "wb462869" {
-        global clone "C:\Users\wb462869\github\repkit"
+        global repkit_clone "C:\Users\wb462869\github\repkit"
     }
     * Fill in your root path here
     if "`c(username)'" == "bbdaniels" {
-        global clone "/Users/bbdaniels/GitHub/repkit"
+        global repkit_clone "/Users/bbdaniels/GitHub/repkit"
     }
 
     * Set global to ado_fldr
-    global src_fldr  "${clone}/src"
+    global src_fldr  "${repkit_clone}/src"
     global test_fldr "${src_fldr}/tests"
     global run_fldr  "${test_fldr}/reprun"
     global tf        "${run_fldr}/targets"
@@ -22,7 +23,7 @@
 
     * Install the version of this package in
     * the plus-ado folder in the test folder
-    
+
     cap mkdir    "${test_fldr}/dev-env/"
     repado using "${test_fldr}/dev-env/"
     cap net uninstall repkit
@@ -36,8 +37,10 @@
     cap mkdir "${tf}/output-2"
     cap mkdir "${tf}/output-3"
     reprun "${tf}/target-1.do" using "${tf}/output-1" , debug
-    reprun "${tf}/target-1.do" using "${tf}/output-2" , s(srng loop)
-    reprun "${tf}/target-1.do" using "${tf}/output-3" , compact s(rng srng dsig)
+    reprun "${tf}/target-1.do" using "${tf}/output-1" , v debug
+    reprun "${tf}/target-1.do" using "${tf}/output-1" , c debug
+    reprun "${tf}/target-1.do" using "${tf}/output-2" , s(loop)
+    reprun "${tf}/target-1.do" using "${tf}/output-3" , v s(rng)
     reprun "${tf}/target-1.do" ,  verbose
 
     * Example A - single file
@@ -61,4 +64,7 @@
     reprun "${wca}/main.do" using "${wca}/output" , debug
 
     * Example F - with project ado-folder
+    cap mkdir "${waf}/output"
     reprun "${waf}/main.do" using "${waf}/output" , debug
+
+    net install repkit, from("${src_fldr}") replace

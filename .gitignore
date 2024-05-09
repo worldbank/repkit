@@ -67,9 +67,12 @@ src/dev/ssc
 
 # Ignore test outputs
 src/tests/outputs/
+!/**/repadolog/**/stata.trk
+!/**/repadolog/**/repadolog.csv
 
 * Ignore the local dev env set up by repado
 src/tests/dev-env/
+src/tests/reprun/with-ado-folder/ado/
 
 * Ignore local test output
 /**/run1

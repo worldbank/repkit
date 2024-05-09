@@ -90,5 +90,6 @@ In this example the {it:nostrict} mode is used.
 
 {title:Authors}
 
-{pstd}DIME Analytics, The World Bank dimenalytics@worldbank.org
+{pstd}LSMS Team, The World Bank lsms@worldbank.org
+DIME Analytics, The World Bank dimenalytics@worldbank.org
 {p_end}
