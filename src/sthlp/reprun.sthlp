@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.2 20240222}{...}
+{* *! version 2.0 20240509}{...}
 {hline}
 {pstd}help file for {hi:reprun}{p_end}
 {hline}
@@ -12,19 +12,19 @@
 {title:Syntax}
 
 {phang}{bf:reprun} {c 34}{it:do-file.do}{c 34} [using {c 34}{it:/directory/}{c 34}]
-, [{bf:{ul:v}erbose}] [{bf:{ul:c}ompact}] [{bf:{ul:s}uppress(rng|srng|dsig|loop)}]
+, [{bf:{ul:v}erbose}] [{bf:{ul:c}ompact}] [{bf:{ul:s}uppress(rng|srng|dsum|loop)}]
 [{bf:{ul:d}ebug}] [{bf:{ul:noc}lear}]
 {p_end}
 
-{phang}By default, {bf:reprun} will execute the complete do-file specified in {c 34}{it:do-file.do}{c 34} once (Run 1), and record the {c 34}seed RNG state{c 34}, {c 34}sort order RNG{c 34}, and {c 34}data signature{c 34} after the execution of every line, as well as the exact data in certain cases. {bf:reprun} will then execute the do-file a second time (Run 2), and find all {it:changes} and {it:mismatches} in these states throughout Run 2. A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called {inp:/reprun/} in the same location as the do-file. If the {inp:using} argument is supplied, the {inp:/reprun/} directory containing the SMCL file will be stored in that location instead. 
+{phang}By default, {bf:reprun} will execute the complete do-file specified in {c 34}{it:do-file.do}{c 34} once (Run 1), and record the {c 34}seed RNG state{c 34}, {c 34}sort order RNG{c 34}, and {c 34}data checksum{c 34} after the execution of every line, as well as the exact data in certain cases. {bf:reprun} will then execute the do-file a second time (Run 2), and find all {it:changes} and {it:mismatches} in these states throughout Run 2. A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called {inp:/reprun/} in the same location as the do-file. If the {inp:using} argument is supplied, the {inp:/reprun/} directory containing the SMCL file will be stored in that location instead. 
 {p_end}
 
 {synoptset 15}{...}
 {synopthdr:options}
 {synoptline}
 {synopt: {bf:{ul:v}erbose}}Report all lines where Run 1 and Run 2 mismatch {bf:or} change for any value{p_end}
-{synopt: {bf:{ul:c}ompact}}Report only lines where Run 1 and Run 2 mismatch {bf:and} change for any value{p_end}
-{synopt: {bf:{ul:s}uppress(types)}}Suppress reporting of state changes that do not result in mismatches for seed RNG state ({inp:rng}), sort order RNG ({inp:srng}), and/or data signature ({inp:dsig}), for any reporting setting{p_end}
+{synopt: {bf:{ul:c}ompact}}Report only lines where Run 1 and Run 2 mismatch {bf:and} change for either the seed or sort RNG{p_end}
+{synopt: {bf:{ul:s}uppress(types)}}Suppress reporting of state changes that do not result in mismatches for seed RNG state ({inp:rng}), sort order RNG ({inp:srng}), and/or data checksum ({inp:dsum}), for any reporting setting{p_end}
 {synopt: {bf:{ul:d}ebug}}Save all records of Stata states in Run 1 and Run 2 for inspection in the {inp:/reprun/} folder{p_end}
 {synopt: {bf:{ul:noc}lear}}Do not reset the Stata state before beginning reproducibility Run 1{p_end}
 {synoptline}
@@ -47,15 +47,15 @@
 {pstd}The {bf:{ul:v}erbose} option can be used to produce even more detail than the default. If the {bf:{ul:v}erbose} option is specified, then any line in which the state changes {it:during} Run 1 or Run 2; or mismatches {it:between} the runs will be flagged and reported. This is intended to allow the user to do a deep-dive into the function and structure of the do-file{c 39}s execution.
 {p_end}
 
-{pstd}The {bf:{ul:c}ompact} option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the {bf:{ul:c}ompact} option is specified, then {it:only} those lines which have changes {it:during} Run 1 or Run 2 {bf:and} mismatches {it:between} the runs will be flagged and reported. This is intended to reduce the reporting of {c 34}cascading{c 34} flags, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run.
+{pstd}The {bf:{ul:c}ompact} option, by contrast, produces less detailed reporting, but is often a good first step to begin locating issues in the code. If the {bf:{ul:c}ompact} option is specified, then {it:only} those lines which have mismatched seed or sort order RNG changes {it:during} Run 1 or Run 2 {bf:and} mismatches {it:between} the runs will be flagged and reported. Data checksum mismatches alone will be ignored; as will RNG mismatches not accompanied by a change in the state. This is intended to reduce the reporting of {c 34}cascading{c 34} differences, which are caused because some state value changes inconsistently at a single point and remains inconsistent for the remainder of the run (making every subsequent data change a mismatch, for example).
 {p_end}
 
-{pstd}The {bf:{ul:s}uppress()} option is used to hide the reporting of changes that do not lead to mismatches (especially when the {bf:{ul:v}erbose} option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should {it:not} be forced to match between runs, it will very often have changes that do not produce errors, specifying {bf:{ul:s}uppress(srng)} will remove a great deal of unhelpful output from the reporting table. To do this for all states, write {bf:{ul:s}uppress(rng srng dsig)}. Suppressing {inp:loop} will clean up the display of loops so that the titles are only shown on the first line; but if combined with {inp:compact} may not display at all. 
+{pstd}The {bf:{ul:s}uppress()} option is used to hide the reporting of changes that do not lead to mismatches (especially when the {bf:{ul:v}erbose} option is specified) for one or more of the types. In particular, since the sort order RNG frequently changes and should {it:not} be forced to match between runs, it will very often have changes that do not produce errors, specifying {bf:{ul:s}uppress(srng)} will remove a great deal of unhelpful output from the reporting table. To do this for all states, write {bf:{ul:s}uppress(rng srng dsum)}. Suppressing {inp:loop} will clean up the display of loops so that the titles are only shown on the first line; but if combined with {inp:compact} may not display at all. 
 {p_end}
 
 {dlgtab:Reporting and debugging options}
 
-{pstd}The {bf:{ul:d}ebug} option allows the user to save all of the underlying materials used by {bf:reprun} in the {inp:/reprun/} folder where the reporting SMCL file will be written. This will include copies of all do-files for each run for manual inspection, text files of the states of Stata after each line, and copies of the dataset at specific lines when it is needed. This can take a lot of space, and is automatically cleaned up after execution if {bf:{ul:d}ebug} is not specified. 
+{pstd}The {bf:{ul:d}ebug} option allows the user to save all of the underlying materials used by {bf:reprun} in the {inp:/reprun/} folder where the reporting SMCL file will be written. This will include copies of all do-files for each run for manual inspection and text files of the states of Stata after each line. This is automatically cleaned up after execution if {bf:{ul:d}ebug} is not specified. 
 {p_end}
 
 {dlgtab:Other options}
@@ -71,5 +71,5 @@
 {title:Authors}
 
 {pstd}LSMS Team, The World Bank lsms@worldbank.org
-DIME Analytics, The World Bank dimenalytics@worldbank.org
+DIME Analytics, The World Bank dimeanalytics@worldbank.org
 {p_end}

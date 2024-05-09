@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.2 20240222}{...}
+{* *! version 2.0 20240509}{...}
 {hline}
 {pstd}help file for {hi:repado}{p_end}
 {hline}
@@ -91,5 +91,5 @@ In this example the {it:nostrict} mode is used.
 {title:Authors}
 
 {pstd}LSMS Team, The World Bank lsms@worldbank.org
-DIME Analytics, The World Bank dimenalytics@worldbank.org
+DIME Analytics, The World Bank dimeanalytics@worldbank.org
 {p_end}
