@@ -91,7 +91,7 @@ qui {
     * Create a frame to store all pkg info and command info
     tempname pkg_frame
     frame create `pkg_frame' ///
-      str500(package_name distribution_date download_date command_name checksum notes) str2000(commands source) byte(is_cmd)
+      str500(package_name distribution_date download_date command_name checksum) strL(notes commands source) byte(is_cmd)
 
     * Read the trk file
     tempname trk_read
@@ -267,7 +267,7 @@ qui {
         }
 
         * Clean up notes
-        local notes = trim(subinstr(`"`macval(notes)'"',",","",1))
+        local notes =trim(itrim(subinstr(`"`macval(notes)'"',",","",1)))
       }
 
       * Return dofile locals
