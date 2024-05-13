@@ -137,7 +137,7 @@ qui {
             local commands "`commands', `r(command_name)'"
             local cmd_name_`cmd_count' = "`r(command_name)'"
             local cmd_chck_`cmd_count' = "`r(checksum)'"
-            local cmd_note_`cmd_count' = "`r(notes)'"
+            local cmd_note_`cmd_count' = `"`r(notes)'"'
           }
         }
 
@@ -158,7 +158,7 @@ qui {
 
           * Write command line to the data frame
           forvalues i = 1/`cmd_count' {
-            frame post `pkg_frame' ("`pkgname'") ("`distdate'") ("`downdate'") ("`cmd_name_`i''") ("`cmd_chck_`i''") ("`cmd_note_`i''") ("") ("`source'") (1)
+            frame post `pkg_frame' ("`pkgname'") ("`distdate'") ("`downdate'") ("`cmd_name_`i''") ("`cmd_chck_`i''") (`"`cmd_note_`i''"') ("") ("`source'") (1)
           }
 
           * Resetting all locals
