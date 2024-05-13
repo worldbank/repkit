@@ -1,0 +1,287 @@
+* 00000012
+*! version 1.0.0
+* Do not erase or edit this file
+* It is used by Stata to track the ado and help
+* files you have installed.
+
+S http://fmwww.bc.edu/repec/bocode/i
+N iefieldkit.pkg
+D  7 Mar 2024
+U 1
+d 'IEFIELDKIT': module providing Stata commands for primary data collection and cleaning
+d 
+d  iefieldkit provides a set of commands that enable a reproducible
+d primary data collection and cleaning workflow. The package is
+d developed to facilitate a workflow including (1) data collection
+d (in particular using opendatakit.org, more specifically
+d surveycto.com); (2) basic data cleaning, such as labeling and
+d recoding; (3) reconciling survey rounds; (4) preparing codebooks
+d to document data sets. iefieldkit was developed to standardize
+d and simplify best practices for high-quality primary data
+d collection across the World Bank's Development Research Group
+d Impact Evaluations team (DIME). The commands can also be used
+d independently, and are developed to be applicable to many other
+d contexts as well. See https://github.com/worldbank/iefieldkit for
+d more details.
+d 
+d KW:  impact evaluations
+d KW: field work
+d KW: ODK
+d KW: survey data
+d KW: primary data collection
+d KW: SurveyCTO
+d KW: data cleaning
+d KW: survey harmonization
+d KW: duplicates
+d KW: codebooks
+d 
+d Requires: Stata version 11
+d 
+d Distribution-Date: 20230802
+d 
+d Author: DIME Analytics, The World Bank, DECIE
+d Support: email  lcardosodeandrad@@worldbank.org
+d 
+f i/iefieldkit.ado
+f i/iefieldkit.sthlp
+f i/iecodebook.ado
+f i/iecodebook.sthlp
+f i/iecompdup.ado
+f i/iecompdup.sthlp
+f i/iecorrect.ado
+f i/iecorrect.sthlp
+f i/ieduplicates.ado
+f i/ieduplicates.sthlp
+f i/ietestform.ado
+f i/ietestform.sthlp
+e
+S https://github.com/bbdaniels/stata/raw/main
+N betterbar.pkg
+D  7 Mar 2024
+U 2
+d Benjamin Daniels
+f b/betterbar.ado
+f b/betterbarci.ado
+f b/betterbarci.sthlp
+f b/betterbar.sthlp
+e
+S http://fmwww.bc.edu/repec/bocode/r
+N repkit.pkg
+D  7 Mar 2024
+U 3
+d 'REPKIT': module providing utility toolkit for reproducibility
+d 
+d  repkit is a package that aims to standardize best practices for
+d reproducibility and make them more accessible to the wider Stata
+d community. Currently, the package consists of one command called
+d repado. The purpose of repado is to manage command dependencies
+d within a project, ensuring that any user running the project code
+d utilizes the exact same version of command dependencies. This
+d intended to be used both across all team members in a project,
+d and by any future user reproducing the results of the project.
+d 
+d KW: reproducibility
+d KW: ado
+d KW: ado-management
+d 
+d Requires: Stata version 14.1
+d 
+d Distribution-Date: 20240222
+d 
+d Author: DIME Analytics, The World Bank, DECIE
+d Support: email dimeanalytics@@worldbank.org
+d 
+f r/repkit.ado
+f r/repkit.sthlp
+f r/repado.ado
+f r/repado.sthlp
+f r/reprun_dataline.ado
+f r/reprun.ado
+f r/reprun.sthlp
+f r/reproot.ado
+f r/reproot.sthlp
+f r/reproot_parse.ado
+f r/reproot_search.ado
+e
+S https://raw.githubusercontent.com/nppackages/binsreg/master/stata
+N binsreg.pkg
+D  7 Mar 2024
+U 4
+d STATA Package: BINSREG PACKAGE
+d 
+d Authors: Matias D. Cattaneo, Princeton University, cattaneo@princeton.edu
+d          Richard K. Crump, Federal Reserve Band of New York, richard.crump@ny.frb.org
+d          Max H. Farrell, UC Santa Barbara, mhfarrell@gmail.com
+d          Yingjie Feng, Tsinghua University, fengyingjiepku@gmail.com
+d 
+d Date: 03-JUL-2023
+d Distribution-Date: 20230703
+d 
+f b/binsreg.ado
+f b/binsreg.sthlp
+f b/binsqreg.ado
+f b/binsqreg.sthlp
+f b/binslogit.ado
+f b/binslogit.sthlp
+f b/binsprobit.ado
+f b/binsprobit.sthlp
+f b/binsregselect.ado
+f b/binsregselect.sthlp
+f b/binstest.ado
+f b/binstest.sthlp
+f b/binspwc.ado
+f b/binspwc.sthlp
+f b/binsreg_irecode.ado
+f b/binsreg_pctile.ado
+f b/binsreg_checkdrop.mo
+f b/binsreg_grids.mo
+f b/binsreg_pred.mo
+f b/binsreg_pval.mo
+f b/binsreg_spdes.mo
+f b/binsreg_st_spdes.mo
+f b/binsreg_uniq.mo
+f b/binsreg_cquantile.mo
+f b/binsreg_stat.mo
+e
+S http://fmwww.bc.edu/repec/bocode/w
+N winsor.pkg
+D  7 Mar 2024
+U 5
+d 'WINSOR': module to Winsorize a variable
+d 
+d winsor takes the non-missing values of a variable and generates a
+d new variable  identical except that the h highest and h lowest
+d values are replaced by the  next value counting inwards from the
+d extremes. h can be specified directly or  indirectly by
+d specifying a fraction p of the number of observations: h =  [p
+d n]. This transformation is named after the biostatistician C.P.
+d Winsor. This is version 1.3.0 of  the software.
+d 
+d Author: Nicholas J. Cox, University of Durham
+d Support: email N.J.Cox@@durham.ac.uk
+d 
+d Distribution-Date: 20060809
+f w/winsor.ado
+f w/winsor.hlp
+e
+S http://www.stata-journal.com/software/sj8-3
+N dm0037.pkg
+D 12 Mar 2024
+U 6
+d SJ8-3 dm0037.  Creating print-ready tables in Stata
+d Creating print-ready tables in Stata
+d by Michael Lokshin, The World Bank, Washington, DC
+d    Zurab Sujaia, The World Bank, Washington, DC
+d Support:  mlokshin@@worldbank.org
+d After installation, type help ^xml_tab^
+f x/xml_tab.ado
+f x/xml_tab.hlp
+e
+S https://github.com/bbdaniels/stata/raw/main
+N outwrite.pkg
+D 12 Mar 2024
+U 7
+d Benjamin Daniels
+f o/outwrite.ado
+f o/outwrite.sthlp
+e
+S http://www.stata-journal.com/software/sj14-2
+N st0085_2.pkg
+D 13 Mar 2024
+U 8
+d SJ14-2 st0085_2. Update: Making regression...
+d Update: Making regression tables from stored
+d   estimates
+d by Ben Jann, University of Bern
+d Support:  jann@@soz.unibe.ch
+d After installation, type help ^estout^,
+d   ^esttab^, ^eststo^, ^estadd^, and ^estpost^
+f _/_eststo.ado
+f _/_eststo.hlp
+f e/esttab.ado
+f e/esttab.hlp
+f e/estadd.ado
+f e/estadd.hlp
+f e/eststo.ado
+f e/eststo.hlp
+f e/estout.ado
+f e/estout.hlp
+f e/estpost.ado
+f e/estpost.hlp
+e
+S http://www.stata-journal.com/software/sj7-4
+N st0030_3.pkg
+D 18 Mar 2024
+U 9
+d SJ7-4 st0030_3.  Update: Instrumental variables and GMM:...
+d Update: Instrumental variables and GMM:  Estimation and
+d    testing
+d 
+d by Christopher F. Baum, Boston College
+d    Mark E. Schaffer, Heriot-Watt University
+d    Steven Stillman, Motu Economic Public Policy Research
+d Support:  baum@@bc.edu, m.e.schaffer@@hw.ac.uk,
+d           stillman@@motu.org.nz
+d After installation, type help ^ivactest^, ^ivendog^, ^ivhettest^,
+d                               ^ivreg2^, ^overid^, and ^ranktest^
+f i/ivactest.ado
+f i/ivactest.hlp
+f i/ivendog.ado
+f i/ivendog.hlp
+f i/ivhettest.ado
+f i/ivhettest.hlp
+f i/ivreg2.ado
+f i/ivreg2.hlp
+f i/ivreg2_p.ado
+f i/ivreg2_cue.ado
+f i/ivreset.ado
+f i/ivreset.hlp
+f o/overid.ado
+f o/overid.hlp
+f r/ranktest.ado
+f r/ranktest.hlp
+e
+S https://github.com/bbdaniels/stata/raw/main
+N easyirt.pkg
+D  1 Apr 2024
+U 10
+d Benjamin Daniels
+f e/easyirt.ado
+f e/easyirt.sthlp
+e
+S https://github.com/bbdaniels/stata/raw/main
+N labelcollapse.pkg
+D  1 Apr 2024
+U 11
+d Benjamin Daniels
+f l/labelcollapse.ado
+f l/labelcollapse.sthlp
+e
+S http://tristanz.github.io/OpenIRT
+N openirt.pkg
+D  1 Apr 2024
+U 12
+d openirt. Bayesian and Maximum Likelihood Estimation of Item Response Theory (IRT) models.
+d Tristan Zajonc (tzajonc@fas.harvard.edu).
+d 
+d OpenIRT estimates 2PL and 3PL Item Response Theory (IRT) models for dichotomous data.
+d It includes Bayesian MCMC estimation of item parameters and abilities, and maximum
+d likelihood ability estimates.  The Bayesian methods includes both expected
+d posterior (EAP) and plausible values (PV) ability and item parameter estimates.
+d 
+d OpenIRT is designed to be flexible. It allows any combination of items, abilities,
+d and responses to be missing.  For instance, fixed anchor items can be used to place
+d children and items on a known scale; missing responses can be used to link multiple
+d overlapping test forms; and known abilities can be used to calibrate new items
+d and ability parameters.
+d 
+d OpenIRT relies on compiled code that works on Windows, Mac, and Linux.
+f o/openirt.ado
+f o/openirt.sthlp
+f o/openirt.ini
+f n/naep_children.dta
+f n/naep_items.dta
+f t/timss_children.dta
+f t/timss_items.dta
+f o/openirt_examples.do
+e

@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.2 20240222}{...}
+{* *! version 2.0 20240509}{...}
 {hline}
 {pstd}help file for {hi:reproot}{p_end}
 {hline}
@@ -111,17 +111,11 @@ root files with those names for this project are found.
 {text}
 {title:Feedback, bug reports and contributions}
 
-{pstd}Read more about the commands in this package at https://worldbank.github.io/repkit.
-{p_end}
-
-{pstd}Please provide any feed back by opening and issue at https://github.com/worldbank/repkit.
-{p_end}
-
-{pstd}PRs with suggestions for improvements are also greatly appreciated.
+{pstd}Read more about these commands on {browse "https://github.com/worldbank/repkit":this repo} where this package is developed. Please provide any feedback by {browse "https://github.com/worldbank/repkit/issues":opening an issue}. PRs with suggestions for improvements are also greatly appreciated.
 {p_end}
 
 {title:Authors}
 
 {pstd}LSMS Team, The World Bank lsms@worldbank.org
-DIME Analytics, The World Bank dimenalytics@worldbank.org
+DIME Analytics, The World Bank dimeanalytics@worldbank.org
 {p_end}

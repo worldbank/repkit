@@ -1,4 +1,4 @@
-*! version 1.2 20240222 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 2.0 20240509 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reprun
     program define reprun, rclass
@@ -140,7 +140,7 @@ qui {
     }
   }
 
-  // Remove then command is no longer in beta
+  // Remove tmahen command is no longer in beta
   noi repkit "beta reprun"
 
 end
@@ -257,25 +257,31 @@ end
 
           *Reset the last line local
           local last_line = ""
-          get_command, word("`firstw'")
-          local line_command = "`r(command)'"
+          local line_command = "OTHER"
+          local dofile ""
+          local doflag 0
+          foreach w in `macval(line)' {
+            get_command, word("`w'")
+            if `doflag' == 1 local dofile = "`w'"
+            if "`r(command)'" == "do" | "`r(command)'" == "run" {
+              local doflag = 1
+            }
+            else local doflag 0
+            local line_command = "`line_command' `r(command)'"
+          }
+            local line_command : list uniq line_command
 
           * If using capture, log it and take second word as command
-          if (inlist("`line_command'","capture")) {
+          if (strpos("`line_command'","capture")) {
             local lastline_capture = 1
             local write_dataline = 0
-            * Move forward each word
-            local firstw = "`secondw'"
-            local secondw = "`thirdw'"
-            get_command, word("`firstw'")
-            local line_command = "`r(command)'"
           }
           * Handle row that is not capture
           else {
             * Test if _rc was used on line that is
             * not immedeatly after line with capture
             if `lastline_capture' == 0 & `has_rc' == 1 {
-              noi di as error "{pstd}To make sure that {cmd:reprun} runs correctly, {cmd:_rc} is only allowed to be used immedeatly after the line where {cmd:capture} was used. See this article (TODO) for examples on how code can be rewritten to satisfy this requirement. Line number `lnum'.{p_end}"
+              noi di as error "{pstd}To make sure that {cmd:reprun} runs correctly, {cmd:_rc} is only allowed to be used immediately after the line where {cmd:capture} was used. See this article (TODO) for examples on how code can be rewritten to satisfy this requirement. Line number `lnum'.{p_end}"
               error 99
               exit
             }
@@ -284,31 +290,55 @@ end
           }
 
           * Line is do or run, so call recursive function
-          if (inlist("`line_command'","do","run")) {
+          if (strpos("`line_command'","do")) | (strpos("`line_command'","run")) {
 
             * Write line handling recursion in data file
             local write_recline = 1
-            * Keep working on the stub
-            local recursestub "`stub'_`++subf_n'"
 
             * Get the file path from the second word
-            local file = `"`macval(secondw)'"'
+            local file = `"`dofile'"'
+            local file_rev = strreverse("`file'")
 
-            noi reprun_recurse, dofile("`file'")     ///
-                                output("`output'")   ///
-                                stub("`recursestub'")
-            local sub_f1 "`r(code_file_run1)'"
-            local sub_f2 "`r(code_file_run2)'"
+            * Only recurse on .do files and add .do when no extension is used
+            if (substr("`file_rev'",1,3) == "od.") {
+              local recurse 1
+            }
+            else if (substr("`file_rev'",1,4) == "oda.") {
+              local recurse 0 // skip recursing reprun on adofiles
+            }
+            else {
+              local recurse 1
+              local file "`file'.do"
+            }
 
-            * Substitute the original sub-dofile with the check/write ones
-            local run1_line = ///
-              subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
-            local run2_line = ///
-              subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
+            * Skip recursion instead of error if file not found
+            cap confirm file "`file'"
+            if _rc {
+              local recurse 0
+            }
 
-            *Correct potential ""path"" to "path"
-            local run1_line = subinstr(`"`run1_line'"',`""""',`"""',.)
-            local run2_line = subinstr(`"`run2_line'"',`""""',`"""',.)
+            * Test if it should recurse or not
+            if `recurse' == 1 {
+
+              * Keep working on the stub
+              local recursestub "`stub'_`++subf_n'"
+
+              noi reprun_recurse, dofile("`file'")     ///
+                    output("`output'")   ///
+                    stub("`recursestub'")
+              local sub_f1 "`r(code_file_run1)'"
+              local sub_f2 "`r(code_file_run2)'"
+
+              * Substitute the original sub-dofile with the check/write ones
+              local run1_line = ///
+                subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
+              local run2_line = ///
+                subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
+
+              *Correct potential ""path"" to "path"
+              local run1_line = subinstr(`"`run1_line'"',`""""',`"""',.)
+              local run2_line = subinstr(`"`run2_line'"',`""""',`"""',.)
+            }
           }
 
           * No special thing with row needing alteration, write row as is
@@ -320,20 +350,21 @@ end
 
             * Load the local in memory - important to
             * build file paths in recursive calls
-            if inlist("`line_command'","local","global") {
-              `line'
+            if (strpos("`line_command'","local")) | (strpos("`line_command'","global")) {
+              // Capture in case running the macro requires data in memory
+              capture `line'
             }
 
             * Write foreach/forvalues to block stack and
             * it's macro name to loop stack
-            if inlist("`line_command'","foreach","forvalues") {
+            if (strpos("`line_command'","foreach")) | (strpos("`line_command'","forvalues")) {
               local block_stack   "`line_command' `block_stack' "
               local loop_stack = trim("`loop_stack' `secondw'")
             }
 
             * Write while to block stack and
             * also "while" to loop stack as it does not have a macro name
-            if inlist("`line_command'","while") {
+            if strpos("`line_command'","while") {
               local block_stack   "`line_command' `block_stack' "
               local loop_stack = trim("`loop_stack' `line_command'")
             }
@@ -635,18 +666,18 @@ end
           local write_outputline 0
 
             * Check each value individually for changes and mismatches
-            foreach matchtype in rng srng dsig {
+            foreach matchtype in rng srng dsum {
               * Test if any line is "Change"
               local any_change = ///
                 strpos("`r(`matchtype'_c1)'`r(`matchtype'_c2)'","Change")
               if (`any_change' > 0 & !missing(`"`verbose'"')) ///
                 local write_outputline 1
-              * Test if any line is "Missmatch"
+              * Test if any line is "Mismatch"
               local any_mismatch = ///
                 max(strpos("`r(`matchtype'_m)'","ERR"),strpos("`r(`matchtype'_m)'","DIFF"))
               if (`any_mismatch' > 0) & missing(`"`compact'"') local write_outputline 1
               * Compact display
-              if (`any_mismatch' > 0) & (`any_change' > 0) local write_outputline 1
+              if ("`matchtype'"!="dsum") & (`any_mismatch' > 0) & (`any_change' > 0) local write_outputline 1
             }
 
           * If line is supposed to be outputted, write line
@@ -655,7 +686,7 @@ end
               outputcolumns("`outputcolumns'") lnum("`r(lnum)'")               ///
               rng1("`r(rng_c1)'")   rng2("`r(rng_c2)'")   rngm("`r(rng_m)'")   ///
               srng1("`r(srng_c1)'") srng2("`r(srng_c2)'") srngm("`r(srng_m)'") ///
-              dsig1("`r(dsig_c1)'") dsig2("`r(dsig_c2)'") dsigm("`r(dsig_m)'") ///
+              dsum1("`r(dsum_c1)'") dsum2("`r(dsum_c2)'") dsumm("`r(dsum_m)'") ///
               loopiteration("`r(loopt)'")
             noi write_and_print_output, h_smcl(`h_smcl') l1("`r(outputline)'")
           }
@@ -715,7 +746,7 @@ end
         local l1_srng = "`l1_srngstate'"
         local pl1_srng = "`pl1_srngstate'"
 
-        if ("`l2_srngcheck'" != "0") {
+        if ("`l1_srngstate'" != "`pl1_srngstate'") & ("`l2_srngcheck'" != "`l1_srngcheck'") {
           local l2_srng = "`l2_srngstate'"
           local pl2_srng = "`pl2_srngstate'"
         }
@@ -727,19 +758,19 @@ end
       local arrow "{c -}{c -}{c -}{c -}{c -}>"
 
       * Comparing all states since previous line and between runs
-      foreach state in rng srng dsig {
+      foreach state in rng srng dsum {
 
         * Compare state in each run compared to previous line
         local `state'_c1 = ""
         local change1 0
-        if ("`l1_`state''" != "`pl1_`state''") {
+        if ("`l1_`state''" != "`pl1_`state''") & ("`pl1_`state''"!="") {
           local `state'_c1 = "Change"
           local change1 1
         }
 
         local `state'_c2 = ""
         local change2 0
-        if ("`l2_`state''" != "`pl2_`state''") {
+        if ("`l2_`state''" != "`pl2_`state''") & ("`pl2_`state''"!="") {
           local `state'_c2 = "Change"
           local change2 1
         }
@@ -757,9 +788,6 @@ end
           }
         }
 
-        * Return the labels for each state
-        return local `state'_c1 "``state'_c1'"
-        return local `state'_c2 "``state'_c2'"
 
         ************************************************************
         * Compare states across runs
@@ -767,7 +795,16 @@ end
         * Match
         if ("`l1_`state''" == "`l2_`state''") {
           if !missing("``state'_c1'``state'_c2'") return local `state'_m "OK!"
+          if strpos(" `suppress' "," `state' ") {
+            return local `state'_m ""
+            local `state'_c1 = ""
+            local `state'_c2 = ""
+          }
         }
+
+        * Return the labels for each state
+        return local `state'_c1 "``state'_c1'"
+        return local `state'_c2 "``state'_c2'"
 
         * Not matching
         else {
@@ -831,7 +868,7 @@ end
     syntax , outputcolumns(numlist) lnum(string) ///
       [rng1(string)  rng2(string)  rngm(string) ///
       srng1(string) srng2(string) srngm(string) ///
-      dsig1(string) dsig2(string) dsigm(string) ///
+      dsum1(string) dsum2(string) dsumm(string) ///
       loopiteration(string)]
 
     local c1 : word 1 of `outputcolumns'
@@ -859,10 +896,10 @@ end
 
     * Datasignature
     local c3 = (`c3' + 9)
-    local out_line "`out_line'{c |} `dsig1'{col `c3'}"
+    local out_line "`out_line'{c |} `dsum1'{col `c3'}"
     local c3 = (`c3' + 9)
-    local out_line "`out_line'  `dsig2'{col `c3'}"
-    local out_line "`out_line'  `dsigm'{col `c4'}"
+    local out_line "`out_line'  `dsum2'{col `c3'}"
+    local out_line "`out_line'  `dsumm'{col `c4'}"
 
 
     local out_line "`out_line'{c |} `loopiteration'"
@@ -896,7 +933,7 @@ end
     local sl "{c |}{col `c1'}"
     local sl "`sl'{c |}{dup 6: }Seed RNG State{col `c2'}"
     local sl "`sl'{c |}{dup 6: }Sort Order RNG{col `c3'}"
-    local sl "`sl'{c |}{dup 6: }Data Signature{col `c4'}"
+    local sl "`sl'{c |}{dup 6: }Data Checksum{col `c4'}"
     return local state_titles "`sl'{c |}"
 
     * Column title line

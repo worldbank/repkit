@@ -92,13 +92,9 @@ reproot , project("my_proj") roots("data clone")
 
 # Feedback, bug reports and contributions
 
-Read more about the commands in this package at https://worldbank.github.io/repkit.
-
-Please provide any feed back by opening and issue at https://github.com/worldbank/repkit.
-
-PRs with suggestions for improvements are also greatly appreciated.
+Read more about these commands on [this repo](https://github.com/worldbank/repkit) where this package is developed. Please provide any feedback by [opening an issue](https://github.com/worldbank/repkit/issues). PRs with suggestions for improvements are also greatly appreciated.
 
 # Authors
 
 LSMS Team, The World Bank lsms@worldbank.org
-DIME Analytics, The World Bank dimenalytics@worldbank.org
+DIME Analytics, The World Bank dimeanalytics@worldbank.org

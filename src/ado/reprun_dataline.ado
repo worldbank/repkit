@@ -1,4 +1,4 @@
-*! version 1.2 20240222 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 2.0 20240509 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 * Command intended to exclusively be run from the run files
 * that the command iedorep is generating
@@ -32,13 +32,19 @@ cap program drop   reprun_dataline
       local rng "`c(rngstate)'"
       *Get the states to be checked
       local srng "`c(sortrngstate)'"
-      datasignature
-      local dsig "`r(datasignature)'"
       * Trim looptracker to remove excessive spaces
       local loopt = trim("`looptracker'")
 
+      * Handle data state
+      tempfile checksum
+        cap export delimited using `checksum' , replace
+        cap qui checksum `checksum'
+        cap local srngcheck = `r(checksum)'
+          if _rc local srngcheck = 0
+          local dsum "`srngcheck'"
+
       *Build data line
-      local line "l:`lnum'&rng:`rng'&srngstate:`srng'&data:`output'`data'&dsig:`dsig'&loopt:`loopt'&srngcheck:`srngcheck'"
+      local line "l:`lnum'&rng:`rng'&srngstate:`srng'&data:`output'`data'&dsum:`dsum'&loopt:`loopt'&srngcheck:`srngcheck'"
     }
 
     * Recurse line

@@ -1,0 +1,4 @@
+package_name,distribution_date,download_date,commands,source
+"adodown.pkg","20240225","25 Mar 2024","ad_update, ad_pkg_meta, adodown, ad_publish, ad_setup, ad_command, ad_sthlp, ad-cmd-command","http://fmwww.bc.edu/repec/bocode/a"
+"estout.pkg","20230212","1 Apr 2024","_eststo, estadd, estout, eststo, estpost, esttab","http://fmwww.bc.edu/repec/bocode/e"
+"repkit.pkg","20240222","21 Mar 2024","repkit, repado, reprun_dataline, reprun, reproot, reproot_parse, reproot_search","http://fmwww.bc.edu/repec/bocode/r"

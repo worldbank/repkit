@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 1.2 20240222}{...}
+{* *! version 2.0 20240509}{...}
 {hline}
 {pstd}help file for {hi:repkit}{p_end}
 {hline}
@@ -35,5 +35,6 @@ That is the main purpose of this command.
 
 {title:Authors}
 
-{pstd}DIME Analytics, The World Bank dimenalytics@worldbank.org
+{pstd}LSMS Team, The World Bank lsms@worldbank.org
+DIME Analytics, The World Bank dimeanalytics@worldbank.org
 {p_end}
