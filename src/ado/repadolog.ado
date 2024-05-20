@@ -1,4 +1,4 @@
-*! version 2.0 20240509 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 2.1 20240516 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   repadolog
     program define repadolog
@@ -91,7 +91,7 @@ qui {
     * Create a frame to store all pkg info and command info
     tempname pkg_frame
     frame create `pkg_frame' ///
-      str500(package_name distribution_date download_date command_name checksum notes) str2000(commands source) byte(is_cmd)
+      str500(package_name distribution_date download_date command_name checksum) strL(notes commands source) byte(is_cmd)
 
     * Read the trk file
     tempname trk_read
@@ -137,7 +137,7 @@ qui {
             local commands "`commands', `r(command_name)'"
             local cmd_name_`cmd_count' = "`r(command_name)'"
             local cmd_chck_`cmd_count' = "`r(checksum)'"
-            local cmd_note_`cmd_count' = "`r(notes)'"
+            local cmd_note_`cmd_count' = `"`r(notes)'"'
           }
         }
 
@@ -158,7 +158,7 @@ qui {
 
           * Write command line to the data frame
           forvalues i = 1/`cmd_count' {
-            frame post `pkg_frame' ("`pkgname'") ("`distdate'") ("`downdate'") ("`cmd_name_`i''") ("`cmd_chck_`i''") ("`cmd_note_`i''") ("") ("`source'") (1)
+            frame post `pkg_frame' ("`pkgname'") ("`distdate'") ("`downdate'") ("`cmd_name_`i''") ("`cmd_chck_`i''") (`"`cmd_note_`i''"') ("") ("`source'") (1)
           }
 
           * Resetting all locals
@@ -267,7 +267,7 @@ qui {
         }
 
         * Clean up notes
-        local notes = trim(subinstr(`"`macval(notes)'"',",","",1))
+        local notes =trim(itrim(subinstr(`"`macval(notes)'"',",","",1)))
       }
 
       * Return dofile locals
