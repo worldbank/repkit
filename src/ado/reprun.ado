@@ -261,7 +261,7 @@ end
           local dofile ""
           local doflag 0
           foreach w in `macval(line)' {
-            get_command, word("`w'")
+            get_command, word(`"`w'"')
             if `doflag' == 1 local dofile = "`w'"
             if "`r(command)'" == "do" | "`r(command)'" == "run" {
               local doflag = 1
