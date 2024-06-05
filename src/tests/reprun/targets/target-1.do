@@ -17,7 +17,7 @@ di as err "Should be 6165... `r(mean)'"
 
 #d cr
 
-* Bad comment
+* Bad comment "
 /* Weird comment */
 // TEST COMMENT
 

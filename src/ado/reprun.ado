@@ -292,6 +292,7 @@ end
             local theline = regexr(`"`theline'"',"[\+]","")
             local theline = regexr(`"`theline'"',"[\(]","")
             local theline = regexr(`"`theline'"',"[\)]","")
+            local theline = regexr(`"`theline'"',`"[\"]"',"")
           }
 
           foreach w in `macval(theline)' {
