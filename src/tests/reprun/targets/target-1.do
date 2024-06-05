@@ -18,7 +18,7 @@ di as err "Should be 6165... `r(mean)'"
 #d cr
 
 local check : var lab price`domain_num'
-* Bad comment "
+* Bad comment 
 /* Weird comment */
 // TEST COMMENT
 
