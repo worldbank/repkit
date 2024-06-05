@@ -36,8 +36,7 @@ cap program drop   reprun_dataline
       local loopt = trim("`looptracker'")
 
       * Handle data state
-      tempfile checksum
-        cap export delimited using "`datatmp'.dta" , replace
+      cap export delimited using "`datatmp'.dta" , replace
         cap qui checksum "`datatmp'.dta"
         cap local srngcheck = `r(checksum)'
           if _rc local srngcheck = 0
