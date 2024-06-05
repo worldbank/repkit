@@ -282,7 +282,16 @@ end
 
           local theline = regexr(`"`macval(line)'"',"[\[//]\\\^\%\|\?\*\+\(\)]","")
           forv i = 1/10 {
-            local theline = regexr(`"`macval(theline)'"',"[\[//]\\\^\%\|\?\*\+\(\)]","")
+            local theline = regexr(`"`theline'"',"[\[//]]","")
+            local theline = regexr(`"`theline'"',"[\\","")
+            local theline = regexr(`"`theline'"',"[\^]","")
+            local theline = regexr(`"`theline'"',"[\%\]","")
+            local theline = regexr(`"`theline'"',"[\|]","")
+            local theline = regexr(`"`theline'"',"[\?]","")
+            local theline = regexr(`"`theline'"',"[\*]","")
+            local theline = regexr(`"`theline'"',"[\+]","")
+            local theline = regexr(`"`theline'"',"[\(]","")
+            local theline = regexr(`"`theline'"',"[\)]","")
           }
 
           foreach w in `macval(theline)' {
