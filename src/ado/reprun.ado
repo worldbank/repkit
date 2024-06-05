@@ -285,7 +285,7 @@ end
             local theline = regexr(`"`theline'"',"[\[//]]","")
             local theline = regexr(`"`theline'"',"[\\","")
             local theline = regexr(`"`theline'"',"[\^]","")
-            local theline = regexr(`"`theline'"',"[\%\]","")
+            local theline = regexr(`"`theline'"',"[\%]","")
             local theline = regexr(`"`theline'"',"[\|]","")
             local theline = regexr(`"`theline'"',"[\?]","")
             local theline = regexr(`"`theline'"',"[\*]","")
