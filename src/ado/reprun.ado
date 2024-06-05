@@ -71,7 +71,7 @@ qui {
     noi reprun_recurse, dofile("`dofile'") output("`dirout'") stub("m")
     local code_file_run1 "`r(code_file_run1)'"
     local code_file_run2 "`r(code_file_run2)'"
-    local mmmflag "`mmmflag' `r(mmmflag)'"
+    if "`r(mmmflag)'" != ""  local mmmflag "`mmmflag' `r(mmmflag)'"
     noi di as err "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
 
     /*************************************************************************
