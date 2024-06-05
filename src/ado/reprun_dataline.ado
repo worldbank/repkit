@@ -37,8 +37,8 @@ cap program drop   reprun_dataline
 
       * Handle data state
       tempfile checksum
-        cap export delimited using `checksum' , replace
-        cap qui checksum `checksum'
+        cap export delimited using "`datatmp'.dta" , replace
+        cap qui checksum "`datatmp'.dta"
         cap local srngcheck = `r(checksum)'
           if _rc local srngcheck = 0
           local dsum "`srngcheck'"
