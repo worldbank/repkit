@@ -260,7 +260,7 @@ end
           local line_command = "OTHER"
           local dofile ""
           local doflag 0
-          foreach w in `macval(line)' {
+          foreach w in `=regexr(`"`macval(line)'"',"[\\\^\%\.\|\?\*\+\(\)]","")' {
             cap get_command, word(`"`w'"')
             if `doflag' == 1 local dofile = "`w'"
             if "`r(command)'" == "do" | "`r(command)'" == "run" {
