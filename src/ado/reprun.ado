@@ -260,16 +260,43 @@ end
           local line_command = "OTHER"
           local dofile ""
           local doflag 0
-          foreach w in `=regexr(`"`macval(line)'"',"[\\\^\%\.\|\?\*\+\(\)]","")' {
+          local mmmflag 0
+
+          // di as err "`macval(line)'"
+          // di as err "CHECK: `=regexr(`"`macval(line)'"',"[\\\^\%\.\|\?\*\+\(\)]","")'"
+
+          foreach w in `macval(line)' {
+            di as err "Checking -- `w'"
             cap get_command, word(`"`w'"')
             if `doflag' == 1 local dofile = "`w'"
             if "`r(command)'" == "do" | "`r(command)'" == "run" {
               local doflag = 1
+            if "`r(command)'" == "mmm" local mmmflag = 1
             }
             else local doflag 0
             local line_command = "`line_command' `r(command)'"
           }
             local line_command : list uniq line_command
+
+          * If MMM signestimationsample
+          if (strpos("`line_command'","mmm")) {
+            di as err "Command Stopped: Many-to-many merge on Line `lnum'"
+            di as err ""
+            di as err "  The following is copied word-for-word from the documentation"
+            di as err "    of the merge command in the Stata Data Management Reference Manual."
+            di as err ""
+            di as err "    m:m specifies a many-to-many merge and is a bad idea."
+            di as err "    In an m:m merge, observations are matched within equal values of the key variable(s),"
+            di as err "      with the first observation being matched to the first; the second, to the second; and so on."
+            di as err "    If the master and using have an unequal number of observations within the group,"
+            di as err "      then the last observation of the shorter group is used repeatedly"
+            di as err "      to match with subsequent observations of the longer group."
+            di as err "    Thus m:m merges are dependent on the current sort order—something which should never happen.""
+            di as err "    Because m:m merges are such a bad idea, we are not going to show you an example."
+            di as err "    If you think that you need an m:m merge, then you probably need to work with your data so that you can use a 1:m or m:1 merge."
+
+            error 459
+          }
 
           * If using capture, log it and take second word as command
           if (strpos("`line_command'","capture")) {
@@ -536,6 +563,11 @@ end
             }
           }
         }
+      }
+
+      if "`word'" == "m:m" {
+        return local command "mmm"
+        local match = 1
       }
 
       * No match, return OTHER

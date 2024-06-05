@@ -42,6 +42,8 @@
     reprun "${tf}/target-1.do" using "${tf}/output-2" , s(loop)
     reprun "${tf}/target-1.do" using "${tf}/output-3" , v s(rng)
     reprun "${tf}/target-1.do" ,  verbose
+    reprun "${tf}/target-mmm.do" ,  verbose
+
 
     * Example A - single file
     cap mkdir "${sf}/output"
