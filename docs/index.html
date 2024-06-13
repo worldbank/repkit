@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>repkit</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./images/logo.png" rel="icon" type="image/png">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="./index.html">
+    <img src="./images/logo.png" alt="">
+    <span class="navbar-title">repkit</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="./reference/index.html">Reference</a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">Articles</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="./articles/ado-management-with-repado.html">
+ <span class="dropdown-text">ado-management-with-repado</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./articles/reproot-files.html">
+ <span class="dropdown-text">reproot-files</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./articles/schemes-with-repado.html">
+ <span class="dropdown-text">schemes-with-repado</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/worldbank/repkit"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#repkit" id="toc-repkit" class="nav-link active" data-scroll-target="#repkit">repkit</a></li>
+  <li><a href="#installation" id="toc-installation" class="nav-link" data-scroll-target="#installation">Installation</a>
+  <ul class="collapse">
+  <li><a href="#install-from-ssc" id="toc-install-from-ssc" class="nav-link" data-scroll-target="#install-from-ssc">Install from SSC</a></li>
+  <li><a href="#install-from-github-repo" id="toc-install-from-github-repo" class="nav-link" data-scroll-target="#install-from-github-repo">Install from GitHub repo</a></li>
+  </ul></li>
+  <li><a href="#contributions" id="toc-contributions" class="nav-link" data-scroll-target="#contributions">Contributions</a></li>
+  <li><a href="#authors" id="toc-authors" class="nav-link" data-scroll-target="#authors">Authors</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="repkit" class="level1">
+<h1>repkit</h1>
+<p>This Stata module is package providing a utility toolkit for reproducibility best-practices. The motivation for this package is to make the World Bank’s reproducibility best-practices more accessible to a wider Stata community. The best-practices promoted in this package appreciated identified and implemented as part of the <a href="https://reproducibility.worldbank.org/">World Bank’s reproducibility effort</a>.</p>
+<p>Currently, this toolkit has the following commands:</p>
+<table class="table">
+<thead>
+<tr class="header">
+<th>Command</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><a href="https://worldbank.github.io/repkit/reference/repado.html">repado</a></td>
+<td>Command used to manage a project’s dependencies of commands installed from external sources such as SSC. This command provides a way to make sure that all team members as well as future reproducers of the projects code use the exact same version of all command dependencies.</td>
+</tr>
+<tr class="even">
+<td><a href="https://worldbank.github.io/repkit/reference/repadolog.html">repadolog</a></td>
+<td>Outputs a report of the commands installed in the current PLUS folder.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://worldbank.github.io/repkit/reference/repkit.html">repkit</a></td>
+<td>Command named the same as the package. Most important purpose is that this command makes the code <code>which repkit</code> work.</td>
+</tr>
+<tr class="even">
+<td><a href="https://worldbank.github.io/repkit/reference/reproot.html">reproot</a></td>
+<td>This command allows teams to dynamically set root-paths with no manual user-specific set-up, in both single-rooted and multi-rooted projects.</td>
+</tr>
+<tr class="odd">
+<td><a href="https://worldbank.github.io/repkit/reference/reprun.html">reprun</a></td>
+<td>This command is used to automate reproducibility checks by running a do-file or a set of do-files and compare all state values (RNG-value, datasignature etc.) between the two runs. This command is currently only release as a beta-version.</td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="installation" class="level1">
+<h1>Installation</h1>
+<p>While we allow multiple ways of installing the package, we recommend all users to install the package from SSC unless there is a very specific reason to not do so.</p>
+<section id="install-from-ssc" class="level2">
+<h2 class="anchored" data-anchor-id="install-from-ssc">Install from SSC</h2>
+<p>To install from SSC, run this code in your Stata command line.</p>
+<pre><code>ssc install repkit</code></pre>
+</section>
+<section id="install-from-github-repo" class="level2">
+<h2 class="anchored" data-anchor-id="install-from-github-repo">Install from GitHub repo</h2>
+<p>You can install older versions of <code>repkit</code> directly from the GitHub repository. To do so, start by finding the tag corresponding to the version you want to install here: https://github.com/worldbank/repkit/tags. Update the local “tag” in the code below with the value of the tag you picked, and then run the code.</p>
+<pre><code>local tag "v1.0"
+net install repkit, ///
+  from("https://raw.githubusercontent.com/worldbank/repkit/`tag'/src")</code></pre>
+</section>
+</section>
+<section id="contributions" class="level1">
+<h1>Contributions</h1>
+<p>This package is developed in <a href="https://github.com/worldbank/repkit">this repo</a> on GitHub using the <a href="https://github.com/lsms-worldbank/adodown">adodown</a> workflow.</p>
+<p>We are happy to receive feedback and/or contributions. Please feel free to report bugs or request new features by opening up a <a href="https://github.com/worldbank/repkit/issues">new issue</a>.</p>
+<p>You are also welcome to fork this repo and submit a <a href="https://github.com/worldbank/repkit/pulls">pull request</a> with contribution to the code.</p>
+</section>
+<section id="authors" class="level1">
+<h1>Authors</h1>
+<p>This package is written and published by <a href="https://www.worldbank.org/en/research/dime/data-and-analytics">DIME Analytics</a> and the <a href="https://www.worldbank.org/en/programs/lsms">LSMS Team</a>. Both teams are teams within the <a href="https://www.worldbank.org/">World Bank</a> DIME Analytics is a research data methodology team part of the <a href="https://www.worldbank.org/en/research/dime">Development Impact</a> department. The Living Standards Measurement Study (LSMS) is the World Bank’s flagship household survey program and is part of the World Bank’s <a href="https://www.worldbank.org/en/about/unit/unit-dec/dev">Development Data Group</a>.</p>
+<p>Contact: - dimeanalytics@worldbank.org - lsms@worldbank.org</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

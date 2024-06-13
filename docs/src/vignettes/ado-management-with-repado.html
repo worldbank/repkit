@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>repkit – ado-management-with-repado</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../index.html">
+    <img src="../../images/logo.png" alt="">
+    <span class="navbar-title">repkit</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../reference/index.html">Reference</a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">Articles</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../../articles/ado-management-with-repado.html">
+ <span class="dropdown-text">ado-management-with-repado</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../articles/reproot-files.html">
+ <span class="dropdown-text">reproot-files</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../articles/schemes-with-repado.html">
+ <span class="dropdown-text">schemes-with-repado</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/worldbank/repkit"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#using-repado-for-ado-file-management" id="toc-using-repado-for-ado-file-management" class="nav-link active" data-scroll-target="#using-repado-for-ado-file-management">Using <code>repado</code> for Ado-File Management</a>
+  <ul class="collapse">
+  <li><a href="#background" id="toc-background" class="nav-link" data-scroll-target="#background">Background</a>
+  <ul class="collapse">
+  <li><a href="#reproducible-code-dependencies" id="toc-reproducible-code-dependencies" class="nav-link" data-scroll-target="#reproducible-code-dependencies">Reproducible Code Dependencies</a></li>
+  <li><a href="#version-control-of-built-in-commands" id="toc-version-control-of-built-in-commands" class="nav-link" data-scroll-target="#version-control-of-built-in-commands">Version Control of Built-In Commands</a></li>
+  <li><a href="#version-control-of-community-contributed-commands" id="toc-version-control-of-community-contributed-commands" class="nav-link" data-scroll-target="#version-control-of-community-contributed-commands">Version Control of Community-Contributed Commands</a></li>
+  </ul></li>
+  <li><a href="#using-repado" id="toc-using-repado" class="nav-link" data-scroll-target="#using-repado">Using <code>repado</code></a>
+  <ul class="collapse">
+  <li><a href="#the-best-practice-repado-implements" id="toc-the-best-practice-repado-implements" class="nav-link" data-scroll-target="#the-best-practice-repado-implements">The Best Practice <code>repado</code> Implements</a></li>
+  </ul></li>
+  <li><a href="#setting-up-the-projects-ado-folder" id="toc-setting-up-the-projects-ado-folder" class="nav-link" data-scroll-target="#setting-up-the-projects-ado-folder">Setting Up the Project’s Ado-Folder</a>
+  <ul class="collapse">
+  <li><a href="#a-simple-example" id="toc-a-simple-example" class="nav-link" data-scroll-target="#a-simple-example">A Simple Example</a></li>
+  <li><a href="#installing-commands-in-the-ado-folder" id="toc-installing-commands-in-the-ado-folder" class="nav-link" data-scroll-target="#installing-commands-in-the-ado-folder">Installing Commands in the Ado-Folder</a></li>
+  <li><a href="#when-not-to-use-strict-mode" id="toc-when-not-to-use-strict-mode" class="nav-link" data-scroll-target="#when-not-to-use-strict-mode">When Not to Use Strict Mode</a></li>
+  </ul></li>
+  <li><a href="#drawbacks-of-repado" id="toc-drawbacks-of-repado" class="nav-link" data-scroll-target="#drawbacks-of-repado">Drawbacks of <code>repado</code></a>
+  <ul class="collapse">
+  <li><a href="#licenses-and-republishing-of-commands" id="toc-licenses-and-republishing-of-commands" class="nav-link" data-scroll-target="#licenses-and-republishing-of-commands">Licenses and Republishing of Commands</a></li>
+  <li><a href="#repado-cannot-install-itself" id="toc-repado-cannot-install-itself" class="nav-link" data-scroll-target="#repado-cannot-install-itself"><code>repado</code> Cannot Install Itself</a></li>
+  <li><a href="#mitigation" id="toc-mitigation" class="nav-link" data-scroll-target="#mitigation">Mitigation</a></li>
+  <li><a href="#alternative" id="toc-alternative" class="nav-link" data-scroll-target="#alternative">Alternative</a></li>
+  </ul></li>
+  </ul></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="using-repado-for-ado-file-management" class="level1">
+<h1>Using <code>repado</code> for Ado-File Management</h1>
+<p><em>This is a comprehensive guide on how to use <code>repado</code>. For a shorter and more technical syntax documentation, refer to the <a href="https://worldbank.github.io/repkit/reference/repado.html">helpfile</a>.</em></p>
+<section id="background" class="level2">
+<h2 class="anchored" data-anchor-id="background">Background</h2>
+<p>To create a fully reproducible reproducibility package for a research project, you need the following four elements:</p>
+<ol type="1">
+<li>The exact same data</li>
+<li>The exact same project code</li>
+<li>The exact same project code dependencies</li>
+<li>The exact same computation environment</li>
+</ol>
+<p>Sharing the same project data and code is straightforward and is typically done by publishing the data and code to an archive. Using the same computation environment is more complicated and often involves using software like Docker. However, this article will focus on how to share the same project code dependencies and will primarily cover Stata.</p>
+<section id="reproducible-code-dependencies" class="level3">
+<h3 class="anchored" data-anchor-id="reproducible-code-dependencies">Reproducible Code Dependencies</h3>
+<p>Writing code is about creating precise instructions that a computer can follow. This precision is crucial for ensuring reproducibility in research. The code used in a project includes both the code written by the team and the code within all the commands that the project code relies on. Users running different versions of these commands may obtain different results, even if they use the same project code and data. Therefore, it’s essential to establish a method for version controlling all the code (including the code for any commands used) that the project code depends on, which is commonly referred to as code dependencies.</p>
+<p>All programming languages have two types of code dependencies: built-in commands and community-contributed commands. It’s equally important to version control both of these.</p>
+</section>
+<section id="version-control-of-built-in-commands" class="level3">
+<h3 class="anchored" data-anchor-id="version-control-of-built-in-commands">Version Control of Built-In Commands</h3>
+<p>The most effective way to version control built-in commands is to run the exact same version of the programming software. This is typically more straightforward in open-source software, as older software versions can be easily installed. In Stata, while running the exact same version is ideal, built-in commands can be version controlled using the <code>version</code> command. The <code>version</code> command allows Stata users to utilize built-in commands from any version equal to or older than the version they have installed.</p>
+<p>This command can be added to the top of each script, as it doesn’t consume much time to execute. However, if the project uses a main script for one-click reproducibility, it’s sufficient to place this line at the top of the main script. See example below. Be sure to replace <code>12.1</code> with the version the project is targeting. Unless a specific new feature is required, it’s advisable not to choose the most recent version to ensure reproducibility for as many users as possible.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>  <span class="kw">version</span> 12.1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="version-control-of-community-contributed-commands" class="level3">
+<h3 class="anchored" data-anchor-id="version-control-of-community-contributed-commands">Version Control of Community-Contributed Commands</h3>
+<p>In most other programming languages, there are version-controlled archives for community-contributed commands (or libraries). For R, there is CRAN, and for Python, there are archives like <code>pip</code> and <code>conda</code>. Tools for these archives make older versions of commands available, and in these languages, these tools can be used to specify the required commands and their exact versions when reproducing a project. When a user reproduces such a project, these tools install the exact version of these dependencies.</p>
+<p>In Stata, the primary archive for community-contributed commands is SSC (Statistical Software Components). SSC is not version controlled, and only the most recent version of a command is made available. For this reason, there is no tool in Stata that functions similarly to those in R and Python.</p>
+<p>However, the <code>repado</code> command in the <code>repkit</code> package provides a Stata solution to the challenge of version controlling community-contributed commands.</p>
+</section>
+</section>
+<section id="using-repado" class="level2">
+<h2 class="anchored" data-anchor-id="using-repado">Using <code>repado</code></h2>
+<section id="the-best-practice-repado-implements" class="level3">
+<h3 class="anchored" data-anchor-id="the-best-practice-repado-implements">The Best Practice <code>repado</code> Implements</h3>
+<p>In Stata, the best practice for version controlling community-contributed commands is to first include the ado-files of the commands used in the reproducibility package. Then, your project code should code that ensures all users utilize these files exclusively. To achieve this, the project must incorporate some technical code to set the “<em>ado-paths</em>”. The motivation behind <code>repado</code> is to encapsulate this technical code within an accessible command, making this feature available to a wider audience of Stata users.</p>
+<p>You can view your default ado-paths by running the <code>adopath</code> command within your Stata installation. Simply enter <code>adopath</code> and press Enter, and you will see output in the following format. The exact paths will differ:</p>
+<pre><code>  [1]  (BASE)      "C:\Program Files\Stata17\ado\base/"
+  [2]  (SITE)      "C:\Program Files\Stata17\ado\site/"
+  [3]              "."
+  [4]  (PERSONAL)  "C:\Users\user123\ado\personal/"
+  [5]  (PLUS)      "C:\Users\user123\ado\plus/"
+  [6]  (OLDPLACE)  "c:\ado/"</code></pre>
+<p>These locations are where your Stata installation looks for commands, from top to bottom. If Stata finds the command a user has used in the first folder, it will use that command. If it doesn’t find a command with that name in the first folder, it will continue to search in subsequent folders until it finds a matching command or exhausts the list and throws an error, such as <code>command [...] is unrecognized</code>.</p>
+<p>Built-in commands are located in the <code>BASE</code> path, which should not be changed. Commands installed via <code>ssc install</code> and <code>net install</code> are placed in the <code>PLUS</code> folder. However, as seen in the example, the default <code>PLUS</code> location is specific to each user. In practice, different users may have different versions of the commands required for a project installed in their <code>PLUS</code> folder.</p>
+<p>The objective of <code>repado</code> is to ensure that all users employ commands installed in a shared location, and this shared location is the exclusive source for the project’s command dependencies.</p>
+</section>
+</section>
+<section id="setting-up-the-projects-ado-folder" class="level2">
+<h2 class="anchored" data-anchor-id="setting-up-the-projects-ado-folder">Setting Up the Project’s Ado-Folder</h2>
+<p>Using <code>repado</code> is best done at the beginning of the project, but it can be implemented at any point of a project. The first requirement is to create a folder referred to as the ado-folder. A suitable name for this folder is <code>ado</code>, but it can be given any name.</p>
+<p>The ado-folder should be created in a location distinct from the project code. This separation is crucial to differentiate code owned by the project team from code authored by others. Commands from SSC can be republished as per the <code>GPL v3</code> license. However, if commands are installed from other sources, different licenses might apply.</p>
+<section id="a-simple-example" class="level3">
+<h3 class="anchored" data-anchor-id="a-simple-example">A Simple Example</h3>
+<p>Consider a project with the following folder structure. This example project will be used throughout this guide.</p>
+<pre><code>myproject/
+├─ code/
+│  ├─ ado/
+│  ├─ projectcode/
+├─ data/
+├─ outputs/</code></pre>
+<p>In this case, the basic use of <code>repado</code> would be as follows:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>* Set user root folder</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> root <span class="st">"C:\Users\user123\github\myproject"</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>* Point repado to the ado-folder</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>repado, <span class="kw">adopath</span>(<span class="st">"${root}/code/ado"</span>) <span class="kw">mode</span>(<span class="ot">strict</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Upon re-running the <code>adopath</code> command, the output will now be:</p>
+<pre><code>[1]  (BASE)      "C:\Program Files\Stata17\ado\base/"
+[2]  (PLUS)      "C:\Users\user123\github\myproject/code/ado"</code></pre>
+<p>It’s important to note three key aspects after running <code>repado</code>.</p>
+<p>First, the <code>BASE</code> folder remains intact. Removing it would render Stata’s built-in commands unavailable.</p>
+<p>Second, the <code>PLUS</code> folder now points to the ado-folder shared within the project. The project folder can be shared via various means, such as Git repositories, syncing services (OneDrive, Dropbox), network drives, or even in a .zip archive (common for reproducibility packages but less so for collaborative sharing).</p>
+<p>Third, all other paths are removed, meaning commands installed by the user in other locations are no longer available. Although this might initially seem inconvenient, it serves as a useful tool to ensure that all commands needed for the project are contained within the project’s ado-folder. Later, we will explore how this can be relaxed using the <code>mode()</code> option. However, for teams aiming to guarantee project reproducibility, it’s advisable to use <code>mode(strict)</code> as the default.</p>
+<p>Remember that all settings discussed here are reset when Stata is restarted.</p>
+</section>
+<section id="installing-commands-in-the-ado-folder" class="level3">
+<h3 class="anchored" data-anchor-id="installing-commands-in-the-ado-folder">Installing Commands in the Ado-Folder</h3>
+<p>The project now has a project ado-folder and a mechanism to ensure that all users employ commands installed in that folder. However, no commands have been installed in the folder yet. An easy way to do so is facilitated by how <code>repado</code> changed the ado-paths.</p>
+<p>As mentioned earlier, <code>ssc install</code> and <code>net install</code> place packages in the <code>PLUS</code> folder. Since the <code>PLUS</code> folder now points to the project ado-folder, any actions like <code>ssc install</code>, <code>ssc update</code>, and <code>adoupdate</code> will affect only the project ado-folder, provided Stata is not restarted.</p>
+<p>In the <code>repado</code> workflow, you should avoid including <code>ssc install</code> or any other commands that install or update community-contributed commands within your do-file. Instead, this should be done interactively through the “Command” window in Stata’s main interface. Only one user needs to install each required command into the project ado-folder. Subsequently, any other team member or future project reproducer will use the version of the commands in the project ado-folder without needing to install anything in their Stata installations.</p>
+<p>Using the strict mode (<code>mode(strict)</code>) ensures that the project code exclusively source commands from the project ado-folder, guaranteeing uniformity in command versions for all current and future users.</p>
+</section>
+<section id="when-not-to-use-strict-mode" class="level3">
+<h3 class="anchored" data-anchor-id="when-not-to-use-strict-mode">When Not to Use Strict Mode</h3>
+<p>In short, strict mode (<code>mode(strict)</code>) should be used almost always and especially for reproducibility packages. However, the no-strict mode (<code>mode(nostrict)</code>) exists to enable a user to utilize a command already installed on their computer before deciding to install it in the project ado-folder. In no-strict mode, the project ado-folder path is set to <code>PERSONAL</code> instead of <code>PLUS</code>. <code>PERSONAL</code> is given the second highest priority after <code>BASE</code> in this mode, meaning <code>PERSONAL</code> is given higher priority compared to <code>PLUS</code>. Thus, a command installed in the project ado-folder will be used over a command with the same name (typically the same command but a different version) in the user’s default <code>PLUS</code> folder.</p>
+<p>It’s important to note that the no-strict mode workflow is not guaranteed to be reproducible and is only intended to be used temporarily.</p>
+</section>
+</section>
+<section id="drawbacks-of-repado" class="level2">
+<h2 class="anchored" data-anchor-id="drawbacks-of-repado">Drawbacks of <code>repado</code></h2>
+<p>Once <code>repado</code> is set up and utilized, there are no drawbacks from a reproducibility perspective. It aligns with all the gold standards for future-proofing the reproducibility of a reproducibility package. However, there are two aspects that users of <code>repado</code> should consider.</p>
+<section id="licenses-and-republishing-of-commands" class="level3">
+<h3 class="anchored" data-anchor-id="licenses-and-republishing-of-commands">Licenses and Republishing of Commands</h3>
+<p>The first aspect pertains to licenses and whether republishing of commands is allowed. This is particularly relevant to reproducibility packages published publicly. Commands from SSC are published under the <code>GPL v3</code>, where republishing is permitted. However, it’s important to review the <code>GPL v3</code> for specific requirements regarding how to republish the commands. If other sources are used, the project team will need to ascertain whether they are allowed to publish a reproducibility package containing these commands.</p>
+</section>
+<section id="repado-cannot-install-itself" class="level3">
+<h3 class="anchored" data-anchor-id="repado-cannot-install-itself"><code>repado</code> Cannot Install Itself</h3>
+<p>The other aspect to consider is that, even after <code>repado</code> is set up in the project code, each user needs to install <code>repkit</code> on their own computers before the <code>repado</code> functionality will work on their computers. This is the case even if <code>repkit</code> is installed in the project ado-folder. Below, we suggest our recommended mitigation for this aspect, as well as an alternative approach that achieves the same results but involves more lines of code.</p>
+<p>We will never add any commands to the <code>repkit</code> package that are used for analysis or generate outcomes in a project. This is why it is acceptable to depend on users installing <code>repkit</code> before reproducing the results of a project.</p>
+<p>Initially, this functionality was implemented as a feature in the <code>ieboilstart</code> command in the <code>ietoolkit</code> package. However, it was later realized that this was not a good idea, as other commands in <code>ietoolkit</code> are used to generate results. To version control all dependencies used for generating results, the functionality now in <code>repado</code> cannot share a package with any command used for that purpose.</p>
+</section>
+<section id="mitigation" class="level3">
+<h3 class="anchored" data-anchor-id="mitigation">Mitigation</h3>
+<p>One mitigation to this is to include code that tests if <code>repkit</code> is already installed on a user’s computer. A do-file intended for potential wide distribution should never include code that automatically installs anything on other users’ computers. That practice is inconsiderate and is generally considered bad practice. However, it is a good practice to include a polite prompt instructing the user to install <code>repkit</code> in order to run the code if the package is not already installed. See the example below:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>* Make sure that repkit is installed</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>* If <span class="kw">not</span>, prompt user to install it from <span class="kw">ssc</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>cap which repkit  </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="kw">if</span> <span class="dt">_rc</span> == 111 {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">di</span> <span class="kw">as</span> <span class="kw">error</span> <span class="st">"{pstd}You need to have {cmd:repkit} installed to run this reproducibility package. Click {stata ssc install repkit} to do so.{p_end}"</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="alternative" class="level3">
+<h3 class="anchored" data-anchor-id="alternative">Alternative</h3>
+<p>As an alternative, the code from <code>repado</code> can be copied into the project’s main file. <code>repkit</code> is published using the MIT license where this is perfectly allowed. The ado-folder must still be created in the same way as described above. Afterward, you can add that folder using one of the two examples below. Both examples assume the same folder structure as previously outlined.</p>
+<p>Before using any of these examples, ensure they are utilizing the most recent version of the code used in the <code>repado</code> command <a href="https://github.com/worldbank/repkit/blob/main/src/ado/repado.ado">here</a>.</p>
+<p><strong>Example 1:</strong> In this example, the same results are achieved as when using <code>repado</code> in strict mode. This version maintains only the project ado-folder and the <code>BASE</code> folder in the ado-paths. After running this code, you can still install commands in the project ado-folder using <code>ssc install</code> and use other commands that use the <code>PLUS</code> folder.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>* Set user root folder</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> root <span class="st">"C:\Users\user123\github\myproject"</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>* Set <span class="ot">PLUS</span> to <span class="kw">adopath</span> and <span class="ot">list</span> it first, then <span class="ot">list</span> <span class="kw">BASE</span> first.</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>* This <span class="kw">means</span> that <span class="kw">BASE</span> is first and <span class="ot">PLUS</span> is second.</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="ot">sysdir</span> <span class="kw">set</span>  <span class="ot">PLUS</span> <span class="st">"${root}/code/ado"</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a><span class="kw">adopath</span> ++  <span class="ot">PLUS</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="kw">adopath</span> ++  <span class="kw">BASE</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>* Keep removing adopaths with <span class="fu">rank</span> 3 <span class="kw">until</span> only <span class="kw">BASE</span> and <span class="ot">PLUS</span>,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>* that has <span class="fu">rank</span> 1 and 2, are left <span class="kw">in</span> the adopaths</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> morepaths 1</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a><span class="kw">while</span> (<span class="ot">`morepaths'</span> == 1) {</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">capture</span> <span class="kw">adopath</span> - 3</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">if</span> <span class="dt">_rc</span> <span class="kw">local</span> morepaths 0</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p><strong>Example 2:</strong> This example is identical to the first one, with the exception that <code>PLUS</code> is not used. This eliminates the risk of any user accidentally using <code>adoupdate</code> to update all commands in the project ado-folder. This aspect is especially useful when not using Git, as mistakes like this cannot be easily reverted. If Git is employed, and all content in the ado-folder is tracked in the repository, this difference becomes less significant.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode stata code-with-copy"><code class="sourceCode stata"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>* Set user root folder</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="kw">global</span> root <span class="st">"C:\Users\user123\github\myproject"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>* Set <span class="ot">PLUS</span> to <span class="kw">adopath</span> and <span class="ot">list</span> it first, then <span class="ot">list</span> <span class="kw">BASE</span> first.</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>* This <span class="kw">means</span> that <span class="kw">BASE</span> is first and <span class="ot">PLUS</span> is second.</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="kw">adopath</span> ++  <span class="st">"${root}/code/ado"</span></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a><span class="kw">adopath</span> ++  <span class="kw">BASE</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>* Keep removing adopaths with <span class="fu">rank</span> 3 <span class="kw">until</span> only <span class="kw">BASE</span> and the project ado-folder,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>* that has <span class="fu">rank</span> 1 and 2, are left <span class="kw">in</span> the adopaths</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a><span class="kw">local</span> morepaths 1</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="kw">while</span> (<span class="ot">`morepaths'</span> == 1) {</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">capture</span> <span class="kw">adopath</span> - 3</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">if</span> <span class="dt">_rc</span> <span class="kw">local</span> morepaths 0</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>It is equally possible to create a future-proof reproducibility package using <code>repado</code> or either of the two examples provided here. We have offered <code>repado</code> in the form of a command to make this process easier and to abstract away technical code. In the end, it is up to each team to decide which method to employ.</p>
+
+
+</section>
+</section>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>

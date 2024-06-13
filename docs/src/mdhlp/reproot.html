@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.0.37">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>repkit – reproot</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+<script src="../../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../../">
+<link href="../../images/logo.png" rel="icon" type="image/png">
+<script src="../../site_libs/quarto-html/quarto.js"></script>
+<script src="../../site_libs/quarto-html/popper.min.js"></script>
+<script src="../../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-fixed">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg navbar-dark ">
+      <div class="navbar-container container-fluid">
+      <a class="navbar-brand" href="../../index.html">
+    <img src="../../images/logo.png" alt="">
+    <span class="navbar-title">repkit</span>
+  </a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link" href="../../reference/index.html">Reference</a>
+  </li>  
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-articles" role="button" data-bs-toggle="dropdown" aria-expanded="false">Articles</a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-articles">    
+        <li>
+    <a class="dropdown-item" href="../../articles/ado-management-with-repado.html">
+ <span class="dropdown-text">ado-management-with-repado</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../articles/reproot-files.html">
+ <span class="dropdown-text">reproot-files</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="../../articles/schemes-with-repado.html">
+ <span class="dropdown-text">schemes-with-repado</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/worldbank/repkit"><i class="bi bi-github" role="img">
+</i> 
+ </a>
+  </li>  
+</ul>
+              <div id="quarto-search" class="" title="Search"></div>
+          </div> <!-- /navcollapse -->
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#title" id="toc-title" class="nav-link active" data-scroll-target="#title">Title</a></li>
+  <li><a href="#syntax" id="toc-syntax" class="nav-link" data-scroll-target="#syntax">Syntax</a></li>
+  <li><a href="#options" id="toc-options" class="nav-link" data-scroll-target="#options">Options</a></li>
+  <li><a href="#examples" id="toc-examples" class="nav-link" data-scroll-target="#examples">Examples</a>
+  <ul class="collapse">
+  <li><a href="#example-1." id="toc-example-1." class="nav-link" data-scroll-target="#example-1.">Example 1.</a></li>
+  </ul></li>
+  <li><a href="#feedback-bug-reports-and-contributions" id="toc-feedback-bug-reports-and-contributions" class="nav-link" data-scroll-target="#feedback-bug-reports-and-contributions">Feedback, bug reports and contributions</a></li>
+  <li><a href="#authors" id="toc-authors" class="nav-link" data-scroll-target="#authors">Authors</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+
+<section id="title" class="level1">
+<h1>Title</h1>
+<p><strong>reproot</strong> - Command for managing root file paths.</p>
+</section>
+<section id="syntax" class="level1">
+<h1>Syntax</h1>
+<p><strong>reproot</strong> , <strong><strong>p</strong>roject</strong>(<em>string</em>) <strong><strong>r</strong>oots</strong>(<em>string</em>) [ <strong><strong>pre</strong>fix</strong>(<em>string</em>) <strong>clear</strong>]</p>
+<table class="table">
+<colgroup>
+<col style="width: 43%">
+<col style="width: 56%">
+</colgroup>
+<thead>
+<tr class="header">
+<th><em>options</em></th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong><strong>p</strong>roject</strong>(<em>string</em>)</td>
+<td>The project name to search roots for.</td>
+</tr>
+<tr class="even">
+<td><strong><strong>r</strong>oots</strong>(<em>string</em>)</td>
+<td>The root name(s) to search for.</td>
+</tr>
+<tr class="odd">
+<td><strong><strong>pre</strong>fix</strong>(<em>string</em>)</td>
+<td>Adds a project-specific prefix to root globals.</td>
+</tr>
+<tr class="even">
+<td><strong>clear</strong></td>
+<td>Always search for roots even if already loaded.</td>
+</tr>
+</tbody>
+</table>
+<p><code>reproot</code> is a framework for automatically handling file paths across teams without requiring project-specific setup from individual users. Each user needs to set up <code>reproot</code> once on their computer (see the next paragraph). Afterward, users can automatically load root paths with no manual setup in all projects using <code>reproot</code> on that computer.</p>
+<p><code>reproot</code> works by having the team save a root file in root folders required in the project. Such root folders could be the root of a Git clone folder, the root of a OneDrive/DropBox folder where data is shared, or the root of a project folder on a network drive where files are shared, etc. As long as the folder is accessible from the file system, a root can be placed in that folder. File paths to specific files can then be expressed in the code as relative paths from any of those roots.</p>
+<p>To avoid searching the entire file system for roots (which would take too much time), each user needs to configure a <code>reproot-env</code> file. This file lists which folders and how many sub-folders of those folders <code>reproot</code> should search for root files. This setup should make the search take less than a second.</p>
+<p>The <code>reproot-env</code> file should be created in the folder that Stata outputs when running the code <code>cd ~</code>. This location can be accessed by all users without having to set any root paths first.</p>
+<p>Read more about setting up this file in this <a href="https://worldbank.github.io/repkit/articles/reproot-files.html">article</a>. The rest of this help file will focus on how to use this command once those files are set up.</p>
+</section>
+<section id="options" class="level1">
+<h1>Options</h1>
+<p><strong>project</strong>(<em>string</em>) indicates the name of the current project. When searching for root files, only root files for this project will be considered. Use a project name that will remain unique across all team members’ computers.</p>
+<p><strong>roots</strong>(<em>string</em>) indicates which roots are expected to be found for this project. The command creates a global based on the root name of that root if that root folder is found. The content of the global will be the file path to the location of the root file. This command does not set globals for roots not listed here, even if such roots for this project were found. Unless the <strong>clear</strong> option is used, the command does not overwrite any global that already existed before running the command. Finally, the command tests that there is a global named after each root and that all of them are non-empty.</p>
+<p><strong>prefix</strong>(<em>string</em>) allows the user to set a project-specific global prefix. This is strongly recommended to ensure that a global from another project is not mistaken as a global for the current project. Unless the <strong>clear</strong> option is used, a global already set with a common name, such as <code>data</code> or <code>code</code>, will be interpreted as a root global with that name for the current project. The <strong>prefix()</strong> option allows a project-specific prefix that is set to all globals. So, if <strong>prefix(“abc_”)</strong> is used, then the globals <code>data</code> and <code>code</code> will be set to <code>abc_data</code> and <code>abc_code</code>.</p>
+<p><strong>clear</strong> overwrites globals that already exist with the name that <code>reproot</code> would creaet. This is all the roots listed in <strong>roots()</strong> with the <strong>prefix()</strong> prepended if that option is used. The default behavior is to not search for roots that are already set up. If all globals are already set, then the command does not execute the search for roots.</p>
+</section>
+<section id="examples" class="level1">
+<h1>Examples</h1>
+<p>These examples demonstrate how to include <code>reproot</code> in the do-file. See this <a href="https://worldbank.github.io/repkit/articles/reproot-files.html">article</a> for information on how to set up the <code>.yaml</code> files this command needs to run.</p>
+<section id="example-1." class="level2">
+<h2 class="anchored" data-anchor-id="example-1.">Example 1.</h2>
+<p>In this example, the command searches the search paths indicated in the <code>reproot-env.yaml</code> file for root files for the project <code>my_proj</code>. Then it sets the globals <code>data</code> and <code>clone</code> to the file location where root files with those names for this project are found.</p>
+<pre><code>reproot , project("my_proj") roots("data clone")</code></pre>
+</section>
+</section>
+<section id="feedback-bug-reports-and-contributions" class="level1">
+<h1>Feedback, bug reports and contributions</h1>
+<p>Read more about these commands on <a href="https://github.com/worldbank/repkit">this repo</a> where this package is developed. Please provide any feedback by <a href="https://github.com/worldbank/repkit/issues">opening an issue</a>. PRs with suggestions for improvements are also greatly appreciated.</p>
+</section>
+<section id="authors" class="level1">
+<h1>Authors</h1>
+<p>LSMS Team, The World Bank lsms@worldbank.org DIME Analytics, The World Bank dimeanalytics@worldbank.org</p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    setTimeout(function() {
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      let href = ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const cites = ref.parentNode.getAttribute('data-cites').split(' ');
+    tippyHover(ref, function() {
+      var popup = window.document.createElement('div');
+      cites.forEach(function(cite) {
+        var citeDiv = window.document.createElement('div');
+        citeDiv.classList.add('hanging-indent');
+        citeDiv.classList.add('csl-entry');
+        var biblioDiv = window.document.getElementById('ref-' + cite);
+        if (biblioDiv) {
+          citeDiv.innerHTML = biblioDiv.innerHTML;
+        }
+        popup.appendChild(citeDiv);
+      });
+      return popup.innerHTML;
+    });
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+</body></html>
