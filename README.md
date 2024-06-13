@@ -1,6 +1,6 @@
 # repkit
 
-This Stata module is package providing a utility toolkit
+This Stata module is a package providing a utility toolkit
 for reproducibility best-practices.
 The motivation for this package is to make the World Bank's
 reproducibility best-practices more accessible to a wider Stata community.
