@@ -12,7 +12,7 @@ Currently, this toolkit has the following commands:
 
 | Command | Description |
 | --- | --- |
-| [repado](https://worldbank.github.io/repkit/reference/repado.html) | Command used to manage a project's command dependencies. This command provides a way to make sure that all team members as well as future reproducers of the projects code use the exact same version of all command dependencies. |
+| [repado](https://worldbank.github.io/repkit/reference/repado.html) | Command used to manage a project's dependencies of commands installed from external sources such as SSC. This command provides a way to make sure that all team members as well as future reproducers of the projects code use the exact same version of all command dependencies. |
 | [repadolog](https://worldbank.github.io/repkit/reference/repadolog.html) | Outputs a report of the commands installed in the current PLUS folder. |
 | [repkit](https://worldbank.github.io/repkit/reference/repkit.html) | Command named the same as the package. Most important purpose is that this command makes the code `which repkit` work. |
 | [reproot](https://worldbank.github.io/repkit/reference/reproot.html) | This command allows teams to dynamically set root-paths with no manual user-specific set-up, in both single-rooted and multi-rooted projects. |
