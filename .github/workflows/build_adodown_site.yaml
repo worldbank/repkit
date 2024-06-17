@@ -27,23 +27,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo apt-get install -y make
-          sudo apt-get install -y libcurl4-openssl-dev
-          sudo apt-get install -y libssl-dev
-          sudo apt-get install -y libfontconfig1-dev
-          sudo apt-get install -y libfreetype6-dev
-          sudo apt-get install -y libfribidi-dev
-          sudo apt-get install -y libharfbuzz-dev
-          sudo apt-get install -y libjpeg-dev
-          sudo apt-get install -y libpng-dev
-          sudo apt-get install -y libtiff-dev
-          sudo apt-get install -y libicu-dev
-          sudo apt-get install -y pandoc
-          sudo apt-get install -y libxml2-dev
-          sudo apt-get install -y libgit2-dev
-          sudo apt-get install -y libssh2-1-dev
-          sudo apt-get install -y zlib1g-dev
-          sudo apt-get install -y git
+          sudo apt-get install -y make libcurl4-openssl-dev libssl-dev libfontconfig1-dev libfreetype6-dev libfribidi-dev libharfbuzz-dev libjpeg-dev libpng-dev libtiff-dev libicu-dev pandoc libxml2-dev libgit2-dev libssh2-1-dev zlib1g-dev git
 
       - name: Install devtools
         run: install.packages("devtools")
@@ -61,13 +45,17 @@ jobs:
         run: adodownr::build_site(pkg_dir = here::here(), site_dir = here::here())
         shell: Rscript {0}
 
-      - name: Setup Pages
-        uses: actions/configure-pages@v5
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          # Upload entire repository
-          path: './docs'
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+  deploy:
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{steps.deployment.outputs.page_url}}
+    runs-on: ubuntu-latest
+    needs: adodownr
+    steps:
+        - name: Deploy to GitHub Pages
+          id: deployment
+          uses: actions/deploy-pages@v2
