@@ -61,10 +61,13 @@ jobs:
         run: adodownr::build_site(pkg_dir = here::here(), site_dir = here::here())
         shell: Rscript {0}
 
-      - name: Deploy to GitHub pages
-        uses: JamesIves/github-pages-deploy-action@v4
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          clean: false
-          folder: docs
-          branch: gh-pages
-          target-folder: docs
+          # Upload entire repository
+          path: '/docs'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
