@@ -276,35 +276,16 @@ end
 
           *Reset the last line local
           local last_line = ""
-          local line_command = "OTHER"
+          local line_command = ""
           local dofile ""
           local doflag 0
 
-          local theline = regexr(`"`macval(line)'"',"[\[//]\\\^\%\|\?\*\+\(\)]","")
-          forv i = 1/10 {
-            local theline = regexr(`"`theline'"',"[\[//]]","")
-            local theline = regexr(`"`theline'"',"[\\]","")
-            local theline = regexr(`"`theline'"',"[\^]","")
-            local theline = regexr(`"`theline'"',"[\%]","")
-            local theline = regexr(`"`theline'"',"[\|]","")
-            local theline = regexr(`"`theline'"',"[\?]","")
-            local theline = regexr(`"`theline'"',"[\*]","")
-            local theline = regexr(`"`theline'"',"[\+]","")
-            local theline = regexr(`"`theline'"',"[\(]","")
-            local theline = regexr(`"`theline'"',"[\)]","")
-            // local theline = regexr(`"`theline'"',`"[\"]"',"")
-          }
-
-          foreach w in `macval(theline)' {
-            cap get_command, word(`"`w'"')
-            if `doflag' == 1 local dofile = "`w'"
-            if "`r(command)'" == "do" | "`r(command)'" == "run" {
-              local doflag = 1
-            }
-            else local doflag 0
+          * Get all commands used in the line
+          foreach w in `macval(line)' {
+            get_command, word(`"`macval(line)'"')
             local line_command = "`line_command' `r(command)'"
           }
-            local line_command : list uniq line_command
+          local line_command : list uniq line_command
 
           * If MMM signestimationsample
           if (strpos("`line_command'","mmm")) {
@@ -580,7 +561,7 @@ end
         }
       }
 
-      if "`word'" == "m:m" {
+      if `"`word'"' == "m:m" {
         return local command "mmm"
         local match = 1
       }
