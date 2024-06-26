@@ -41,6 +41,7 @@ gen y = rnormal()
 
 cap duplicates drop make , force
 
+do "target-2.do" // missing do-file
 
 if (1 == 1) & (1 == 1) do "${tf}/target-2.do"
 
