@@ -357,15 +357,20 @@ end
 
             * Write foreach/forvalues to block stack and
             * it's macro name to loop stack
-            if (strpos("`line_command'","foreach")) | (strpos("`line_command'","forvalues")) {
-              local block_stack   "`line_command' `block_stack' "
+            if (strpos("`line_command'","foreach")) {
+              local block_stack   "foreach `block_stack' "
+              local loop_stack = trim("`loop_stack' `secondw'")
+            }
+
+            if (strpos("`line_command'","forvalues")) {
+              local block_stack   "forvalues `block_stack' "
               local loop_stack = trim("`loop_stack' `secondw'")
             }
 
             * Write while to block stack and
             * also "while" to loop stack as it does not have a macro name
             if strpos("`line_command'","while") {
-              local block_stack   "`line_command' `block_stack' "
+              local block_stack   "while `block_stack' "
               local loop_stack = trim("`loop_stack' `line_command'")
             }
           }
