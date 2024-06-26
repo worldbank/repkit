@@ -280,21 +280,16 @@ end
           local dofile ""
           local doflag 0
 
-          local theline = regexr(`"`macval(line)'"',"[\[//]\\\^\%\|\?\*\+\(\)]","")
-          forv i = 1/10 {
-            local theline = regexr(`"`theline'"',"[\[//]]","")
-            local theline = regexr(`"`theline'"',"[\\]","")
-            local theline = regexr(`"`theline'"',"[\^]","")
-            local theline = regexr(`"`theline'"',"[\%]","")
-            local theline = regexr(`"`theline'"',"[\|]","")
-            local theline = regexr(`"`theline'"',"[\?]","")
-            local theline = regexr(`"`theline'"',"[\*]","")
-            local theline = regexr(`"`theline'"',"[\+]","")
-            local theline = regexr(`"`theline'"',"[\(]","")
-            local theline = regexr(`"`theline'"',"[\)]","")
-            // local theline = regexr(`"`theline'"',`"[\"]"',"")
+          // Sanitize that string! -- see d17586d873a978987f34ba2fe536a311107ea58b for more regex
+          local theline = `"`macval(line)'"'
+          while regexm(`"`macval(theline)'"',"[\*]") {
+            local theline = regexr(`"`macval(theline)'"',"[\*]","")
+          }
+          while regexm(`"`macval(theline)'"',"\[//]"){
+            local theline = regexr(`"`macval(theline)'"',"\[//]","")
           }
 
+          // Identify all commands in line
           foreach w in `macval(theline)' {
             cap get_command, word(`"`w'"')
             if `doflag' == 1 local dofile = "`w'"
