@@ -386,7 +386,7 @@ end
             * also "while" to loop stack as it does not have a macro name
             if strpos("`line_command'","while") {
               local block_stack   "while `block_stack' "
-              local loop_stack = trim("`loop_stack' `line_command'")
+              local loop_stack = trim("`loop_stack' while")
             }
           }
 
