@@ -329,6 +329,7 @@ end
               local sub_f1 "`r(code_file_run1)'"
               local sub_f2 "`r(code_file_run2)'"
 
+
               * Substitute the original sub-dofile with the check/write ones
               local run1_line = ///
                 subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
@@ -628,8 +629,9 @@ end
           noi write_and_print_output, h_smcl(`h_smcl') ///
             l1("`r(botline)'") l2(" ") ///
             l3(`"{pstd} Stepping into sub-file:{p_end}"')
+
           noi print_filetree_and_verbose_title, ///
-            files(`" "`orgfile'" "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
+            files(`" `orgfile' "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
           output_writetitle , outputcolumns("`outputcolumns'")
           noi write_and_print_output, h_smcl(`h_smcl') ///
             l1("`r(topline)'") l2("`r(state_titles)'") ///
@@ -637,7 +639,7 @@ end
 
           * Make the recurisive call for next file
           noi recurse_comp_lines , dirout("`dirout'") stub("`new_stub'") ///
-            orgfile(`"`orgfile' "`new_orgfile'" "') ///
+            orgfile(`" `orgfile' "`new_orgfile'" "') ///
             outputcolumns("`outputcolumns'") h_smcl(`h_smcl') `verbose' `compact' `suppress'
 
           * Step back into this data file after the recursive call and:
@@ -646,7 +648,7 @@ end
           noi write_and_print_output, h_smcl(`h_smcl') ///
             l1(`"{phang} Stepping back into file:{p_end}"')
           noi print_filetree_and_verbose_title, ///
-            files(`" "`orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
+            files(`" `orgfile' "') h_smcl(`h_smcl') `verbose' `compact'
           output_writetitle , outputcolumns("`outputcolumns'")
           noi write_and_print_output, h_smcl(`h_smcl') ///
               l1("`r(topline)'") l2("`r(state_titles)'") ///
@@ -965,6 +967,7 @@ end
   program define   print_filetree_and_verbose_title, rclass
     syntax , files(string) h_smcl(string) [verbose] [compact]
     local file_count = 0
+
     foreach file of local files {
       noi write_and_print_output, h_smcl(`h_smcl') ///
         l1(`"{pstd}{c BLC}{hline `++file_count'}> `file'{p_end}"')
