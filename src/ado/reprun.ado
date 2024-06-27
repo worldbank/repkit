@@ -339,6 +339,7 @@ end
             cap confirm file "`file'"
             if _rc {
               local recurse 0
+              di as err `"      Skipping recursion -- file not found: `file' "'
             }
 
             * Test if it should recurse or not
