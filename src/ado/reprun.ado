@@ -128,21 +128,9 @@ qui {
     file close `h_smcl'
 
     if "`mmmflag'" != "" {
-      di as err "  Warning: Your code contains many-to-many merges."
-      di as err "  These occur on lines:`mmmflag'."
-      di as err ""
-      di as err "  The following is copied word-for-word from the documentation"
-      di as err "    of the merge command in the Stata Data Management Reference Manual."
-      di as err ""
-      di as err "    m:m specifies a many-to-many merge and is a bad idea."
-      di as err "    In an m:m merge, observations are matched within equal values of the key variable(s),"
-      di as err "      with the first observation being matched to the first; the second, to the second; and so on."
-      di as err "    If the master and using have an unequal number of observations within the group,"
-      di as err "      then the last observation of the shorter group is used repeatedly"
-      di as err "      to match with subsequent observations of the longer group."
-      di as err "    Thus m:m merges are dependent on the current sort order—something which should never happen.""
-      di as err "    Because m:m merges are such a bad idea, we are not going to show you an example."
-      di as err "    If you think that you need an m:m merge, then you probably need to work with your data so that you can use a 1:m or m:1 merge."
+      noi di as res `"{pstd}{red:Warning:}: Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"'
+      noi di as res `"{pstd}As the {mansection D merge:Stata Manual} says: {it:if you think you need to perform an m:m merge, then we suspect you are wrong}.{p_end}"'
+      noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
     }
 
   /*****************************************************************************
