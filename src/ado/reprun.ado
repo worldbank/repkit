@@ -71,6 +71,7 @@ qui {
     noi reprun_recurse, dofile("`dofile'") output("`dirout'") stub("m")
     local code_file_run1 "`r(code_file_run1)'"
     local code_file_run2 "`r(code_file_run2)'"
+    if "`r(mmmflag)'" != ""  local mmmflag "`mmmflag' `r(mmmflag)'"
     noi di as err "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
 
     /*************************************************************************
@@ -125,6 +126,12 @@ qui {
       l1(`"{phang}Done checking file:{p_end}"') ///
       l2(`"{pstd}{c BLC}{hline 1}> `dofile'{p_end}"') l3("{hline}")
     file close `h_smcl'
+
+    if "`mmmflag'" != "" {
+      noi di as res `"{pstd}{red:Warning:}: Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"'
+      noi di as res `"{pstd}As the {mansection D merge:Stata Manual} says: {it:if you think you need to perform an m:m merge, then we suspect you are wrong}.{p_end}"'
+      noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
+    }
 
   /*****************************************************************************
         Write smcl file to disk and clean up intermediate files unless debugging
@@ -255,21 +262,51 @@ end
         * Not part of a multiline line
         else {
 
-          *Reset the last line local
+          * Reset the last line locals
           local last_line = ""
           local line_command = "OTHER"
           local dofile ""
           local doflag 0
-          foreach w in `macval(line)' {
-            get_command, word("`w'")
+          local looptype ""
+          local loopflag 0
+
+          // Sanitize that string! -- see d17586d873a978987f34ba2fe536a311107ea58b for more regex
+          local theline = `"`macval(line)'"'
+          while regexm(`"`macval(theline)'"',"[\*]") {
+            local theline = regexr(`"`macval(theline)'"',"[\*]","")
+          }
+          while regexm(`"`macval(theline)'"',"\[//]"){
+            local theline = regexr(`"`macval(theline)'"',"\[//]","")
+          }
+
+          // Identify all commands in line
+          foreach w in `macval(theline)' {
+            cap get_command, word(`"`w'"')
+
             if `doflag' == 1 local dofile = "`w'"
+            if `loopflag' == 1 local looptype = "`w'"
+
+            * Dofiles
             if "`r(command)'" == "do" | "`r(command)'" == "run" {
               local doflag = 1
             }
             else local doflag 0
+
+            * Loops
+            if "`r(command)'" == "foreach" | "`r(command)'" == "forvalues" {
+              local loopflag = 1
+            }
+            else local loopflag 0
+
             local line_command = "`line_command' `r(command)'"
           }
             local line_command : list uniq line_command
+
+          * If MMM signestimationsample
+          if (strpos("`line_command'","mmm")) {
+            di as err "Command Warning: Many-to-many merge on Line `lnum'"
+            return local mmmflag = `lnum'
+          }
 
           * If using capture, log it and take second word as command
           if (strpos("`line_command'","capture")) {
@@ -315,6 +352,7 @@ end
             cap confirm file "`file'"
             if _rc {
               local recurse 0
+              di as err `"      Skipping recursion -- file not found: `file' "'
             }
 
             * Test if it should recurse or not
@@ -328,6 +366,7 @@ end
                     stub("`recursestub'")
               local sub_f1 "`r(code_file_run1)'"
               local sub_f2 "`r(code_file_run2)'"
+
 
               * Substitute the original sub-dofile with the check/write ones
               local run1_line = ///
@@ -357,16 +396,21 @@ end
 
             * Write foreach/forvalues to block stack and
             * it's macro name to loop stack
-            if (strpos("`line_command'","foreach")) | (strpos("`line_command'","forvalues")) {
-              local block_stack   "`line_command' `block_stack' "
-              local loop_stack = trim("`loop_stack' `secondw'")
+            if (strpos("`line_command'","foreach")) {
+              local block_stack   "foreach `block_stack' "
+              local loop_stack = trim("`loop_stack' `looptype'")
+            }
+
+            if (strpos("`line_command'","forvalues")) {
+              local block_stack   "forvalues `block_stack' "
+              local loop_stack = trim("`loop_stack' `looptype'")
             }
 
             * Write while to block stack and
             * also "while" to loop stack as it does not have a macro name
             if strpos("`line_command'","while") {
-              local block_stack   "`line_command' `block_stack' "
-              local loop_stack = trim("`loop_stack' `line_command'")
+              local block_stack   "while `block_stack' "
+              local loop_stack = trim("`loop_stack' while")
             }
           }
 
@@ -414,6 +458,7 @@ end
     return local code_file_run1 "`code_f1'"
     return local code_file_run2 "`code_f2'"
   }
+
   end
 
   cap program drop org_line_parse
@@ -538,6 +583,11 @@ end
         }
       }
 
+      if "`word'" == "m:m" {
+        return local command "mmm"
+        local match = 1
+      }
+
       * No match, return OTHER
       if (`match'==0) {
           return local command "OTHER"
@@ -628,8 +678,9 @@ end
           noi write_and_print_output, h_smcl(`h_smcl') ///
             l1("`r(botline)'") l2(" ") ///
             l3(`"{pstd} Stepping into sub-file:{p_end}"')
+
           noi print_filetree_and_verbose_title, ///
-            files(`" "`orgfile'" "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
+            files(`" `orgfile' "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
           output_writetitle , outputcolumns("`outputcolumns'")
           noi write_and_print_output, h_smcl(`h_smcl') ///
             l1("`r(topline)'") l2("`r(state_titles)'") ///
@@ -637,7 +688,7 @@ end
 
           * Make the recurisive call for next file
           noi recurse_comp_lines , dirout("`dirout'") stub("`new_stub'") ///
-            orgfile(`"`orgfile' "`new_orgfile'" "') ///
+            orgfile(`" `orgfile' "`new_orgfile'" "') ///
             outputcolumns("`outputcolumns'") h_smcl(`h_smcl') `verbose' `compact' `suppress'
 
           * Step back into this data file after the recursive call and:
@@ -646,7 +697,7 @@ end
           noi write_and_print_output, h_smcl(`h_smcl') ///
             l1(`"{phang} Stepping back into file:{p_end}"')
           noi print_filetree_and_verbose_title, ///
-            files(`" "`orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
+            files(`" `orgfile' "') h_smcl(`h_smcl') `verbose' `compact'
           output_writetitle , outputcolumns("`outputcolumns'")
           noi write_and_print_output, h_smcl(`h_smcl') ///
               l1("`r(topline)'") l2("`r(state_titles)'") ///
@@ -965,6 +1016,7 @@ end
   program define   print_filetree_and_verbose_title, rclass
     syntax , files(string) h_smcl(string) [verbose] [compact]
     local file_count = 0
+
     foreach file of local files {
       noi write_and_print_output, h_smcl(`h_smcl') ///
         l1(`"{pstd}{c BLC}{hline `++file_count'}> `file'{p_end}"')
