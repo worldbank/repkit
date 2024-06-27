@@ -262,11 +262,13 @@ end
         * Not part of a multiline line
         else {
 
-          *Reset the last line local
+          * Reset the last line locals
           local last_line = ""
           local line_command = "OTHER"
           local dofile ""
           local doflag 0
+          local looptype ""
+          local loopflag 0
 
           // Sanitize that string! -- see d17586d873a978987f34ba2fe536a311107ea58b for more regex
           local theline = `"`macval(line)'"'
@@ -280,11 +282,22 @@ end
           // Identify all commands in line
           foreach w in `macval(theline)' {
             cap get_command, word(`"`w'"')
+
             if `doflag' == 1 local dofile = "`w'"
+            if `loopflag' == 1 local looptype = "`w'"
+
+            * Dofiles
             if "`r(command)'" == "do" | "`r(command)'" == "run" {
               local doflag = 1
             }
             else local doflag 0
+
+            * Loops
+            if "`r(command)'" == "foreach" | "`r(command)'" == "forvalues" {
+              local loopflag = 1
+            }
+            else local loopflag 0
+
             local line_command = "`line_command' `r(command)'"
           }
             local line_command : list uniq line_command
@@ -383,16 +396,21 @@ end
 
             * Write foreach/forvalues to block stack and
             * it's macro name to loop stack
-            if (strpos("`line_command'","foreach")) | (strpos("`line_command'","forvalues")) {
-              local block_stack   "`line_command' `block_stack' "
-              local loop_stack = trim("`loop_stack' `secondw'")
+            if (strpos("`line_command'","foreach")) {
+              local block_stack   "foreach `block_stack' "
+              local loop_stack = trim("`loop_stack' `looptype'")
+            }
+
+            if (strpos("`line_command'","forvalues")) {
+              local block_stack   "forvalues `block_stack' "
+              local loop_stack = trim("`loop_stack' `looptype'")
             }
 
             * Write while to block stack and
             * also "while" to loop stack as it does not have a macro name
             if strpos("`line_command'","while") {
-              local block_stack   "`line_command' `block_stack' "
-              local loop_stack = trim("`loop_stack' `line_command'")
+              local block_stack   "while `block_stack' "
+              local loop_stack = trim("`loop_stack' while")
             }
           }
 
