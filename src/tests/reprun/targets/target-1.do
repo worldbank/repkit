@@ -1,4 +1,13 @@
-//
+/*************************************************************
+
+Name of do file: Data_Clean.do
+3
+Author: Maria J. Urbina Date: 14/05/2024
+
+Description: Dofile in charge of cleanning the data
+45
+Input files: Output files:
+********************/
 
 clear
 
@@ -22,7 +31,7 @@ local check : var lab price`domain_num'
 su  /// error 196
   price
 
-* Bad comment 
+* Bad comment
 /* Weird comment */
 // TEST COMMENT
 
@@ -48,7 +57,17 @@ gen y = rnormal()
 
 cap duplicates drop make , force
 
-do "target-2.do" // missing do-file
+do "target-2.do" // missing do-file do "${tf}/target-dontrun.do"
+
+* do "${tf}/target-dontrun.do"
+
+// do "${tf}/target-dontrun.do"
+
+// do "${tf}/target-dontrun.do"
+
+/*
+do "${tf}/target-dontrun.do"
+*/
 
 if (1 == 1) & (1 == 1) do "${tf}/target-2.do"
 
