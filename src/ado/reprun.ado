@@ -71,6 +71,7 @@ qui {
     noi reprun_recurse, dofile("`dofile'") output("`dirout'") stub("m")
     local code_file_run1 "`r(code_file_run1)'"
     local code_file_run2 "`r(code_file_run2)'"
+    if "`r(mmmflag)'" != ""  local mmmflag "`mmmflag' `r(mmmflag)'"
     noi di as err "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
 
     /*************************************************************************
@@ -125,6 +126,24 @@ qui {
       l1(`"{phang}Done checking file:{p_end}"') ///
       l2(`"{pstd}{c BLC}{hline 1}> `dofile'{p_end}"') l3("{hline}")
     file close `h_smcl'
+
+    if "`mmmflag'" != "" {
+      di as err "  Warning: Your code contains many-to-many merges."
+      di as err "  These occur on lines:`mmmflag'."
+      di as err ""
+      di as err "  The following is copied word-for-word from the documentation"
+      di as err "    of the merge command in the Stata Data Management Reference Manual."
+      di as err ""
+      di as err "    m:m specifies a many-to-many merge and is a bad idea."
+      di as err "    In an m:m merge, observations are matched within equal values of the key variable(s),"
+      di as err "      with the first observation being matched to the first; the second, to the second; and so on."
+      di as err "    If the master and using have an unequal number of observations within the group,"
+      di as err "      then the last observation of the shorter group is used repeatedly"
+      di as err "      to match with subsequent observations of the longer group."
+      di as err "    Thus m:m merges are dependent on the current sort order—something which should never happen.""
+      di as err "    Because m:m merges are such a bad idea, we are not going to show you an example."
+      di as err "    If you think that you need an m:m merge, then you probably need to work with your data so that you can use a 1:m or m:1 merge."
+    }
 
   /*****************************************************************************
         Write smcl file to disk and clean up intermediate files unless debugging
@@ -263,9 +282,18 @@ end
           local looptype ""
           local loopflag 0
 
-          * Parse the line commands
-          foreach w in `macval(line)' {
-            get_command, word("`w'")
+          // Sanitize that string! -- see d17586d873a978987f34ba2fe536a311107ea58b for more regex
+          local theline = `"`macval(line)'"'
+          while regexm(`"`macval(theline)'"',"[\*]") {
+            local theline = regexr(`"`macval(theline)'"',"[\*]","")
+          }
+          while regexm(`"`macval(theline)'"',"\[//]"){
+            local theline = regexr(`"`macval(theline)'"',"\[//]","")
+          }
+
+          // Identify all commands in line
+          foreach w in `macval(theline)' {
+            cap get_command, word(`"`w'"')
 
             if `doflag' == 1 local dofile = "`w'"
             if `loopflag' == 1 local looptype = "`w'"
@@ -285,6 +313,12 @@ end
             local line_command = "`line_command' `r(command)'"
           }
             local line_command : list uniq line_command
+
+          * If MMM signestimationsample
+          if (strpos("`line_command'","mmm")) {
+            di as err "Command Warning: Many-to-many merge on Line `lnum'"
+            return local mmmflag = `lnum'
+          }
 
           * If using capture, log it and take second word as command
           if (strpos("`line_command'","capture")) {
@@ -434,6 +468,7 @@ end
     return local code_file_run1 "`code_f1'"
     return local code_file_run2 "`code_f2'"
   }
+
   end
 
   cap program drop org_line_parse
@@ -556,6 +591,11 @@ end
             }
           }
         }
+      }
+
+      if "`word'" == "m:m" {
+        return local command "mmm"
+        local match = 1
       }
 
       * No match, return OTHER

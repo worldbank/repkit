@@ -4,6 +4,11 @@ clear
 
 sysuse auto.dta
 
+  tempfile a
+  save `a' , replace
+
+merge m:m foreign using `a' , nogen
+
 isid make, sort
 sort foreign
 
@@ -17,13 +22,7 @@ di as err "Should be 6165... `r(mean)'"
 
 #d cr
 
-local check : var lab price`domain_num'
 
-su  /// error 196
-  price
-
-* Bad comment 
-/* Weird comment */
 // TEST COMMENT
 
 global something "nothing"
