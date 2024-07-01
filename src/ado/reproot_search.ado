@@ -39,9 +39,8 @@ qui {
 
     * Test if this location has a root file
     cap confirm file "`path'/`root_file'"
-    * File found, handle it
+    * File found, add it to rootdirs
     if (_rc == 0) {
-      noi di as text "{phang}{bf:root:} {it:`path'}{p_end}"
       local rootdirs `""`path'""'
     }
 
@@ -66,7 +65,7 @@ qui {
       * Recure into dirs unless it is part of skip folders
       foreach dir of local dir_list {
         if !(`: list dir in skipdirs') {
-          reproot_search,             ///
+          noi reproot_search,             ///
             path("`path'/`dir'")      ///
             recsleft(`next_recsleft') ///
             skipdirs(`skipdirs')      ///
