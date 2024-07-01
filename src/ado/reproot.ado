@@ -71,6 +71,22 @@ qui {
     * There are roots to search for
     else {
 
+      /***************************************************
+        Test that all roots to look for has legal names
+      ***************************************************/
+      foreach root of local roots_notset {
+        validate_global_name, gname(`"`root'"')
+        if r(is_legal_name) == 0 {
+          local illegal_names `"`illegal_names' `root'"'
+        }
+      }
+      if !missing(`"`illegal_names'"') {
+        local illegal_names = trim(`"`illegal_names'"')
+        noi di as error `"{phang}The following root global names are not valid global names [`illegal_names']. Stata does not share an exhaustive documentation for legal global names, but these names failed our test. Even though some non-standard English letters are allowed, try to only use standard English letters and numbers. Underscores "_" may be used, but may not be the first character. Do not use any other special characters.{p_end}"' _n
+        error 198
+        exit
+      }
+
     /***************************************************
       Output that at least some roots were not loaded
     ***************************************************/
@@ -214,4 +230,29 @@ cap program drop   di_search_results
   else local intro_str "In total"
 
   noi di as result _n `"{pstd}`intro_str', `dcount' directories were searched in `time' seconds, and `rcount' reproot   root(s) were found.{p_end}"' _n
+end
+
+
+cap program drop   validate_global_name
+    program define validate_global_name, rclass
+
+    syntax, gname(string)
+
+    noi di as error `"gname [`gname']"'
+
+    * Create a test value to be stored
+    local test_value = "test-repkit-%-1234"
+
+    * Use the global name to test if it can be used to
+    * store and retreive the global name
+    capture {
+      global `gname' = `"`test_value'"'
+      local stored_test_value = `"${`gname'}"'
+      assert `"`test_value'"' == `"`stored_test_value'"'
+    }
+
+    * Return 1 if the name was legal (i.e. capture returned 0)
+    local return_code = _rc == 0
+    return scalar is_legal_name = `return_code'
+
 end
