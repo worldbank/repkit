@@ -67,7 +67,7 @@ The __prefix()__ option allows a project-specific prefix that is set to all glob
 So, if __prefix("abc_")__ is used, then the globals `data` and `code`
 will be set to `abc_data` and `abc_code`.
 
-__clear__ overwrites globals that already exist with the name that `reproot` would creaet.
+__clear__ overwrites globals that already exist with the name that `reproot` would create.
 This is all the roots listed in __roots()__ with
 the __prefix()__ prepended if that option is used.
 The default behavior is to not search for roots that are already set up.
