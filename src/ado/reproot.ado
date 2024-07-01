@@ -8,7 +8,7 @@ qui {
     version 14.1
 
     * Update the syntax. This is only a placeholder to make the command run
-    syntax , Project(string) Roots(string) [prefix(string) clear]
+    syntax , Project(string) Roots(string) [OPTRoots(string) prefix(string) clear verbose]
 
     noi di _n "{hline}"
 
@@ -24,20 +24,41 @@ qui {
       Test if all roots are already loaded
     ***************************************************/
 
+    * List of all roots - required or optional
+    local all_roots : list roots | optroots
+
     local roots_set ""
     local roots_notset ""
 
     * If clear is used, then add all roots to roots_notset,
     * and search for all of them again
     if !missing("`clear'") {
-      local roots_notset "`roots'"
+      local roots_notset "`all_roots'"
     }
 
     * If clear is not used, test what root globals are already set,
     * and search only for roots not already set in root globals
     else {
-        * Test which roots if any are already loaded
-      foreach root of local roots {
+
+      /***************************************************
+        Test that all roots to look for has legal names
+      ***************************************************/
+      foreach root of local all_roots {
+        validate_global_name, rootname(`"`root'"') prefix("`prefix'")
+        if r(is_legal_name) == 0 {
+          local illegal_names `"`illegal_names' `prefix'`root'"'
+        }
+      }
+      if !missing(`"`illegal_names'"') {
+        local illegal_names = trim(`"`illegal_names'"')
+        if !missing("`prefix'") local prefix_str "with prefix "
+        noi di as error `"{phang}The following root global names`prefix_str' are not valid global names [`illegal_names']. Stata does not share an exhaustive documentation for legal global names, but these names failed our test. Even though some non-standard English letters are allowed, try to only use standard English letters and numbers. Underscores "_" may be used, but may not be the first character. Do not use any other special characters.{p_end}"' _n
+        error 198
+        exit
+      }
+
+      * Test which roots if any are already loaded
+      foreach root of local all_roots {
         * Test if root exists with prefix
         if missing("${`prefix'`root'}") {
           local roots_notset : list roots_notset | root
@@ -70,22 +91,6 @@ qui {
 
     * There are roots to search for
     else {
-
-      /***************************************************
-        Test that all roots to look for has legal names
-      ***************************************************/
-      foreach root of local roots_notset {
-        validate_global_name, gname(`"`root'"')
-        if r(is_legal_name) == 0 {
-          local illegal_names `"`illegal_names' `root'"'
-        }
-      }
-      if !missing(`"`illegal_names'"') {
-        local illegal_names = trim(`"`illegal_names'"')
-        noi di as error `"{phang}The following root global names are not valid global names [`illegal_names']. Stata does not share an exhaustive documentation for legal global names, but these names failed our test. Even though some non-standard English letters are allowed, try to only use standard English letters and numbers. Underscores "_" may be used, but may not be the first character. Do not use any other special characters.{p_end}"' _n
-        error 198
-        exit
-      }
 
     /***************************************************
       Output that at least some roots were not loaded
@@ -144,7 +149,7 @@ qui {
 
         * Output this search
         noi di_search_results, ///
-          time(`time') dcount(`dirs') rootdirs(`"`this_rootdirs'"')
+          time(`time') dcount(`dirs') rootdirs(`"`this_rootdirs'"') `verbose'
 
         * Add these rootdirs to the list of all dirs
         local rootdirs = trim(`"`rootdirs' `this_rootdirs'"')
@@ -154,10 +159,13 @@ qui {
         local tot_dirs = `tot_dirs' + `dirs'
       }
 
+      * Deduplicate the list in case the same root was found in multiple paths
+      local rootdirs : list uniq rootdirs
+
       * Output the grand total
       noi di as smcl `"{hline}"'
       noi di_search_results, total ///
-        time(`tot_time') dcount(`tot_dirs') rootdirs(`"`rootdirs'"')
+        time(`tot_time') dcount(`tot_dirs') rootdirs(`"`rootdirs'"') `verbose'
       noi di as smcl `"{hline}"'
 
 
@@ -165,41 +173,55 @@ qui {
         Parse the root files
       ***************************************************/
 
+      * List of roots found for this project
       local found_roots ""
 
+      * Parse all rootfile and filter out roots for this project
       foreach rootdir of local rootdirs {
+
+        * parse this root
         reproot_parse root, file("`rootdir'/`root_file'")
-        local this_root         "`r(root)'"
-        local this_root_global  "`prefix'`this_root'"
-        local this_root_project "`r(project)'"
+        local root = "`r(root)'"
 
-        * Test if this root belongs the relevant project
-        if "`project'" == "`this_root_project'" {
+        * Filter for this project and roots
+        if "`project'" == "`r(project)'" & `:list root in all_roots'  {
 
-          * Test if root was already found, if not then add to found_roots
-          if (`: list this_root in found_roots') {
-            noi di as error _n "{pstd}A second root called {result:`this_root)'} was found for this project found in folder {result:`rootdir'}.{p_end}"
-            error 99
+          *Test if root is duplicates
+          if (`:list root in found_roots') {
+            noi di as error `"{phang}Duplicate root found for root name [`root']. This root was found at [{it:`rootdir'}] after it had already been found at [{it:```prefix'`root'''}]. All roots must have a unique name within a project. No root globals were set.{p_end}"' _n
+            error 198
             exit
           }
-          local found_roots : list found_roots | this_root
-          noi di "found_roots `found_roots'"
 
-          local found_str "Root {result:`this_root'} for project {result:`this_root_project'} found"
-
-
-          if (`: list this_root in roots') {
-            * Output that a relevant root has been found
-            noi di _n as text "{pstd}`found_str'. Setting global {result:{c S|}{c -(}`this_root_global'{c )-}} to: {result:`rootdir'}{p_end}"
-
-            global `this_root_global' "`rootdir'"
-          }
-          * Root not required - just skip it
-          else {
-            noi di _n as text "{pstd}`found_str', but root not required, so no global is set for this root.{p_end}"
-          }
+          * Add root to found root and set local with this root's path
+          local found_roots "`found_roots' `root'"
+          tempname `prefix'`root'
+          local   ``prefix'`root'' "`rootdir'"
         }
       }
+
+      * Test that all required roots are found
+      local required_roots_not_found : list roots - found_roots
+      if !missing("`required_roots_not_found'") {
+        noi di as error _n `"{phang}The following required root(s) [`required_roots_not_found'] were not found. No root globals were set.{p_end}"'
+        error 198
+        exit
+      }
+
+      * Display what optional roots were not found
+      local optional_roots_not_found : list optroots - found_roots
+      if !missing("`optional_roots_not_found'") {
+        noi di as text _n `"{phang}The following optional root(s) [`optional_roots_not_found'] were not found.{p_end}"'
+      }
+
+      * Set all roots
+      foreach root of local found_roots {
+        local gname "`prefix'`root'"
+        local path `"```prefix'`root'''"'
+        noi di _n as text "{pstd}Root {it:`root'} was set to {result:`path'} using global {result:{c S|}{c -(}`gname'{c )-}} {p_end}"
+        global `gname' "`path'"
+      }
+
       noi di _n `"{hline}"'
     }
 
@@ -212,41 +234,55 @@ qui {
 }
 end
 
-
 cap program drop   di_search_results
     program define di_search_results
 
-  syntax, time(numlist) dcount(numlist) [rootdirs(string) total]
+  syntax, time(numlist) dcount(numlist) [rootdirs(string) total verbose]
 
   local time: display %8.2f `time'
   local dcount: display %14.0fc `dcount'
-
-  local rcount: list sizeof rootdirs
-
   local time   = trim("`time'")
   local dcount = trim("`dcount'")
+
+  local rcount: list sizeof rootdirs
 
   if missing("`total'") local intro_str "In this search directory"
   else local intro_str "In total"
 
-  noi di as result _n `"{pstd}`intro_str', `dcount' directories were searched in `time' seconds, and `rcount' reproot   root(s) were found.{p_end}"' _n
+  noi di as result _n `"{pstd}`intro_str', `dcount' directories were searched in `time' seconds, and `rcount' unique reproot root(s) were found.{p_end}"' _n
+
+  if !missing("`verbose'") {
+    noi di as result "{pstd}The following root folders were found:{p_end}"
+    foreach rootdir of local rootdirs {
+      local rootdir_list "`rootdir_list'- {it:`rootdir'}{break}"
+    }
+    noi di as text `"{pmore}`rootdir_list'{p_end}"' _n
+  }
 end
 
 
 cap program drop   validate_global_name
     program define validate_global_name, rclass
 
-    syntax, gname(string)
+    syntax, rootname(string) [prefix(string)]
 
     * Create a test value to be stored
     local test_value = "test-repkit-%-1234"
 
+    * Create the global name that will be used
+    local gname "`prefix'`rootname'"
+    cap local preserve_value `"${`gname'}"'
+
     * Use the global name to test if it can be used to
     * store and retreive the global name
     capture {
+      * Load the test value into the global name
       global `gname' = `"`test_value'"'
-      local stored_test_value = `"${`gname'}"'
-      assert `"`test_value'"' == `"`stored_test_value'"'
+      * Stata does not give error on global names such as "te&st",
+      * but those names fail when retreiving the global
+      assert `"`test_value'"' == `"${`gname'}"'
+      * Reset global
+      global `gname' = "`preserve_value'"
     }
 
     * Return 1 if the name was legal (i.e. capture returned 0)
