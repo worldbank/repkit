@@ -238,8 +238,6 @@ cap program drop   validate_global_name
 
     syntax, gname(string)
 
-    noi di as error `"gname [`gname']"'
-
     * Create a test value to be stored
     local test_value = "test-repkit-%-1234"
 
