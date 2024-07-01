@@ -12,23 +12,27 @@ qui {
 
     noi di _n "{hline}"
 
-    * initiate locals
-    local tot_time 0
-    local tot_dirs 0
-    local rootfiles ""
+    /***************************************************
+      Initiate locals
+    ***************************************************/
 
+    * Hardcoded file names
     local env_file  "~/reproot-env.yaml"
     local root_file "reproot.yaml"
+
+    * Counters
+    local tot_time 0
+    local tot_dirs 0
+
+    * Data locals
+    local rootfiles    ""
+    local all_roots    : list roots | optroots
+    local roots_set    ""
+    local roots_notset ""
 
     /***************************************************
       Test if all roots are already loaded
     ***************************************************/
-
-    * List of all roots - required or optional
-    local all_roots : list roots | optroots
-
-    local roots_set ""
-    local roots_notset ""
 
     * If clear is used, then add all roots to roots_notset,
     * and search for all of them again
