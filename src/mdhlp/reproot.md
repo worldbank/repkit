@@ -4,14 +4,16 @@ __reproot__ - Command for managing root file paths.
 
 # Syntax
 
-__reproot__ , __**p**roject__(_string_) __**r**oots__(_string_) [ __**pre**fix__(_string_) __clear__]
+__reproot__ , __**p**roject__(_string_) __**r**oots__(_string_) [ __**optr**oots__(_string_) __**pre**fix__(_string_) __clear__ __verbose__]
 
 | _options_ | Description |
 |-------------|-----------------|
-| __**p**roject__(_string_) | The project name to search roots for. |
-| __**r**oots__(_string_) | The root name(s) to search for. |
-| __**pre**fix__(_string_) | Adds a project-specific prefix to root globals. |
-| __clear__ | Always search for roots even if already loaded. |
+| __**p**roject__(_string_) | The project name to search roots for |
+| __**r**oots__(_string_) | Required root name(s) to search for |
+| __**optr**oots__(_string_) | Optional root name(s) to also search for |
+| __**pre**fix__(_string_) | Adds a project-specific prefix to root globals |
+| __clear__ | Always search for roots even if already loaded |
+| __verbose__ | More verbose output about roots found |
 
 `reproot` is a framework for automatically handling file paths across
 teams without requiring project-specific setup from individual users.
@@ -50,12 +52,18 @@ __roots__(_string_) indicates which roots are expected to be found for this proj
 The command creates a global based on the root name of that root
 if that root folder is found.
 The content of the global will be the file path to the location of the root file.
-This command does not set globals for roots not listed here,
+This command does not set globals for roots not listed in this option
+(or in `optroots()` - see below),
 even if such roots for this project were found.
 Unless the __clear__ option is used,
-the command does not overwrite any global that already existed before running the command.
+the command does not overwrite any global that
+already had content before running the command.
 Finally, the command tests that there is a global named after each root and
 that all of them are non-empty.
+
+__optroots__(_string_) allows the users to set optional roots.
+They will be treated the same way as the roots in `roots()` with
+the one exception that no error is thrown if this root is not found.
 
 __prefix__(_string_) allows the user to set a project-specific global prefix.
 This is strongly recommended to ensure that a global from another project
@@ -72,6 +80,9 @@ This is all the roots listed in __roots()__ with
 the __prefix()__ prepended if that option is used.
 The default behavior is to not search for roots that are already set up.
 If all globals are already set, then the command does not execute the search for roots.
+
+__verbose__ makes the command output more information about what roots were found.
+This option is helpful for debugging when trying to figure out what roots are found and not found.
 
 # Examples
 
