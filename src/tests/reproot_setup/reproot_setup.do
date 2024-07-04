@@ -15,7 +15,7 @@
     reproot, project("repkit") roots("clone") prefix("repkit_")
 
     * Use locals for all non-root paths
-    local testfldr "${adwn_clone}/src/tests"
+    local testfldr "${repkit_clone}/src/tests"
 
     * Use the /dev-env folder as a dev environment
     cap mkdir    "`testfldr'/dev-env"
@@ -33,6 +33,6 @@
     * Run tests
 
     * Test basic case of the command reproot_setup
-    reproot_setup
+    reproot_setup, envpath("C:\Users\WB462869\Dropbox\DIME Analytics")
 
     // Add more tests here...
