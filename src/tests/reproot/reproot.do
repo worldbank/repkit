@@ -31,18 +31,12 @@
     cap which repkit
     if _rc == 111 ssc install repkit
 
-    /* TODO: Uncomment once adodown is published
-    * If not already installed, add adodown to the dev environment
-    cap which adodown
-    if _rc == 111 ssc install adodown
-    */
-
     * Install the latest version of repkit to the dev environment
     net uninstall repkit
     net install repkit, from("${src}") replace
 
     * Test 1 - this should all work without error
-    local prj "reproot-test-1"
+    local prj1 "reproot-test-1"
     local pref "test1_"
 
     * Reset globals
@@ -50,18 +44,24 @@
     global `pref'data ""
 
     * Run command
-    reproot, project("`prj'") roots("clone") prefix("`pref'")
-    reproot, project("`prj'") roots("clone data") prefix("`pref'")
-    reproot, project("`prj'") roots("clone data") prefix("`pref'")
+    reproot, project("`prj1'") roots("clone") prefix("`pref'") verbose
+    reproot, project("`prj1'") roots("clone data") optroot("nonexist") prefix("`pref'")
+    reproot, project("`prj1'") roots("clone data") prefix("`pref'")
 
     * Test 2 - this project has two clone roots
-    local prj "reproot-test-2"
+    local prj2 "reproot-test-2"
     local pref "test2_"
 
     * Reset globals
     global `pref'clone ""
 
     * Run command - expected error as two roots named clone exist
-    cap reproot, project("`prj'") roots("clone") prefix("`pref'")
+    cap reproot, project("`prj2'") roots("clone") prefix("`pref'")
     di _rc
-    if !(_rc == 99) reproot, project("`prj'") roots("clone") prefix("`pref'") clear
+    if !(_rc == 99) reproot, project("`prj2'") roots("clone") prefix("`pref'")
+    
+    
+    * Run command - expected error as nonexist is set as required root
+    cap reproot, project("`prj1'") roots("clone data nonexist") prefix("`pref'")
+    di _rc
+    if !(_rc == 99) reproot, project("`prj1'") roots("clone data nonexist") prefix("`pref'")
