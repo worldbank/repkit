@@ -200,7 +200,7 @@ qui {
           *Test if root is duplicates
           if (`:list root in found_roots') {
             noi di as error `"{phang}Duplicate root found for root name [`root']. This root was found at [{it:`rootdir'}] after it had already been found at [{it:```prefix'`root'''}]. All roots must have a unique name within a project. No root globals were set.{p_end}"' _n
-            error 198
+            error 99
             exit
           }
 
@@ -215,7 +215,7 @@ qui {
       local required_roots_not_found : list roots - found_roots
       if !missing("`required_roots_not_found'") {
         noi di as error _n `"{phang}The following required root(s) [`required_roots_not_found'] were not found. No root globals were set.{p_end}"'
-        error 198
+        error 99
         exit
       }
 
