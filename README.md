@@ -16,6 +16,7 @@ Currently, this toolkit has the following commands:
 | [repadolog](https://worldbank.github.io/repkit/reference/repadolog.html) | Outputs a report of what commands are installed in the PLUS folder. |
 | [repkit](https://worldbank.github.io/repkit/reference/repkit.html) | Command named the same as the package. Most important purpose is that this command makes the code `which repkit` work. |
 | [reproot](https://worldbank.github.io/repkit/reference/reproot.html) | This command allows teams to dynamically set root-paths with no manual user-specific set-up, in both single-rooted and multi-rooted projects. |
+| [reproot_setup](https://worldbank.github.io/repkit/reference/reproot_setup.html) | This command helps setting up the environment setting file used in `reproot` |
 | [reprun](https://worldbank.github.io/repkit/reference/reprun.html) | This command is used to automate reproducibility checks by running a do-file or a set of do-files and compare all state values (RNG-value, datasignature etc.) between the two runs. This command is currently only release as a beta-version. |
 
 # Installation
