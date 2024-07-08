@@ -69,6 +69,7 @@ src/dev/ssc
 src/tests/outputs/
 !/**/repadolog/**/stata.trk
 !/**/repadolog/**/repadolog.csv
+/**/reproot_setup/**/*.yaml
 
 * Ignore the local dev env set up by repado
 src/tests/dev-env/

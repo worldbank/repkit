@@ -4,28 +4,29 @@ __reproot_setup__ - This command is used for short description.
 
 # Syntax
 
-__reproot_setup__ , __**opt**ion1__(_string_)
+__reproot_setup__ , __**envp**aths__(_string_)
 
 | _options_ | Description |
 |-----------|-------------|
-| __**opt**ion1__(_string_) | Short description of option1 |
+| __**envp**aths__(_string_) | Root paths to be added to the environment file |
 
 # Description
-<!-- Longer description of the intended use of the command and best practices related to the usage -->
+
+This command helps setting up the environment file used in the command
+[reproot](https://worldbank.github.io/repkit/reference/reproot.html).
+Read more about the environment file
+[here](https://worldbank.github.io/repkit/articles/reproot-files.html).
 
 # Options
-<!-- Longer description (paragraph length) of all options, their intended use case and best practices related to them -->
 
-__**opt**ion1__(_string_) is used for xyz. Longer description (paragraph length) of all options, their intended use case and best practices related to them.
-
-# Stored results
-<!-- Document all results this command returns as either r-class, e-class or s-class macros -->
-
-# Examples
-<!-- A couple of examples to help the user get started and a short explanation of each of them -->
+__**envp**aths__(_string_) is used for list files to be added to the environment file.
+Paths can also be added interactively when running the command.
 
 # Feedback, bug reports and contributions
-<!-- Guidelines for how to provide feedback, bug reports or contributions for this package. Include an email or links to GitHub repo -->
+
+Read more about these commands on [this repo](https://github.com/worldbank/repkit) where this package is developed. Please provide any feedback by [opening an issue](https://github.com/worldbank/repkit/issues). PRs with suggestions for improvements are also greatly appreciated.
 
 # Authors
-<!-- A couple of examples to help the user get started and a short explanation of each of them -->
+
+LSMS Team, The World Bank lsms@worldbank.org
+DIME Analytics, The World Bank dimeanalytics@worldbank.org

@@ -33,6 +33,8 @@
     * Run tests
 
     * Test basic case of the command reproot_setup
-    reproot_setup, envpath("C:\Users\WB462869\Dropbox\DIME Analytics")
+    local test_homefolder "`testfldr'/reproot_setup"
+    cap rm "`test_homefolder'/reproot-env.yaml"
+    reproot_setup, envpath(`"${repkit_clone}"') debug_home_folder("`test_homefolder'")
 
     // Add more tests here...
