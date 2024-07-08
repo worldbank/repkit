@@ -275,8 +275,17 @@ end
           while regexm(`"`macval(theline)'"',"[\*]") {
             local theline = regexr(`"`macval(theline)'"',"[\*]","")
           }
-          while regexm(`"`macval(theline)'"',"\[//]"){
+          while regexm(`"`macval(theline)'"',"\[//]") {
             local theline = regexr(`"`macval(theline)'"',"\[//]","")
+          }
+		  while regexm(`"`macval(theline)'"',"[\[]|[\]]") {
+            local theline = regexr(`"`macval(theline)'"',"[\[]|[\]]","")
+          }
+		  while regexm(`"`macval(theline)'"',"[\(]|[\)]") {
+            local theline = regexr(`"`macval(theline)'"',"[\(]|[\)]","")
+          }
+		  while regexm(`"`macval(theline)'"', char(34)) {
+            local theline = regexr(`"`macval(theline)'"', char(34), "")
           }
 
           // Identify all commands in line
