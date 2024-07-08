@@ -43,6 +43,8 @@
     global `pref'clone ""
     global `pref'data ""
 
+    noi di as text "{pstd}{red:Warning}: Make sure you have reproot set up such that it searches the subfolders of ${tests}/reproot{p_end}"
+    
     * Run command
     reproot, project("`prj1'") roots("clone") prefix("`pref'") verbose
     reproot, project("`prj1'") roots("clone data") optroot("nonexist") prefix("`pref'")

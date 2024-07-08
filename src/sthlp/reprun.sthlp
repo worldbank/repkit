@@ -20,7 +20,7 @@
 {p_end}
 
 {synoptset 15}{...}
-{synopthdr:options}
+{p2coldent:{it:options}}Description{p_end}
 {synoptline}
 {synopt: {bf:{ul:v}erbose}}Report all lines where Run 1 and Run 2 mismatch {bf:or} change for any value{p_end}
 {synopt: {bf:{ul:c}ompact}}Report only lines where Run 1 and Run 2 mismatch {bf:and} change for either the seed or sort RNG{p_end}
