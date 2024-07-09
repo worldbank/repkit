@@ -166,7 +166,7 @@ end
   program define   reprun_recurse, rclass
   qui {
 
-    syntax, dofile(string) output(string) stub(string)
+    syntax, dofile(string asis) output(string) stub(string)
 
     /*************************************************************************
       Create the files that this recursive call needs
@@ -205,7 +205,8 @@ end
 
     * Open the orginal file
     tempname   code_orig
-    file open `code_orig' using "`dofile'", read
+
+    file open `code_orig' using `dofile', read
 
     * Loop until end of file
     while `leof' == 0 {
@@ -358,8 +359,11 @@ end
             * Test if it should recurse or not
             if `recurse' == 1 {
 
+
               * Keep working on the stub
               local recursestub "`stub'_`++subf_n'"
+
+
 
               noi reprun_recurse, dofile(`file')     ///
                     output("`output'")   ///
@@ -369,10 +373,12 @@ end
 
 
               * Substitute the original sub-dofile with the check/write ones
+              if !strpos(`"`file'"',`"""') local file `""`file'""'
+
               local run1_line = ///
-                subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
+                subinstr(`"`line'"',`file',`""`sub_f1'""',1)
               local run2_line = ///
-                subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
+                subinstr(`"`line'"',`file',`""`sub_f2'""',1)
 
               *Correct potential ""path"" to "path"
               local run1_line = subinstr(`"`run1_line'"',`""""',`"""',.)

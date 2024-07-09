@@ -14,7 +14,7 @@ cap program drop   reprun_dataline
       [ ///
       datatmp(string)     /// The tempfile that holds the RNG etc. data
       recursestub(string) /// keep track of sub-do-file
-      orgsubfile(string)  ///
+      orgsubfile(string asis)  ///
       looptracker(string) /// keeps track of inside a loop
       ]
 
@@ -49,7 +49,7 @@ cap program drop   reprun_dataline
     * Recurse line
     else {
       *Build recurse instructions line
-      local line `"recurse `recursestub' "`orgsubfile'" "'
+      local line `"recurse `recursestub' `orgsubfile' "'
     }
 
     *Write line and close file
