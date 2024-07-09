@@ -166,7 +166,7 @@ end
   program define   reprun_recurse, rclass
   qui {
 
-    syntax, dofile(string) output(string) stub(string)
+    syntax, dofile(string asis) output(string) stub(string)
 
     /*************************************************************************
       Create the files that this recursive call needs
@@ -205,7 +205,8 @@ end
 
     * Open the orginal file
     tempname   code_orig
-    file open `code_orig' using "`dofile'", read
+
+    file open `code_orig' using `dofile', read
 
     * Loop until end of file
     while `leof' == 0 {
@@ -270,21 +271,20 @@ end
           local looptype ""
           local loopflag 0
 
-          // Sanitize that string! -- see d17586d873a978987f34ba2fe536a311107ea58b for more regex
-          local theline = `"`macval(line)'"'
-          while regexm(`"`macval(theline)'"',"[\*]") {
-            local theline = regexr(`"`macval(theline)'"',"[\*]","")
-          }
-          while regexm(`"`macval(theline)'"',"\[//]"){
-            local theline = regexr(`"`macval(theline)'"',"\[//]","")
-          }
+          // Sanitize that string!
+          local 0 `"`macval(line)'"'
+
 
           // Identify all commands in line
-          foreach w in `macval(theline)' {
-            cap get_command, word(`"`w'"')
+          while `"`0'"' != "" {
 
-            if `doflag' == 1 local dofile = "`w'"
-            if `loopflag' == 1 local looptype = "`w'"
+            gettoken 1 0 : 0 , quotes
+            // di as err `"`1'  // `0'"'
+
+            cap get_command, word(`"`1'"')
+
+            if `doflag' == 1 local dofile = `"`1'"'
+            if `loopflag' == 1 local looptype = "`1'"
 
             * Dofiles
             if "`r(command)'" == "do" | "`r(command)'" == "run" {
@@ -299,6 +299,7 @@ end
             else local loopflag 0
 
             local line_command = "`line_command' `r(command)'"
+            mac shift
           }
             local line_command : list uniq line_command
 
@@ -327,20 +328,20 @@ end
           }
 
           * Line is do or run, so call recursive function
-          if (strpos("`line_command'","do")) | (strpos("`line_command'","run")) {
+          if (strpos(`"`line_command'"',"do")) | (strpos("`line_command'","run")) {
 
             * Write line handling recursion in data file
             local write_recline = 1
 
             * Get the file path from the second word
             local file = `"`dofile'"'
-            local file_rev = strreverse("`file'")
+            local file_rev = strreverse(`"`file'"')
 
             * Only recurse on .do files and add .do when no extension is used
-            if (substr("`file_rev'",1,3) == "od.") {
+            if strpos(`"`file'"' , ".do") {
               local recurse 1
             }
-            else if (substr("`file_rev'",1,4) == "oda.") {
+            else if strpos(`"`file'"' , ".ado") {
               local recurse 0 // skip recursing reprun on adofiles
             }
             else {
@@ -349,7 +350,7 @@ end
             }
 
             * Skip recursion instead of error if file not found
-            cap confirm file "`file'"
+            cap confirm file `file'
             if _rc {
               local recurse 0
               di as err `"      Skipping recursion -- file not found: `file' "'
@@ -358,10 +359,13 @@ end
             * Test if it should recurse or not
             if `recurse' == 1 {
 
+
               * Keep working on the stub
               local recursestub "`stub'_`++subf_n'"
 
-              noi reprun_recurse, dofile("`file'")     ///
+
+
+              noi reprun_recurse, dofile(`file')     ///
                     output("`output'")   ///
                     stub("`recursestub'")
               local sub_f1 "`r(code_file_run1)'"
@@ -369,10 +373,12 @@ end
 
 
               * Substitute the original sub-dofile with the check/write ones
+              if !strpos(`"`file'"',`"""') local file `""`file'""'
+
               local run1_line = ///
-                subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
+                subinstr(`"`line'"',`file',`""`sub_f1'""',1)
               local run2_line = ///
-                subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
+                subinstr(`"`line'"',`file',`""`sub_f2'""',1)
 
               *Correct potential ""path"" to "path"
               local run1_line = subinstr(`"`run1_line'"',`""""',`"""',.)

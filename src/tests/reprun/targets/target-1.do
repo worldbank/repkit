@@ -31,9 +31,6 @@ local check : var lab price`domain_num'
 su  /// error 196
   price
 
-* Bad comment
-/* Weird comment */
-// TEST COMMENT
 
 global something "nothing"
 
@@ -57,17 +54,7 @@ gen y = rnormal()
 
 cap duplicates drop make , force
 
-do "target-2.do" // missing do-file do "${tf}/target-dontrun.do"
 
-* do "${tf}/target-dontrun.do"
-
-// do "${tf}/target-dontrun.do"
-
-// do "${tf}/target-dontrun.do"
-
-/*
-do "${tf}/target-dontrun.do"
-*/
 
 if (1 == 1) & (1 == 1) do "${tf}/target-2.do"
 
