@@ -270,30 +270,20 @@ end
           local looptype ""
           local loopflag 0
 
-          // Sanitize that string! -- see d17586d873a978987f34ba2fe536a311107ea58b for more regex
-          local theline = `"`macval(line)'"'
-          while regexm(`"`macval(theline)'"',"[\*]") {
-            local theline = regexr(`"`macval(theline)'"',"[\*]","")
-          }
-          while regexm(`"`macval(theline)'"',"\[//]") {
-            local theline = regexr(`"`macval(theline)'"',"\[//]","")
-          }
-		  while regexm(`"`macval(theline)'"',"[\[]|[\]]") {
-            local theline = regexr(`"`macval(theline)'"',"[\[]|[\]]","")
-          }
-		  while regexm(`"`macval(theline)'"',"[\(]|[\)]") {
-            local theline = regexr(`"`macval(theline)'"',"[\(]|[\)]","")
-          }
-		  while regexm(`"`macval(theline)'"', char(34)) {
-            local theline = regexr(`"`macval(theline)'"', char(34), "")
-          }
+          // Sanitize that string!
+          local 0 `"`macval(line)'"'
+
 
           // Identify all commands in line
-          foreach w in `macval(theline)' {
-            cap get_command, word(`"`w'"')
+          while `"`0'"' != "" {
 
-            if `doflag' == 1 local dofile = "`w'"
-            if `loopflag' == 1 local looptype = "`w'"
+            gettoken 1 0 : 0 , quotes
+            // di as err `"`1'  // `0'"'
+
+            cap get_command, word(`"`1'"')
+
+            if `doflag' == 1 local dofile = `"`1'"'
+            if `loopflag' == 1 local looptype = "`1'"
 
             * Dofiles
             if "`r(command)'" == "do" | "`r(command)'" == "run" {
@@ -308,6 +298,7 @@ end
             else local loopflag 0
 
             local line_command = "`line_command' `r(command)'"
+            mac shift
           }
             local line_command : list uniq line_command
 
@@ -336,20 +327,20 @@ end
           }
 
           * Line is do or run, so call recursive function
-          if (strpos("`line_command'","do")) | (strpos("`line_command'","run")) {
+          if (strpos(`"`line_command'"',"do")) | (strpos("`line_command'","run")) {
 
             * Write line handling recursion in data file
             local write_recline = 1
 
             * Get the file path from the second word
             local file = `"`dofile'"'
-            local file_rev = strreverse("`file'")
+            local file_rev = strreverse(`"`file'"')
 
             * Only recurse on .do files and add .do when no extension is used
-            if (substr("`file_rev'",1,3) == "od.") {
+            if strpos(`"`file'"' , ".do") {
               local recurse 1
             }
-            else if (substr("`file_rev'",1,4) == "oda.") {
+            else if strpos(`"`file'"' , ".ado") {
               local recurse 0 // skip recursing reprun on adofiles
             }
             else {
@@ -358,7 +349,7 @@ end
             }
 
             * Skip recursion instead of error if file not found
-            cap confirm file "`file'"
+            cap confirm file `file'
             if _rc {
               local recurse 0
               di as err `"      Skipping recursion -- file not found: `file' "'
@@ -370,7 +361,7 @@ end
               * Keep working on the stub
               local recursestub "`stub'_`++subf_n'"
 
-              noi reprun_recurse, dofile("`file'")     ///
+              noi reprun_recurse, dofile(`file')     ///
                     output("`output'")   ///
                     stub("`recursestub'")
               local sub_f1 "`r(code_file_run1)'"

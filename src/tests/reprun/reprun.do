@@ -36,6 +36,10 @@
     cap mkdir "${tf}/output-1"
     cap mkdir "${tf}/output-2"
     cap mkdir "${tf}/output-3"
+
+    reprun "${tf}/comments.do" using "${tf}/comments" , debug
+    // reprun "${tf}/recursion.do" using "${tf}/recursion" , debug
+
     reprun "${tf}/target-1.do" using "${tf}/output-1" , debug
     reprun "${tf}/target-1.do" using "${tf}/output-1" , v debug
     reprun "${tf}/target-1.do" using "${tf}/output-1" , c debug
