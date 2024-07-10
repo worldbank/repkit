@@ -51,7 +51,7 @@ qui {
     syntax, env_file(string) home_fld(string) [envpaths(string)]
 
     * Ask for confirmation
-    noi di as result _n `"{pstd}No environment file was found in {browse `home_fld':your home folder}.{p_end}"' _n `"{pstd}Do you want to set up a template?{p_end}"'
+    noi di as result _n `"{pstd}No environment file was found in {browse `home_fld':your home folder}.{p_end}"' _n `"{pstd}Do you want to create one?{p_end}"'
     global setup_confirmation ""
     while (!inlist(upper("${setup_confirmation}"),"Y", "N")) {
       noi di as txt `"{pstd}Enter "Y" to continue or "N" to exit to Stata."', _request(setup_confirmation)

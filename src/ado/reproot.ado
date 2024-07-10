@@ -119,8 +119,8 @@ qui {
       * Test if this location has a root file
       cap confirm file "`env_file'"
       if (_rc) {
-        noi di as error `"{phang}No file {inp:reproot-env.yaml} found in home directory {it:`homedir'}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here} or use command {browse "https://worldbank.github.io/repkit/reference/reproot_setup.html":reproot_setup}.{p_end}"' _n
-        error 601
+        noi di as error `"{phang}No file {inp:reproot-env.yaml} found in home directory {it:`homedir'}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}. Starting {stata reproot_setup:setup wizard}....{p_end}"' _n
+        noi reproot_setup
         exit
       }
 
@@ -131,7 +131,7 @@ qui {
 
       * Test that the environment file has at least one search path
       if missing(`"`envpaths'"') {
-        noi di as error `"{phang}The file {inp:reproot-env.yaml} found in home directory {it:`homedir'} as no paths and will therefore not find any roots. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' _n
+        noi di as error `"{phang}The file {inp:reproot-env.yaml} found in home directory {it:`homedir'} has no paths and will therefore not find any roots. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' _n
         error 99
         exit
       }
