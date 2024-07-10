@@ -35,7 +35,7 @@ qui {
     else      local env_file_exists 1
 
     if (`env_file_exists') {
-        noi di as result _n `"{pstd}An environment file was found in the home folder [`home_fld']. To modify this file, see {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide}.{p_end}"'
+        noi di as result _n `"{pstd}An environment file (reproot-env.yaml) was found in {browse `home_fld':your home folder} (`home_fld'). To modify this file, use a text editor and follow the instructions in {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide}.{p_end}"'
     }
     else {
       noi reproot_setup_envfile, env_file("`env_file'") envpaths(`"`envpaths'"') home_fld("`home_fld'")
@@ -51,10 +51,10 @@ qui {
     syntax, env_file(string) home_fld(string) [envpaths(string)]
 
     * Ask for confirmation
-    noi di as result _n `"{pstd}No environment file was found in the home folder [`home_fld']. This command can set up a template. In the workflow of {inp:reproot}, this file must be located in the home folder.{p_end}"' _n(2) `"{pstd}Do you want to set up a template in the home folder?{p_end}"'
+    noi di as result _n `"{pstd}No environment file was found in {browse `home_fld':your home folder}.{p_end}"' _n `"{pstd}Do you want to set up a template?{p_end}"'
     global setup_confirmation ""
     while (!inlist(upper("${setup_confirmation}"),"Y", "N")) {
-      noi di as txt `"{pstd}Enter "Y" to set up an environment template file or enter "N" to abort."', _request(setup_confirmation)
+      noi di as txt `"{pstd}Enter "Y" to continue or "N" to exit to Stata."', _request(setup_confirmation)
     }
     if upper("${setup_confirmation}") == "N" {
       noi di as txt "{pstd}Environment file creation aborted - nothing was created.{p_end}"
@@ -62,12 +62,18 @@ qui {
       exit
     }
 
-    noi di as result _n `"{pstd}The environment file will only work if it has at least one environment search paths. Read more about the environment file and its settings in the {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide}.{p_end}"' _n(2) `"{pstd}Do you want to add search folders? It is possible to do this later see the guide (also linked to in the help file for this command) for how to modify this file later.{p_end}"'
+    noi di as result _n `"{pstd}Reproot requries at least one search path. Read more {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' ///
+      _n `"{pstd}Do you want to add one now?{p_end}"' _n `"{pstd}See {help reproot} or {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide} for more information.{p_end}"' ///
+      _n `"{pstd}Some top-level options are:{p_end}"' _n `"{pstd}`home_fld'/...{p_end}"'
+
+      noi dir ~ , wide
 
     global path_to_add ""
     while (!inlist(upper("${path_to_add}"),"BREAK","DONE")) {
       noi display_envpath, envpaths(`"`envpaths'"')
-      noi di as txt `"{pstd}Enter single folder path or enter "DONE" to create the file with these files, or "BREAK" to abort."', _request(path_to_add)
+      noi di as txt _n `"{pstd}Enter a new folder path (`home_fld'/...) or enter "DONE" to confirm those you have already entered.{p_end}"' ///
+                    _n `"{pstd}Type "BREAK" to discard changes."' ///
+        , _request(path_to_add)
 
       * Do not test of add keywords
       if (!inlist(upper("${path_to_add}"),"BREAK","DONE")) {
@@ -79,7 +85,7 @@ qui {
 
     * Abort if break was the key word
     if upper("${path_to_add}") == "BREAK" {
-      noi di as txt "{pstd}Environment file creation aborted - nothing was created.{p_end}"
+      noi di as txt "{pstd}Changes discarded - nothing was created.{p_end}"
       error 1
       exit
     }
@@ -113,7 +119,7 @@ qui {
 
     copy `env_tmpfile' `"`env_file'"'
 
-    noi di as result _n "{pstd}Environment file was succsfully written to home folder.{p_end}"
+    noi di as result _n "{pstd}Reproot environment file succsfully created!{p_end}"
 }
 end
 
@@ -148,7 +154,7 @@ qui {
       * if path does not exists, and error is used, throw error
       else {
         if !missing("`error'") {
-          noi di as error `"{phang}The folder in "`path'" does not exists, you may only use folders that already exists.{p_end}"'
+          noi di as error `"{phang}The folder in "`path'" does not exists, you may only use folders that already exist.{p_end}"'
           error 693
           exit
         }
