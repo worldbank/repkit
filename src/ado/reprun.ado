@@ -7,8 +7,8 @@ qui {
 
     version 14.1
 	
-    timer clear 1
-    timer on 1
+    timer clear 99
+    timer on 99
 
     syntax anything [using/] , [Verbose] [Compact] [noClear] [Debug] [Suppress(passthru)]
 
@@ -152,19 +152,29 @@ qui {
   
   //display timer 
   
-    timer off 		1
-    qui timer list 	1
-	
-    if `r(t1)' > 60 {
-      local duration :  di %9.3f `r(t1)'/60
+    timer off 		99
+    qui timer list 	99
+   
+   
+   if `r(t99)' >= 3600 {
+      local hours : di %02.0f floor(`r(t99)' / 3600)
+      local minutes : di %02.0f floor(mod(`r(t99)', 3600) / 60)
+      local seconds : di %02.0f mod(`r(t99)', 60)
       noi di as res ""
-      noi di as res `"{phang}Total run time: `duration' minutes {p_end}"'
+      noi di as res `"{phang}Total run time: `hours':`minutes':`seconds' (HH:MM:SS){p_end}"'
+    }
+	
+	else if `r(t99)' >= 60 {
+      local minutes : di %02.0f floor(`r(t99)' / 60)
+      local seconds : di %02.0f mod(`r(t99)', 60)
+      noi di as res ""
+      noi di as res `"{phang}Total run time: `minutes':`seconds' (MM:SS){p_end}"'
     }
 	
     else {
-      local duration : di %9.3f `r(t1)'
+      local seconds : di %9.2f `r(t99)'
       noi di as res ""
-      noi di as res `"{phang}Total run time: `duration' seconds {p_end}"'
+      noi di as res `"{phang}Total run time: `seconds' seconds {p_end}"'
     }
 
 
