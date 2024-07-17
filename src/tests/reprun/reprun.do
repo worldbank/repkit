@@ -9,6 +9,10 @@
     if "`c(username)'" == "bbdaniels" {
         global repkit_clone "/Users/bbdaniels/GitHub/repkit"
     }
+	
+    if "`c(username)'" == "wb558768" {
+        global repkit_clone "C:/Users/wb558768/Documents/GitHub/repkit"
+    }
 
     * Set global to ado_fldr
     global src_fldr  "${repkit_clone}/src"
@@ -20,6 +24,7 @@
     global lf        "${run_fldr}/loop-file"
     global wca       "${run_fldr}/with-clear-all"
     global waf       "${run_fldr}/with-ado-folder"
+    global swu		 "${run_fldr}/stable-with-unstable"
 
     * Install the version of this package in
     * the plus-ado folder in the test folder
@@ -36,6 +41,7 @@
     cap mkdir "${tf}/output-1"
     cap mkdir "${tf}/output-2"
     cap mkdir "${tf}/output-3"
+    cap mkdir "${tf}/comments"
 
     reprun "${tf}/comments.do" using "${tf}/comments" , debug
     // reprun "${tf}/recursion.do" using "${tf}/recursion" , debug
@@ -71,5 +77,9 @@
     * Example F - with project ado-folder
     cap mkdir "${waf}/output"
     reprun "${waf}/main.do" using "${waf}/output" , debug
+	
+    * Example g - output with stable and unstable do-files
+    cap mkdir "${swu}/output"
+    reprun "${swu}/main.do" using "${swu}/output" 
 
     net install repkit, from("${src_fldr}") replace

@@ -6,6 +6,9 @@ cap program drop   reprun
 qui {
 
     version 14.1
+	
+    timer clear 1
+    timer on 1
 
     syntax anything [using/] , [Verbose] [Compact] [noClear] [Debug] [Suppress(passthru)]
 
@@ -146,6 +149,24 @@ qui {
       rm_output_dir , folder("`dirout'/run2/")
     }
   }
+  
+  //display timer 
+  
+    timer off 		1
+    qui timer list 	1
+	
+    if `r(t1)' > 60 {
+      local duration :  di %9.3f `r(t1)'/60
+      noi di as res ""
+      noi di as res `"{phang}Total run time: `duration' minutes {p_end}"'
+    }
+	
+    else {
+      local duration : di %9.3f `r(t1)'
+      noi di as res ""
+      noi di as res `"{phang}Total run time: `duration' seconds {p_end}"'
+    }
+
 
   // Remove tmahen command is no longer in beta
   noi repkit "beta reprun"
@@ -625,6 +646,9 @@ end
 
     local prev_line1 ""
     local prev_line2 ""
+	
+    * Local for empty tables
+    local any_lines_written 0	
 
     * Loop over all lines in the two data files
     local eof = 0
@@ -680,10 +704,20 @@ end
 
           * Write end to previous table, write the file tree for the next
           * recursion, and write the beginning of that table
-          output_writetitle , outputcolumns("`outputcolumns'")
-          noi write_and_print_output, h_smcl(`h_smcl') ///
-            l1("`r(botline)'") l2(" ") ///
+          if (`any_lines_written' == 1 ) {
+		  	* Close the table for his file
+			output_writetitle , outputcolumns("`outputcolumns'")
+			noi write_and_print_output, h_smcl(`h_smcl') ///
+			l1("`r(botline)'") l2(" ") ///
             l3(`"{pstd} Stepping into sub-file:{p_end}"')
+		}
+		else {
+			* If the table is empty
+			output_writetitle , outputcolumns("`outputcolumns'")
+			noi write_and_print_output, h_smcl(`h_smcl') ///
+			l1("`r(botline)'") l2("No mismatches and/or changes detected") l3(" ") ///
+			l4(`"{pstd} Stepping into sub-file:{p_end}"')
+		}
 
           noi print_filetree_and_verbose_title, ///
             files(`" `orgfile' "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
@@ -745,8 +779,9 @@ end
               srng1("`r(srng_c1)'") srng2("`r(srng_c2)'") srngm("`r(srng_m)'") ///
               dsum1("`r(dsum_c1)'") dsum2("`r(dsum_c2)'") dsumm("`r(dsum_m)'") ///
               loopiteration("`r(loopt)'")
-            noi write_and_print_output, h_smcl(`h_smcl') l1("`r(outputline)'")
-          }
+            noi write_and_print_output, h_smcl(`h_smcl') l1("`r(outputline)'") 
+			local any_lines_written 1
+          }	
 
           * Load these lines into pre_line locals for next run
           local prev_line1 "`line1'"
@@ -755,10 +790,19 @@ end
       }
       * End of this data file
       else {
-        * Close the table for his file
-        output_writetitle , outputcolumns("`outputcolumns'")
-        noi write_and_print_output, h_smcl(`h_smcl') ///
-          l1("`r(botline)'") l2(" ")
+	  	* If the table is not empty
+	  	if (`any_lines_written' == 1 ) {
+			* Close the table for his file
+			output_writetitle , outputcolumns("`outputcolumns'")
+			noi write_and_print_output, h_smcl(`h_smcl') ///
+			l1("`r(botline)'") l2(" ")
+		}
+		else {
+			* If the table is empty
+			output_writetitle , outputcolumns("`outputcolumns'")
+			noi write_and_print_output, h_smcl(`h_smcl') ///
+			l1("`r(botline)'") l2("No mismatches and/or changes detected") l3(" ")
+		}
       }
     }
   }
