@@ -7,8 +7,10 @@
 /* Weird comment */
 // TEST COMMENT
 
+// TEST COMMENT do
+
 // TEST COMMENT [
 // TEST COMMENT (
 // TEST COMMENT *
 
-// EOF 
+// EOF
