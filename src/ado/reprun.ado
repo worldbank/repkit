@@ -310,6 +310,9 @@ end
           while `"`0'"' != "" {
 
             gettoken 1 0 : 0 , quotes
+            if strpos(`"`1'"',"//") local 0 "" // End on comments
+            if strpos(`"`1'"',"*") & "`line_command'" == "OTHER" local 0 "" // End on comments
+
             // di as err `"`1'  // `0'"'
 
             cap get_command, word(`"`1'"')

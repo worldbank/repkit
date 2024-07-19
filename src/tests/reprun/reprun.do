@@ -44,7 +44,6 @@
     cap mkdir "${tf}/comments"
 
     reprun "${tf}/comments.do" using "${tf}/comments" , debug
-    // reprun "${tf}/recursion.do" using "${tf}/recursion" , debug
 
     reprun "${tf}/target-1.do" using "${tf}/output-1" , debug
     reprun "${tf}/target-1.do" using "${tf}/output-1" , v debug
