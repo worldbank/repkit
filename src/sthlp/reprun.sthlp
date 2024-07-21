@@ -115,61 +115,102 @@
 {text}
 {dlgtab:Example 3}
 
-{pstd}Assume {c 34}{it:myfile.do}{c 34} contains the following code:
+{pstd}Assume {c 34}{it:myfile1.do}{c 34} contains the following code:
 {p_end}
 
-{input}{space 8}sysuse census.dta, clear
+{input}{space 8}sysuse census, clear
 {space 8}isid state, sort
 {space 8}gen group = runiform() < .5
-{space 8}bys group: gen n_obs = _n
-{space 8}drop if n_obs > 22
 {text}
 {pstd}Running a reproducibility check on this do-file using {bf:reprun} will generate a table listing {it:mismatches} in Stata state between Run 1 and Run 2. 
 {p_end}
 
-{input}{space 8}reprun "myfile.do"
+{input}{space 8}reprun "myfile1.do"
 {text}
-{pstd}In this specific code block, the following lines will be flagged for mismatches:
+{pstd}In {c 34}{it:myfile1.do}{c 34}, Line 3 ({inp:gen group = runiform() < .5}) generates a new variable {inp:group} based on a random uniform distribution. The RNG state will differ between Run 1 and Run 2 unless the random seed is explicitly set before this command. As a result, a mismatch in the {c 34}seed RNG state{c 34} as well as {c 34}data checksum{c 34} will be flagged. 
 {p_end}
 
-{pstd}Line 3: {inp:gen group = runiform() < .5} 
-This line generates a new variable {inp:group} based on a random uniform distribution. The RNG state will differ between Run 1 and Run 2 unless the random seed is explicitly set before this command. As a result, a mismatch in the {c 34}seed RNG state{c 34} will be flagged. 
+{pstd}The issue can be resolved by setting a seed before the command:
 {p_end}
 
-{pstd}Line 4: {inp:bys group: gen n_obs = _n} 
-This line sorts the data by the newly generated {inp:group} variable and creates a new variable {inp:n_obs} based on this sorted order. Since group is generated using {inp:runiform()} without setting a seed, it will differ in each run, causing the sort order to vary. As a result, a mismatch in the {c 34}sort order RNG{c 34} will be flagged. If the sort order is not consistent between runs, the subsequent operations on the data can result in different outputs, causing further mismatches. 
-{p_end}
-
-{pstd}Lines 3-5: These lines will also be flagged for {c 34}data checksum{c 34} mismatches. The {inp:runiform()} function in line 3 introduces randomness, and the {inp:sort} in line 4 can lead to different data orders between runs. These changes propagate to line 5 {inp:drop if n_obs > 22}, where the number of observations dropped may differ between runs due to the changes in {inp:n_obs}. The data checksum comparison will detect these differences, leading to mismatches being flagged. 
+{input}{space 8}sysuse census, clear
+{space 8}isid state, sort
+{space 8}set seed 346290
+{space 8}gen group = runiform() < .5
+{text}
+{pstd}Running the reproducibility check on the modified do-file using reprun will confirm that there are no mismatches in Stata state between Run 1 and Run 2.
 {p_end}
 
 {dlgtab:Example 4}
 
-{pstd}Using the  {bf:{ul:v}erbose} option generates more detailed tables where any lines across Run 1 and Run 2 mismatch {it:**or**} change for any value. In addition to the output in Example 3, it will also flag line 2 for changes in {c 34}seed RNG state{c 34} and {c 34}data checksum{c 34}.
+{pstd}Using the  {bf:{ul:v}erbose} option generates more detailed tables where any lines across Run 1 and Run 2 mismatch {bf:{ul:or}} change for any value. In addition to the output in Example 3, it will also report line 2 for {bf:changes} in {c 34}sort order RNG{c 34} and {c 34}data checksum{c 34}.
 {p_end}
 
-{input}{space 8}reprun "myfile.do", verbose
+{input}{space 8}reprun "myfile1.do", verbose
 {text}
 {dlgtab:Example 5}
 
-{pstd}Using the {bf:{ul:c}ompact} option generates less detailed tables where only lines with mismatched seed or sort order RNG changes during Run 1 or Run 2, and mismatches between the runs, are flagged and reported. The output will be similar to Example 3; however, only lines 3 and 4 will be flagged for {c 34}data checksum{c 34}.
+{pstd}Assume {c 34}{it:myfile2.do}{c 34} contains the following code:
 {p_end}
 
-{input}{space 8}reprun "myfile.do", compact
+{input}{space 8}sysuse auto, clear
+{space 8}sort mpg 
+{space 8}gen sequence = _n
+{text}
+{pstd}Running a reproducibility check on this do-file using {bf:reprun} will generate a table listing {it:mismatches} in Stata state between Run 1 and Run 2. 
+{p_end}
+
+{input}{space 8}reprun "myfile2.do"
+{text}
+{pstd}In {c 34}{it:myfile2.do}{c 34}, Line 2 sorts the data by the non-unique variable {inp:mpg}, causing the sort order to vary between runs. This results in a mismatch in the {c 34}sort order RNG{c 34}. Consequently, Line 2 and Line 3 ({inp:gen sequence = _n}) will be flagged for {c 34}data checksum{c 34} mismatches due to the differences in sort order, leading to discrepancies in the generated {inp:sequence} variable. 
+{p_end}
+
+{pstd}The issue can be resolved by sorting the data on a unique combination of variables:
+{p_end}
+
+{input}{space 8}sysuse auto, clear
+{space 8}sort mpg make
+{space 8}gen sequence = _n
 {text}
 {dlgtab:Example 6}
-{pstd}Running reproducibility check on a set of do-files called by a main do-file. For example, the main do-file might contain the following code:
+
+{pstd}Using the {bf:{ul:c}ompact} option generates less detailed tables where only lines with mismatched seed or sort order RNG changes during Run 1 or Run 2, and mismatches between the runs, are flagged and reported. The output will be similar to Example 5, except that line 3 will no longer be flagged for {c 34}data checksum{c 34}.
+{p_end}
+
+{input}{space 8}reprun "myfile2.do", compact
+{text}
+{dlgtab:Example 7}
+
+{pstd}{inp:reprun} will perform a reproducibility check on a do-file, including all do-files it calls recursively. For example, the main do-file might contain the following code that calls on {c 34}{it:myfile1.do}{c 34} (Example 3) and {c 34}{it:myfile2.do}{c 34} (Example 5): 
 {p_end}
 
 {input}{space 8}local myfolder "/path/to/folder"
 {space 8}do "`myfolder'/myfile1.do" 
-{space 8}do "`myfolder'/myfile2.do 
+{space 8}do "`myfolder'/myfile2.do" 
 {text}
-{pstd}Running the reproducibility check on {c 34}{it:main.do}{c 34} will return tables listing mismatches in {c 34}{it:myfile1.do}{c 34}, {c 34}{it:myfile2.do}{c 34}, and {c 34}{it:main.do}{c 34}. For instance, if there are mismatches between Run 1 and Run 2 in {c 34}{it:myfile1.do}{c 34}, every line with mismatches will be flagged in a table. Additionally, line 2 in {c 34}{it:main.do}{c 34} will be flagged for calling {c 34}{it:myfile1.do}{c 34}.
-{p_end}
-
 {input}{space 8}reprun "main.do"
 {text}
+{pstd}{inp:reprun} on {c 34}{it:main.do}{c 34} performs reproducibility checks across {c 34}{it:main.do}{c 34}, as well as {c 34}{it:myfile1.do}{c 34}, and {c 34}{it:myfile2.do}{c 34}. The output will include tables for each do-file, illustrating the following process: 
+{p_end}
+
+{pstd}- {bf:main.do}: The initial check reveals no mismatches in {c 34}{it:main.do}{c 34}, indicating no discrepancies introduced directly by it.
+{p_end}
+
+{pstd}- {bf:Sub-file 1} ({c 34}{it:myfile1.do}{c 34}) : {inp:reprun} steps into {c 34}{it:myfile1.do}{c 34}, where Line 3 is flagged for mismatches, as shown in Example 3. This table will show the issues specific to {c 34}{it:myfile1.do}{c 34}. 
+{p_end}
+
+{pstd}- {bf:Return to {c 34}main.do{c 34}}{c 34} : After checking {c 34}{it:myfile1.do}{c 34}, {inp:reprun} returns to {c 34}{it:main.do}{c 34}. Here, Line 2 is flagged because it calls {c 34}{it:myfile1.do}{c 34}, reflecting the issues from the sub-file. 
+{p_end}
+
+{pstd}- {bf:Sub-file 2} ({c 34}{it:myfile2.do}{c 34}): {inp:reprun} then steps into {c 34}{it:myfile2.do}{c 34}, where Line 2 is flagged for mismatches, as detailed in Example 5.  
+{p_end}
+
+{pstd}- {bf:Return to {c 34}main.do{c 34} (final check) }: After checking {c 34}{it:myfile2.do{c 34}}, {inp:reprun} returns to {c 34}{it:main.do}{c 34}. Line 3 in {c 34}{it:main.do}{c 34} is flagged due to the issues in {c 34}{it:myfile2.do}{c 34} propagating up. 
+{p_end}
+
+{pstd}In summary, {inp:reprun} provides a comprehensive view by stepping through each do-file, showing where mismatches occur and how issues in sub-files impact the main do-file. 
+{p_end}
+
 {title:Feedback, bug reports and contributions}
 
 {pstd}Read more about these commands on {browse "https://github.com/worldbank/repkit":this repo} where this package is developed. Please provide any feedback by {browse "https://github.com/worldbank/repkit/issues":opening an issue}. PRs with suggestions for improvements are also greatly appreciated.

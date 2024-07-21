@@ -99,64 +99,104 @@ reprun "`myfolder'/myfile.do" using "`myfolder'/report"
 
 ## Example 3
 
-Assume "_myfile.do_" contains the following code:
+Assume "_myfile1.do_" contains the following code:
 
 ```
-sysuse census.dta, clear
+sysuse census, clear
 isid state, sort
 gen group = runiform() < .5
-bys group: gen n_obs = _n
-drop if n_obs > 22
 ```
 
 Running a reproducibility check on this do-file using __reprun__ will generate a table listing _mismatches_ in Stata state between Run 1 and Run 2. 
 
 ```
-reprun "myfile.do"
+reprun "myfile1.do"
 ```
 
+In "_myfile1.do_", Line 3 (`gen group = runiform() < .5`) generates a new variable `group` based on a random uniform distribution. The RNG state will differ between Run 1 and Run 2 unless the random seed is explicitly set before this command. As a result, a mismatch in the "seed RNG state" as well as "data checksum" will be flagged.
 
-In this specific code block, the following lines will be flagged for mismatches:
+The issue can be resolved by setting a seed before the command:
 
-Line 3: `gen group = runiform() < .5`
-This line generates a new variable `group` based on a random uniform distribution. The RNG state will differ between Run 1 and Run 2 unless the random seed is explicitly set before this command. As a result, a mismatch in the "seed RNG state" will be flagged.
+```
+sysuse census, clear
+isid state, sort
+set seed 346290
+gen group = runiform() < .5
+```
 
-Line 4: `bys group: gen n_obs = _n`
-This line sorts the data by the newly generated `group` variable and creates a new variable `n_obs` based on this sorted order. Since group is generated using `runiform()` without setting a seed, it will differ in each run, causing the sort order to vary. As a result, a mismatch in the "sort order RNG" will be flagged. If the sort order is not consistent between runs, the subsequent operations on the data can result in different outputs, causing further mismatches.
-
-Lines 3-5: These lines will also be flagged for "data checksum" mismatches. The `runiform()` function in line 3 introduces randomness, and the `sort` in line 4 can lead to different data orders between runs. These changes propagate to line 5 `drop if n_obs > 22`, where the number of observations dropped may differ between runs due to the changes in `n_obs`. The data checksum comparison will detect these differences, leading to mismatches being flagged.
-
+Running the reproducibility check on the modified do-file using reprun will confirm that there are no mismatches in Stata state between Run 1 and Run 2.
 
 ## Example 4
 
-Using the  __**v**erbose__ option generates more detailed tables where any lines across Run 1 and Run 2 mismatch _**or**_ change for any value. In addition to the output in Example 3, it will also flag line 2 for changes in "seed RNG state" and "data checksum".
+Using the  __**v**erbose__ option generates more detailed tables where any lines across Run 1 and Run 2 mismatch __**or**__ change for any value. In addition to the output in Example 3, it will also report line 2 for __changes__ in "sort order RNG" and "data checksum".
 
 ```
-reprun "myfile.do", verbose
+reprun "myfile1.do", verbose
 ```
 
-## Example 5
+## Example 5 
 
-Using the __**c**ompact__ option generates less detailed tables where only lines with mismatched seed or sort order RNG changes during Run 1 or Run 2, and mismatches between the runs, are flagged and reported. The output will be similar to Example 3; however, only lines 3 and 4 will be flagged for "data checksum".
+Assume "_myfile2.do_" contains the following code:
 
 ```
-reprun "myfile.do", compact
+sysuse auto, clear
+sort mpg 
+gen sequence = _n
+```
+
+Running a reproducibility check on this do-file using __reprun__ will generate a table listing _mismatches_ in Stata state between Run 1 and Run 2. 
+
+```
+reprun "myfile2.do"
+```
+
+In "_myfile2.do_", Line 2 sorts the data by the non-unique variable `mpg`, causing the sort order to vary between runs. This results in a mismatch in the "sort order RNG". Consequently, Line 2 and Line 3 (`gen sequence = _n`) will be flagged for "data checksum" mismatches due to the differences in sort order, leading to discrepancies in the generated `sequence` variable.
+
+The issue can be resolved by sorting the data on a unique combination of variables:
+
+```
+sysuse auto, clear
+sort mpg make
+gen sequence = _n
 ```
 
 ## Example 6
-Running reproducibility check on a set of do-files called by a main do-file. For example, the main do-file might contain the following code:
+
+Using the __**c**ompact__ option generates less detailed tables where only lines with mismatched seed or sort order RNG changes during Run 1 or Run 2, and mismatches between the runs, are flagged and reported. The output will be similar to Example 5, except that line 3 will no longer be flagged for "data checksum".
+
+```
+reprun "myfile2.do", compact
+```
+
+## Example 7
+
+`reprun` will perform a reproducibility check on a do-file, including all do-files it calls recursively. For example, the main do-file might contain the following code that calls on "_myfile1.do_" (Example 3) and "_myfile2.do_" (Example 5):
 
 ```
 local myfolder "/path/to/folder"
 do "`myfolder'/myfile1.do"
-do "`myfolder'/myfile2.do
+do "`myfolder'/myfile2.do"
 ```
-
-Running the reproducibility check on "_main.do_" will return tables listing mismatches in "_myfile1.do_", "_myfile2.do_", and "_main.do_". For instance, if there are mismatches between Run 1 and Run 2 in "_myfile1.do_", every line with mismatches will be flagged in a table. Additionally, line 2 in "_main.do_" will be flagged for calling "_myfile1.do_".
 
 ```
 reprun "main.do"
 ```
+
+`reprun` on "_main.do_" performs reproducibility checks across "_main.do_", as well as "_myfile1.do_", and "_myfile2.do_". The output will include tables for each do-file, illustrating the following process:
+
+- __main.do__: The initial check reveals no mismatches in "_main.do_", indicating no discrepancies introduced directly by it.
+
+- __Sub-file 1__ ("_myfile1.do_") : `reprun` steps into "_myfile1.do_", where Line 3 is flagged for mismatches, as shown in Example 3. This table will show the issues specific to "_myfile1.do_".
+
+- __Return to "main.do"__" : After checking "_myfile1.do_", `reprun` returns to "_main.do_". Here, Line 2 is flagged because it calls "_myfile1.do_", reflecting the issues from the sub-file.
+
+- __Sub-file 2__ ("_myfile2.do_"): `reprun` then steps into "_myfile2.do_", where Line 2 is flagged for mismatches, as detailed in Example 5. 
+
+- __Return to "main.do" (final check) __: After checking "_myfile2.do"_, `reprun` returns to "_main.do_". Line 3 in "_main.do_" is flagged due to the issues in "_myfile2.do_" propagating up.
+
+In summary, `reprun` provides a comprehensive view by stepping through each do-file, showing where mismatches occur and how issues in sub-files impact the main do-file.
+
+
 
 # Feedback, bug reports and contributions
 
