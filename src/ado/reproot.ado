@@ -110,7 +110,7 @@ qui {
         Read env file before search
       ***************************************************/
 
-      * Get home dir
+      * Get home dir using cd, and then restore users pwd
       local pwd = "`c(pwd)'"
       cd ~
       local homedir = "`c(pwd)'"
@@ -119,7 +119,7 @@ qui {
       * Test if this location has a root file
       cap confirm file "`env_file'"
       if (_rc) {
-        noi di as error `"{phang}No file {inp:reproot-env.yaml} found in home directory {it:`homedir'}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}. Starting {stata reproot_setup:setup wizard}....{p_end}"' _n
+        noi di as error `"{phang}No file {inp:reproot-env.yaml} found in home directory {browse "`homedir'"}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}. Starting {stata reproot_setup:setup wizard}....{p_end}"' _n
         noi reproot_setup
         exit
       }
@@ -131,7 +131,7 @@ qui {
 
       * Test that the environment file has at least one search path
       if missing(`"`envpaths'"') {
-        noi di as error `"{phang}The file {inp:reproot-env.yaml} found in home directory {it:`homedir'} has no paths and will therefore not find any roots. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' _n
+        noi di as error `"{phang}The file {inp:reproot-env.yaml} found in home directory {browse "`homedir'"} has no paths and will therefore not find any roots. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' _n
         error 99
         exit
       }
@@ -199,7 +199,7 @@ qui {
 
           *Test if root is duplicates
           if (`:list root in found_roots') {
-            noi di as error `"{phang}Duplicate root found for root name [`root']. This root was found at [{it:`rootdir'}] after it had already been found at [{it:```prefix'`root'''}]. All roots must have a unique name within a project. No root globals were set.{p_end}"' _n
+            noi di as error `"{phang}Duplicate root found for root name [`root']. A root with name [`root'] was found at [{browse "`rootdir'"}] after it had already been found at [{browse "```prefix'`root'''"}]. All roots must have a unique name within a project. No root globals were set.{p_end}"' _n
             error 99
             exit
           }
