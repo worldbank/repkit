@@ -15,7 +15,7 @@
 {p_end}
 
 {synoptset 13}{...}
-{synopthdr:options}
+{p2coldent:{it:options}}Description{p_end}
 {synoptline}
 {synopt: {bf:using} {it:adopath}}The file path to the ado-folder to use{p_end}
 {synopt: {bf:nostrict}}Use {it:nostrict} mode instead of the default {it:strict} mode{p_end}

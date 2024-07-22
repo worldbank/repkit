@@ -11,16 +11,18 @@
 
 {title:Syntax}
 
-{phang}{bf:reproot} , {bf:{ul:p}roject}({it:string}) {bf:{ul:r}oots}({it:string}) [ {bf:{ul:pre}fix}({it:string}) {bf:clear}]
+{phang}{bf:reproot} , {bf:{ul:p}roject}({it:string}) {bf:{ul:r}oots}({it:string}) [ {bf:{ul:optr}oots}({it:string}) {bf:{ul:pre}fix}({it:string}) {bf:clear} {bf:verbose}]
 {p_end}
 
-{synoptset 15}{...}
-{synopthdr:options}
+{synoptset 16}{...}
+{p2coldent:{it:options}}Description{p_end}
 {synoptline}
-{synopt: {bf:{ul:p}roject}({it:string})}The project name to search roots for.{p_end}
-{synopt: {bf:{ul:r}oots}({it:string})}The root name(s) to search for.{p_end}
-{synopt: {bf:{ul:pre}fix}({it:string})}Adds a project-specific prefix to root globals.{p_end}
-{synopt: {bf:clear}}Always search for roots even if already loaded.{p_end}
+{synopt: {bf:{ul:p}roject}({it:string})}The project name to search roots for{p_end}
+{synopt: {bf:{ul:r}oots}({it:string})}Required root name(s) to search for{p_end}
+{synopt: {bf:{ul:optr}oots}({it:string})}Optional root name(s) to also search for{p_end}
+{synopt: {bf:{ul:pre}fix}({it:string})}Adds a project-specific prefix to root globals{p_end}
+{synopt: {bf:clear}}Always search for roots even if already loaded{p_end}
+{synopt: {bf:verbose}}More verbose output about roots found{p_end}
 {synoptline}
 
 {phang}{inp:reproot} is a framework for automatically handling file paths across 
@@ -66,12 +68,19 @@ The rest of this help file will focus on how to use this command once those file
 The command creates a global based on the root name of that root
 if that root folder is found.
 The content of the global will be the file path to the location of the root file.
-This command does not set globals for roots not listed here,
+This command does not set globals for roots not listed in this option
+(or in {inp:optroots()} - see below), 
 even if such roots for this project were found.
 Unless the {bf:clear} option is used,
-the command does not overwrite any global that already existed before running the command.
+the command does not overwrite any global that
+already had content before running the command.
 Finally, the command tests that there is a global named after each root and
 that all of them are non-empty.
+{p_end}
+
+{pstd}{bf:optroots}({it:string}) allows the users to set optional roots.
+They will be treated the same way as the roots in {inp:roots()} with 
+the one exception that no error is thrown if this root is not found.
 {p_end}
 
 {pstd}{bf:prefix}({it:string}) allows the user to set a project-specific global prefix.
@@ -85,11 +94,15 @@ So, if {bf:prefix({c 34}abc_{c 34})} is used, then the globals {inp:data} and {i
 will be set to {inp:abc_data} and {inp:abc_code}. 
 {p_end}
 
-{pstd}{bf:clear} overwrites globals that already exist with the name that {inp:reproot} would creaet. 
+{pstd}{bf:clear} overwrites globals that already exist with the name that {inp:reproot} would create. 
 This is all the roots listed in {bf:roots()} with
 the {bf:prefix()} prepended if that option is used.
 The default behavior is to not search for roots that are already set up.
 If all globals are already set, then the command does not execute the search for roots.
+{p_end}
+
+{pstd}{bf:verbose} makes the command output more information about what roots were found.
+This option is helpful for debugging when trying to figure out what roots are found and not found.
 {p_end}
 
 {title:Examples}

@@ -24,6 +24,7 @@ d
 d Distribution-Date: 20240516
 d
 *** adofiles
+f ado/reproot_setup.ado
 f ado/repadolog.ado
 f ado/reproot_search.ado
 f ado/reproot_parse.ado
@@ -34,6 +35,7 @@ f ado/repado.ado
 f ado/repkit.ado
 
 *** helpfiles
+f sthlp/reproot_setup.sthlp
 f sthlp/repadolog.sthlp
 f sthlp/reproot.sthlp
 f sthlp/reprun.sthlp

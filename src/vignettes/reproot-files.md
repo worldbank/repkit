@@ -47,7 +47,7 @@ If these files are shared over DropBox/OneDrive/Git/Network, etc. among the othe
 
 A template root file can be downloaded from [here](https://github.com/worldbank/repkit/blob/main/src/dev/reproot.yaml) for you to download it and modify it to your needs.
 
-### `reproot-env.yaml` - the settings file
+### `reproot-env.yaml` - the environment settings file
 
 Searching all folders on a computer file system would make `reproot` prohibitively slow. However, with some simple settings, the number of folders that need to be searched can be drastically reduced. These settings are done in the `reproot-env.yaml` file.
 
@@ -68,7 +68,7 @@ A lower recurse depth will be faster, but it might prevent `reproot` from findin
 
 It is typically better to add more search paths rather than increasing the recurse depth a lot. However, the best trade-off between the number of search paths and depends on how you have organized the files on your computer. You should experiment until you've found a combination of search paths and recurse depth that both find all the root files and do so within a reasonable time.
 
-#### `paths`
+#### Search `paths`
 
 * Required: Yes
 * Format: A list of strings that are absolute file paths
