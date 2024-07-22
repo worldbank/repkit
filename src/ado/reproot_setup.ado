@@ -63,15 +63,12 @@ qui {
     }
 
     noi di as result _n `"{pstd}Reproot requries at least one search path. Read more {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' ///
-      _n `"{pstd}Do you want to add one now?{p_end}"' _n `"{pstd}See {help reproot} or {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide} for more information.{p_end}"' ///
-      _n `"{pstd}Some top-level options are:{p_end}"' _n `"{pstd}`home_fld'/...{p_end}"'
-
-      noi dir ~ , wide
+      _n `"{pstd}Do you want to add one now?{p_end}"'
 
     global path_to_add ""
     while (!inlist(upper("${path_to_add}"),"BREAK","DONE")) {
       noi display_envpath, envpaths(`"`envpaths'"')
-      noi di as txt _n `"{pstd}Enter a new folder path (`home_fld'/...) or enter "DONE" to confirm those you have already entered.{p_end}"' ///
+      noi di as txt _n `"{pstd}Enter a new folder path or enter "DONE" to confirm those you have already entered.{p_end}"' ///
                     _n `"{pstd}Type "BREAK" to discard changes."' ///
         , _request(path_to_add)
 
