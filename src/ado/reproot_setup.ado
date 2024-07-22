@@ -35,7 +35,7 @@ qui {
     else      local env_file_exists 1
 
     if (`env_file_exists') {
-        noi di as result _n `"{pstd}An environment file (reproot-env.yaml) was found in {browse `home_fld':your home folder} (`home_fld'). To modify this file, use a text editor and follow the instructions in {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide}.{p_end}"'
+        noi di as result _n `"{pstd}An environment file (reproot-env.yaml) already exists in your home folder: {browse "`home_fld'"}. To modify this file, use a text editor and follow the instructions in {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide}.{p_end}"'
     }
     else {
       noi reproot_setup_envfile, env_file("`env_file'") envpaths(`"`envpaths'"') home_fld("`home_fld'")
@@ -51,7 +51,7 @@ qui {
     syntax, env_file(string) home_fld(string) [envpaths(string)]
 
     * Ask for confirmation
-    noi di as result _n `"{pstd}No environment file was found in {browse `home_fld':your home folder}.{p_end}"' _n `"{pstd}Do you want to create one?{p_end}"'
+    noi di as result _n `"{pstd}No environment file was found in your home folder: {browse "`home_fld'"}.{p_end}"' _n `"{pstd}Do you want to create one?{p_end}"'
     global setup_confirmation ""
     while (!inlist(upper("${setup_confirmation}"),"Y", "N")) {
       noi di as txt `"{pstd}Enter "Y" to continue or "N" to exit to Stata."', _request(setup_confirmation)
@@ -130,7 +130,7 @@ qui {
     syntax, [envpath(string) error]
 
     if !missing("`envpath'") {
-      * Parst the envpath that can either be
+      * Parse the envpath that can be on either of these formats:
       *  - "4:C:\Users\user1234\github"
       *  - "C:\Users\user1234\github"
       gettoken depth path : envpath, parse(":")
