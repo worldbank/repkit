@@ -7,6 +7,10 @@
       global clone "/Users/bbdaniels/GitHub/"
   }
   
+   if "`c(username)'" == "ankritisingh" {
+      global clone "/Users/ankritisingh/GitHub/"
+  }
+  
   local rk "${clone}/repkit"
   
   //ad_sthlp , adfolder("`rk'") commands(repadolog)
