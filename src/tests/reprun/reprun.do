@@ -9,7 +9,7 @@
     if "`c(username)'" == "bbdaniels" {
         global repkit_clone "/Users/bbdaniels/GitHub/repkit"
     }
-	
+
     if "`c(username)'" == "wb558768" {
         global repkit_clone "C:/Users/wb558768/Documents/GitHub/repkit"
     }
@@ -51,7 +51,7 @@
     reprun "${tf}/target-1.do" using "${tf}/output-2" , s(loop)
     reprun "${tf}/target-1.do" using "${tf}/output-3" , v s(rng)
     reprun "${tf}/target-1.do" ,  verbose
-    reprun "${tf}/target-mmm.do" ,  verbose
+    reprun "${tf}/target-mmm.do"
 
     * Example A - single file
     cap mkdir "${sf}/output"
@@ -76,9 +76,9 @@
     * Example F - with project ado-folder
     cap mkdir "${waf}/output"
     reprun "${waf}/main.do" using "${waf}/output" , debug
-	
+
     * Example g - output with stable and unstable do-files
     cap mkdir "${swu}/output"
-    reprun "${swu}/main.do" using "${swu}/output" 
+    reprun "${swu}/main.do" using "${swu}/output"
 
     net install repkit, from("${src_fldr}") replace

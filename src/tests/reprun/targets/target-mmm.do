@@ -22,15 +22,13 @@ di as err "Should be 6165... `r(mean)'"
 
 #d cr
 
+isid make, sort
+
+bys foreign : gen x2 = _N
 
 // TEST COMMENT
 
 global something "nothing"
-
-forv i = 1/5 {
-  gen varx`i' = rnormal()
-  if `i' == 3 set seed 847
-}
 
 expand 2 , gen(check)
 
@@ -41,14 +39,11 @@ sort foreign
 di as err "RUNFILE: THIS VALUE SHOULD ALWAYS BE THE NUMBER ONE: `MYFAKELOCAL'"
 
 gen x = _n
-gen y = rnormal()
 
-
+set sortseed 12345
 
 cap duplicates drop make , force
 
-
-if (1 == 1) & (1 == 1) do "${tf}/target-2.do"
 
 
 //
