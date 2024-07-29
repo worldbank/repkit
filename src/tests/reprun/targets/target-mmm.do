@@ -43,7 +43,7 @@ di as err "RUNFILE: THIS VALUE SHOULD ALWAYS BE THE NUMBER ONE: `MYFAKELOCAL'"
 gen x = _n
 gen y = rnormal()
 
-
+set sortseed 12345
 
 cap duplicates drop make , force
 

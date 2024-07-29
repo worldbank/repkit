@@ -9,7 +9,7 @@
     if "`c(username)'" == "bbdaniels" {
         global repkit_clone "/Users/bbdaniels/GitHub/repkit"
     }
-	
+
     if "`c(username)'" == "wb558768" {
         global repkit_clone "C:/Users/wb558768/Documents/GitHub/repkit"
     }
@@ -76,9 +76,9 @@
     * Example F - with project ado-folder
     cap mkdir "${waf}/output"
     reprun "${waf}/main.do" using "${waf}/output" , debug
-	
+
     * Example g - output with stable and unstable do-files
     cap mkdir "${swu}/output"
-    reprun "${swu}/main.do" using "${swu}/output" 
+    reprun "${swu}/main.do" using "${swu}/output"
 
     net install repkit, from("${src_fldr}") replace

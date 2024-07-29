@@ -6,7 +6,7 @@ cap program drop   reprun
 qui {
 
     version 14.1
-	
+
     timer clear 99
     timer on 99
 
@@ -75,6 +75,7 @@ qui {
     local code_file_run1 "`r(code_file_run1)'"
     local code_file_run2 "`r(code_file_run2)'"
     if "`r(mmmflag)'" != ""  local mmmflag "`mmmflag' `r(mmmflag)'"
+    if "`r(sssflag)'" != ""  local sssflag "`sssflag' `r(sssflag)'"
     noi di as err "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
 
     /*************************************************************************
@@ -131,8 +132,15 @@ qui {
     file close `h_smcl'
 
     if "`mmmflag'" != "" {
-      noi di as res `"{pstd}{red:Warning:}: Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"'
+      noi di as res `"{pstd}{red:Reproducibility Warning:}: Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"'
       noi di as res `"{pstd}As the {mansection D merge:Stata Manual} says: {it:if you think you need to perform an m:m merge, then we suspect you are wrong}.{p_end}"'
+      noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
+    }
+
+    if "`sssflag'" != "" {
+      noi di as res `" "'
+      noi di as res `"{pstd}{red:Reproducibility Warning:}: Your code set the sortseed on lines:`sssflag'.{p_end}"'
+      noi di as res `"{pstd}As the {mansection D sort:Stata Manual} says: {it:You must be sure that the ordering really does not matter. If that is the case, then why did you sort in the first place?}{p_end}"'
       noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
     }
 
@@ -149,13 +157,13 @@ qui {
       rm_output_dir , folder("`dirout'/run2/")
     }
   }
-  
-  //display timer 
-  
+
+  //display timer
+
     timer off 		99
     qui timer list 	99
-   
-   
+
+
    if `r(t99)' >= 3600 {
       local hours : di %02.0f floor(`r(t99)' / 3600)
       local minutes : di %02.0f floor(mod(`r(t99)', 3600) / 60)
@@ -163,14 +171,14 @@ qui {
       noi di as res ""
       noi di as res `"{phang}Total run time: `hours':`minutes':`seconds' (HH:MM:SS){p_end}"'
     }
-	
+
 	else if `r(t99)' >= 60 {
       local minutes : di %02.0f floor(`r(t99)' / 60)
       local seconds : di %02.0f mod(`r(t99)', 60)
       noi di as res ""
       noi di as res `"{phang}Total run time: `minutes':`seconds' (MM:SS){p_end}"'
     }
-	
+
     else {
       local seconds : di %9.2f `r(t99)'
       noi di as res ""
@@ -337,10 +345,16 @@ end
           }
             local line_command : list uniq line_command
 
-          * If MMM signestimationsample
+          * If MMM
           if (strpos("`line_command'","mmm")) {
-            di as err "Command Warning: Many-to-many merge on Line `lnum'"
+            di as err "Reproducibility Warning: Many-to-many merge on Line `lnum'"
             return local mmmflag = `lnum'
+          }
+
+          * If SSS
+          if (strpos("`line_command'","sss")) {
+            di as err "Reproducibility Warning: Sortseed set on Line `lnum'"
+            return local sssflag = `lnum'
           }
 
           * If using capture, log it and take second word as command
@@ -628,6 +642,11 @@ end
         local match = 1
       }
 
+      if "`word'" == "sortseed" {
+        return local command "sss"
+        local match = 1
+      }
+
       * No match, return OTHER
       if (`match'==0) {
           return local command "OTHER"
@@ -659,9 +678,9 @@ end
 
     local prev_line1 ""
     local prev_line2 ""
-	
+
     * Local for empty tables
-    local any_lines_written 0	
+    local any_lines_written 0
 
     * Loop over all lines in the two data files
     local eof = 0
@@ -792,9 +811,9 @@ end
               srng1("`r(srng_c1)'") srng2("`r(srng_c2)'") srngm("`r(srng_m)'") ///
               dsum1("`r(dsum_c1)'") dsum2("`r(dsum_c2)'") dsumm("`r(dsum_m)'") ///
               loopiteration("`r(loopt)'")
-            noi write_and_print_output, h_smcl(`h_smcl') l1("`r(outputline)'") 
+            noi write_and_print_output, h_smcl(`h_smcl') l1("`r(outputline)'")
 			local any_lines_written 1
-          }	
+          }
 
           * Load these lines into pre_line locals for next run
           local prev_line1 "`line1'"
