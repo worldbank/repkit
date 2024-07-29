@@ -7,8 +7,8 @@ qui {
 
     version 14.1
 
-    timer clear 99
-    timer on 99
+	* Store start time
+    local start_time = clock(c(current_time), "hms")
 
     syntax anything [using/] , [Verbose] [Compact] [noClear] [Debug] [Suppress(passthru)]
 
@@ -68,7 +68,9 @@ qui {
     /*************************************************************************
       Generate the run 1 and run 2 do-files
     *************************************************************************/
-
+	
+	
+	
     noi di as res ""
     noi di as err "{phang}Starting reprun. Creating the do-files for run 1 and run 2.{p_end}"
     noi reprun_recurse, dofile("`dofile'") output("`dirout'") stub("m")
@@ -159,31 +161,28 @@ qui {
   }
 
   //display timer
+  * Store end time
+	local end_time = clock(c(current_time), "hms")
 
-    timer off 		99
-    qui timer list 	99
+	* Calculate and display elapsed time
+	local elapsed_time = (`end_time' - `start_time') / 1000
+	local hours = floor(`elapsed_time' / 3600)
+	local minutes = floor(mod(`elapsed_time', 3600) / 60)
+	local seconds = mod(`elapsed_time', 60)
 
+	noi di as res ""
+	if (`elapsed_time' >= 3600) {
+		noi di as res `"{phang}Total run time: `hours':`minutes':`seconds' (HH:MM:SS){p_end}"'
+	} 
+	
+	else if (`elapsed_time' >= 60) {
+		noi di as res `"{phang}Total run time: `minutes':`seconds' (MM:SS){p_end}"'
+	} 
+	
+	else {
+		noi di as res `"{phang}Total run time: `seconds' seconds{p_end}"'
+	}
 
-   if `r(t99)' >= 3600 {
-      local hours : di %02.0f floor(`r(t99)' / 3600)
-      local minutes : di %02.0f floor(mod(`r(t99)', 3600) / 60)
-      local seconds : di %02.0f mod(`r(t99)', 60)
-      noi di as res ""
-      noi di as res `"{phang}Total run time: `hours':`minutes':`seconds' (HH:MM:SS){p_end}"'
-    }
-
-	else if `r(t99)' >= 60 {
-      local minutes : di %02.0f floor(`r(t99)' / 60)
-      local seconds : di %02.0f mod(`r(t99)', 60)
-      noi di as res ""
-      noi di as res `"{phang}Total run time: `minutes':`seconds' (MM:SS){p_end}"'
-    }
-
-    else {
-      local seconds : di %9.2f `r(t99)'
-      noi di as res ""
-      noi di as res `"{phang}Total run time: `seconds' seconds {p_end}"'
-    }
 
 
   // Remove tmahen command is no longer in beta
