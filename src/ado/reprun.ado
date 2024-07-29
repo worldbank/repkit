@@ -132,14 +132,14 @@ qui {
     file close `h_smcl'
 
     if "`mmmflag'" != "" {
-      noi di as res `"{pstd}{red:Reproducibility Warning:}: Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"'
+      noi di as res `"{pstd}{red:Reproducibility Warning:} Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"'
       noi di as res `"{pstd}As the {mansection D merge:Stata Manual} says: {it:if you think you need to perform an m:m merge, then we suspect you are wrong}.{p_end}"'
       noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
     }
 
     if "`sssflag'" != "" {
       noi di as res `" "'
-      noi di as res `"{pstd}{red:Reproducibility Warning:}: Your code set the sortseed on lines:`sssflag'.{p_end}"'
+      noi di as res `"{pstd}{red:Reproducibility Warning:} Your code set the sortseed on lines:`sssflag'.{p_end}"'
       noi di as res `"{pstd}As the {mansection D sort:Stata Manual} says: {it:You must be sure that the ordering really does not matter. If that is the case, then why did you sort in the first place?}{p_end}"'
       noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
     }
