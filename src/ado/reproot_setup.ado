@@ -1,11 +1,11 @@
-*! version XX XXXXXXXXX ADAUTHORNAME ADCONTACTINFO
+*! version 2.2 20240730 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reproot_setup
     program define reproot_setup
 
 qui {
 
-    version /* ADD VERSION NUMBER HERE */
+    version 14.1
 
     * Update the syntax. This is only a placeholder to make the command run
     syntax, [ENVPaths(string) debug_home_folder(string)]

@@ -11,6 +11,10 @@
       global clone "/Users/ankritisingh/GitHub/"
   }
   
+   if "`c(username)'" == "wb558768" {
+      global clone "C:/Users/wb558768/Documents/GitHub/"
+  }
+  
   local rk "${clone}/repkit"
   
   //ad_sthlp , adfolder("`rk'") commands(repadolog)
