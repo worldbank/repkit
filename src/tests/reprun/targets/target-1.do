@@ -1,4 +1,13 @@
-//
+/*************************************************************
+
+Name of do file: Data_Clean.do
+3
+Author: Maria J. Urbina Date: 14/05/2024
+
+Description: Dofile in charge of cleanning the data
+45
+Input files: Output files:
+********************/
 
 clear
 
@@ -17,7 +26,11 @@ di as err "Should be 6165... `r(mean)'"
 
 #d cr
 
-// TEST COMMENT
+local check : var lab price`domain_num'
+
+su  /// error 196
+  price
+
 
 global something "nothing"
 
@@ -40,6 +53,7 @@ gen y = rnormal()
 
 
 cap duplicates drop make , force
+
 
 
 if (1 == 1) & (1 == 1) do "${tf}/target-2.do"

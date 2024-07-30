@@ -11,12 +11,12 @@ qui {
     syntax anything, file(string)
 
     if ("`anything'" == "env")       {
-      reproot_parse_env , file("`file'")
+      noi reproot_parse_env , file("`file'")
       return local envpaths = `"`r(envpaths)'"'
       return local skipdirs = `"`r(skipdirs)'"'
     }
     else if ("`anything'" == "root") {
-      reproot_parse_root, file("`file'")
+      noi reproot_parse_root, file("`file'")
       return local project = `"`r(project)'"'
       return local root    = `"`r(root)'"'
     }
@@ -30,7 +30,7 @@ end
 
 cap program drop   reproot_parse_env
     program define reproot_parse_env, rclass
-
+qui {
     syntax, file(string)
 
     local paths    ""
@@ -144,11 +144,13 @@ cap program drop   reproot_parse_env
 
     return local envpaths = trim(`"`formatted_paths'"')
     return local skipdirs `"`skipdirs'"'
+}
 end
 
 cap program drop   reproot_parse_root
     program define reproot_parse_root, rclass
 
+qui {
     * Update the syntax. This is only a placeholder to make the command run
     syntax, file(string)
 
@@ -224,7 +226,7 @@ cap program drop   reproot_parse_root
     * Return rpoject and root
     return local project = trim("`project_name'")
     return local root    = trim("`root_name'")
-
+}
 end
 
 

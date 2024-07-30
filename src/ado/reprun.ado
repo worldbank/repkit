@@ -7,6 +7,9 @@ qui {
 
     version 14.1
 
+	* Store start time
+    local start_time = clock(c(current_time), "hms")
+
     syntax anything [using/] , [Verbose] [Compact] [noClear] [Debug] [Suppress(passthru)]
 
     /*****************************************************************************
@@ -65,12 +68,16 @@ qui {
     /*************************************************************************
       Generate the run 1 and run 2 do-files
     *************************************************************************/
-
+	
+	
+	
     noi di as res ""
     noi di as err "{phang}Starting reprun. Creating the do-files for run 1 and run 2.{p_end}"
     noi reprun_recurse, dofile("`dofile'") output("`dirout'") stub("m")
     local code_file_run1 "`r(code_file_run1)'"
     local code_file_run2 "`r(code_file_run2)'"
+    if "`r(mmmflag)'" != ""  local mmmflag "`mmmflag' `r(mmmflag)'"
+    if "`r(sssflag)'" != ""  local sssflag "`sssflag' `r(sssflag)'"
     noi di as err "{phang}Done creating the do-files for run 1 and run 2.{p_end}"
 
     /*************************************************************************
@@ -126,6 +133,19 @@ qui {
       l2(`"{pstd}{c BLC}{hline 1}> `dofile'{p_end}"') l3("{hline}")
     file close `h_smcl'
 
+    if "`mmmflag'" != "" {
+      noi di as res `"{pstd}{red:Reproducibility Warning:} Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"'
+      noi di as res `"{pstd}As the {mansection D merge:Stata Manual} says: {it:if you think you need to perform an m:m merge, then we suspect you are wrong}.{p_end}"'
+      noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
+    }
+
+    if "`sssflag'" != "" {
+      noi di as res `" "'
+      noi di as res `"{pstd}{red:Reproducibility Warning:} Your code set the sortseed on lines:`sssflag'.{p_end}"'
+      noi di as res `"{pstd}As the {mansection D sort:Stata Manual} says: {it:You must be sure that the ordering really does not matter. If that is the case, then why did you sort in the first place?}{p_end}"'
+      noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
+    }
+
   /*****************************************************************************
         Write smcl file to disk and clean up intermediate files unless debugging
   *****************************************************************************/
@@ -139,6 +159,31 @@ qui {
       rm_output_dir , folder("`dirout'/run2/")
     }
   }
+
+  //display timer
+  * Store end time
+	local end_time = clock(c(current_time), "hms")
+
+	* Calculate and display elapsed time
+	local elapsed_time = (`end_time' - `start_time') / 1000
+	local hours = floor(`elapsed_time' / 3600)
+	local minutes = floor(mod(`elapsed_time', 3600) / 60)
+	local seconds = mod(`elapsed_time', 60)
+
+	noi di as res ""
+	if (`elapsed_time' >= 3600) {
+		noi di as res `"{phang}Total run time: `hours':`minutes':`seconds' (HH:MM:SS){p_end}"'
+	} 
+	
+	else if (`elapsed_time' >= 60) {
+		noi di as res `"{phang}Total run time: `minutes':`seconds' (MM:SS){p_end}"'
+	} 
+	
+	else {
+		noi di as res `"{phang}Total run time: `seconds' seconds{p_end}"'
+	}
+
+
 
   // Remove tmahen command is no longer in beta
   noi repkit "beta reprun"
@@ -159,7 +204,7 @@ end
   program define   reprun_recurse, rclass
   qui {
 
-    syntax, dofile(string) output(string) stub(string)
+    syntax, dofile(string asis) output(string) stub(string)
 
     /*************************************************************************
       Create the files that this recursive call needs
@@ -198,7 +243,8 @@ end
 
     * Open the orginal file
     tempname   code_orig
-    file open `code_orig' using "`dofile'", read
+
+    file open `code_orig' using `dofile', read
 
     * Loop until end of file
     while `leof' == 0 {
@@ -255,21 +301,60 @@ end
         * Not part of a multiline line
         else {
 
-          *Reset the last line local
+          * Reset the last line locals
           local last_line = ""
           local line_command = "OTHER"
           local dofile ""
           local doflag 0
-          foreach w in `macval(line)' {
-            get_command, word("`w'")
-            if `doflag' == 1 local dofile = "`w'"
+          local looptype ""
+          local loopflag 0
+
+          // Sanitize that string!
+          local 0 `"`macval(line)'"'
+
+
+          // Identify all commands in line
+          while `"`0'"' != "" {
+
+            gettoken 1 0 : 0 , quotes
+            if strpos(`"`1'"',"//") local 0 "" // End on comments
+            if strpos(`"`1'"',"*") & "`line_command'" == "OTHER" local 0 "" // End on comments
+
+            // di as err `"`1'  // `0'"'
+
+            cap get_command, word(`"`1'"')
+
+            if `doflag' == 1 local dofile = `"`1'"'
+            if `loopflag' == 1 local looptype = "`1'"
+
+            * Dofiles
             if "`r(command)'" == "do" | "`r(command)'" == "run" {
               local doflag = 1
             }
             else local doflag 0
+
+            * Loops
+            if "`r(command)'" == "foreach" | "`r(command)'" == "forvalues" {
+              local loopflag = 1
+            }
+            else local loopflag 0
+
             local line_command = "`line_command' `r(command)'"
+            mac shift
           }
             local line_command : list uniq line_command
+
+          * If MMM
+          if (strpos("`line_command'","mmm")) {
+            di as err "Reproducibility Warning: Many-to-many merge on Line `lnum'"
+            return local mmmflag = `lnum'
+          }
+
+          * If SSS
+          if (strpos("`line_command'","sss")) {
+            di as err "Reproducibility Warning: Sortseed set on Line `lnum'"
+            return local sssflag = `lnum'
+          }
 
           * If using capture, log it and take second word as command
           if (strpos("`line_command'","capture")) {
@@ -290,20 +375,20 @@ end
           }
 
           * Line is do or run, so call recursive function
-          if (strpos("`line_command'","do")) | (strpos("`line_command'","run")) {
+          if (strpos(`"`line_command'"',"do")) | (strpos("`line_command'","run")) {
 
             * Write line handling recursion in data file
             local write_recline = 1
 
             * Get the file path from the second word
             local file = `"`dofile'"'
-            local file_rev = strreverse("`file'")
+            local file_rev = strreverse(`"`file'"')
 
             * Only recurse on .do files and add .do when no extension is used
-            if (substr("`file_rev'",1,3) == "od.") {
+            if strpos(`"`file'"' , ".do") {
               local recurse 1
             }
-            else if (substr("`file_rev'",1,4) == "oda.") {
+            else if strpos(`"`file'"' , ".ado") {
               local recurse 0 // skip recursing reprun on adofiles
             }
             else {
@@ -312,28 +397,35 @@ end
             }
 
             * Skip recursion instead of error if file not found
-            cap confirm file "`file'"
+            cap confirm file `file'
             if _rc {
               local recurse 0
+              di as err `"      Skipping recursion -- file not found: `file' "'
             }
 
             * Test if it should recurse or not
             if `recurse' == 1 {
 
+
               * Keep working on the stub
               local recursestub "`stub'_`++subf_n'"
 
-              noi reprun_recurse, dofile("`file'")     ///
+
+
+              noi reprun_recurse, dofile(`file')     ///
                     output("`output'")   ///
                     stub("`recursestub'")
               local sub_f1 "`r(code_file_run1)'"
               local sub_f2 "`r(code_file_run2)'"
 
+
               * Substitute the original sub-dofile with the check/write ones
+              if !strpos(`"`file'"',`"""') local file `""`file'""'
+
               local run1_line = ///
-                subinstr(`"`line'"',`"`file'"',`""`sub_f1'""',1)
+                subinstr(`"`line'"',`file',`""`sub_f1'""',1)
               local run2_line = ///
-                subinstr(`"`line'"',`"`file'"',`""`sub_f2'""',1)
+                subinstr(`"`line'"',`file',`""`sub_f2'""',1)
 
               *Correct potential ""path"" to "path"
               local run1_line = subinstr(`"`run1_line'"',`""""',`"""',.)
@@ -357,16 +449,21 @@ end
 
             * Write foreach/forvalues to block stack and
             * it's macro name to loop stack
-            if (strpos("`line_command'","foreach")) | (strpos("`line_command'","forvalues")) {
-              local block_stack   "`line_command' `block_stack' "
-              local loop_stack = trim("`loop_stack' `secondw'")
+            if (strpos("`line_command'","foreach")) {
+              local block_stack   "foreach `block_stack' "
+              local loop_stack = trim("`loop_stack' `looptype'")
+            }
+
+            if (strpos("`line_command'","forvalues")) {
+              local block_stack   "forvalues `block_stack' "
+              local loop_stack = trim("`loop_stack' `looptype'")
             }
 
             * Write while to block stack and
             * also "while" to loop stack as it does not have a macro name
             if strpos("`line_command'","while") {
-              local block_stack   "`line_command' `block_stack' "
-              local loop_stack = trim("`loop_stack' `line_command'")
+              local block_stack   "while `block_stack' "
+              local loop_stack = trim("`loop_stack' while")
             }
           }
 
@@ -414,6 +511,7 @@ end
     return local code_file_run1 "`code_f1'"
     return local code_file_run2 "`code_f2'"
   }
+
   end
 
   cap program drop org_line_parse
@@ -538,6 +636,16 @@ end
         }
       }
 
+      if "`word'" == "m:m" {
+        return local command "mmm"
+        local match = 1
+      }
+
+      if "`word'" == "sortseed" {
+        return local command "sss"
+        local match = 1
+      }
+
       * No match, return OTHER
       if (`match'==0) {
           return local command "OTHER"
@@ -569,6 +677,9 @@ end
 
     local prev_line1 ""
     local prev_line2 ""
+
+    * Local for empty tables
+    local any_lines_written 0
 
     * Loop over all lines in the two data files
     local eof = 0
@@ -624,12 +735,23 @@ end
 
           * Write end to previous table, write the file tree for the next
           * recursion, and write the beginning of that table
-          output_writetitle , outputcolumns("`outputcolumns'")
-          noi write_and_print_output, h_smcl(`h_smcl') ///
-            l1("`r(botline)'") l2(" ") ///
+          if (`any_lines_written' == 1 ) {
+		  	* Close the table for his file
+			output_writetitle , outputcolumns("`outputcolumns'")
+			noi write_and_print_output, h_smcl(`h_smcl') ///
+			l1("`r(botline)'") l2(" ") ///
             l3(`"{pstd} Stepping into sub-file:{p_end}"')
+		}
+		else {
+			* If the table is empty
+			output_writetitle , outputcolumns("`outputcolumns'")
+			noi write_and_print_output, h_smcl(`h_smcl') ///
+			l1("`r(botline)'") l2("No mismatches and/or changes detected") l3(" ") ///
+			l4(`"{pstd} Stepping into sub-file:{p_end}"')
+		}
+
           noi print_filetree_and_verbose_title, ///
-            files(`" "`orgfile'" "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
+            files(`" `orgfile' "`new_orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
           output_writetitle , outputcolumns("`outputcolumns'")
           noi write_and_print_output, h_smcl(`h_smcl') ///
             l1("`r(topline)'") l2("`r(state_titles)'") ///
@@ -637,7 +759,7 @@ end
 
           * Make the recurisive call for next file
           noi recurse_comp_lines , dirout("`dirout'") stub("`new_stub'") ///
-            orgfile(`"`orgfile' "`new_orgfile'" "') ///
+            orgfile(`" `orgfile' "`new_orgfile'" "') ///
             outputcolumns("`outputcolumns'") h_smcl(`h_smcl') `verbose' `compact' `suppress'
 
           * Step back into this data file after the recursive call and:
@@ -646,7 +768,7 @@ end
           noi write_and_print_output, h_smcl(`h_smcl') ///
             l1(`"{phang} Stepping back into file:{p_end}"')
           noi print_filetree_and_verbose_title, ///
-            files(`" "`orgfile'" "') h_smcl(`h_smcl') `verbose' `compact'
+            files(`" `orgfile' "') h_smcl(`h_smcl') `verbose' `compact'
           output_writetitle , outputcolumns("`outputcolumns'")
           noi write_and_print_output, h_smcl(`h_smcl') ///
               l1("`r(topline)'") l2("`r(state_titles)'") ///
@@ -689,6 +811,7 @@ end
               dsum1("`r(dsum_c1)'") dsum2("`r(dsum_c2)'") dsumm("`r(dsum_m)'") ///
               loopiteration("`r(loopt)'")
             noi write_and_print_output, h_smcl(`h_smcl') l1("`r(outputline)'")
+			local any_lines_written 1
           }
 
           * Load these lines into pre_line locals for next run
@@ -698,10 +821,19 @@ end
       }
       * End of this data file
       else {
-        * Close the table for his file
-        output_writetitle , outputcolumns("`outputcolumns'")
-        noi write_and_print_output, h_smcl(`h_smcl') ///
-          l1("`r(botline)'") l2(" ")
+	  	* If the table is not empty
+	  	if (`any_lines_written' == 1 ) {
+			* Close the table for his file
+			output_writetitle , outputcolumns("`outputcolumns'")
+			noi write_and_print_output, h_smcl(`h_smcl') ///
+			l1("`r(botline)'") l2(" ")
+		}
+		else {
+			* If the table is empty
+			output_writetitle , outputcolumns("`outputcolumns'")
+			noi write_and_print_output, h_smcl(`h_smcl') ///
+			l1("`r(botline)'") l2("No mismatches and/or changes detected") l3(" ")
+		}
       }
     }
   }
@@ -965,6 +1097,7 @@ end
   program define   print_filetree_and_verbose_title, rclass
     syntax , files(string) h_smcl(string) [verbose] [compact]
     local file_count = 0
+
     foreach file of local files {
       noi write_and_print_output, h_smcl(`h_smcl') ///
         l1(`"{pstd}{c BLC}{hline `++file_count'}> `file'{p_end}"')
