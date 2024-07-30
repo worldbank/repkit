@@ -7,9 +7,14 @@
       global clone "/Users/bbdaniels/GitHub/"
   }
   
+   if "`c(username)'" == "ankritisingh" {
+      global clone "/Users/ankritisingh/GitHub/"
+  }
+  
   local rk "${clone}/repkit"
   
   //ad_sthlp , adfolder("`rk'") commands(repadolog)
   
-  ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline") //ssczip
+  //ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline") //ssczip
   
+  ad_command create reproot_setup, adf("`rk'") pkg(repkit)

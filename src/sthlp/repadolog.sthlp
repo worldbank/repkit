@@ -15,7 +15,7 @@
 {p_end}
 
 {synoptset 16}{...}
-{synopthdr:options}
+{p2coldent:{it:options}}Description{p_end}
 {synoptline}
 {synopt: {bf:{ul:d}etail}}Display one line per command instead of one line per package{p_end}
 {synopt: {bf:{ul:s}ave}}Save the report in the current PLUS folder{p_end}
