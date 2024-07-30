@@ -1,5 +1,5 @@
 * This package file is generated in the adodown workflow. Do not edit directly.
 *** version
-v 1.1
+v 2.2
 *** packages
 p repkit
