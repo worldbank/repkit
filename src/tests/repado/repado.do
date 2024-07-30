@@ -2,6 +2,8 @@
   * TODO: replace with reproot
   local repkit "C:/Users\wb462869\github\repkit\"
   local out    "`repkit'/src/tests/repado/output"
+  cap mkdir 	"`out'"
+  cap mkdir 	"`out'/ado"
 
   * Load the commands
   do "`repkit'/src/ado/repado.ado"
