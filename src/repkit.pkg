@@ -48,6 +48,7 @@ f sthlp/repkit.sthlp
 f ado/stata_linter_detect.py
 f ado/stata_linter_correct.py
 f ado/stata_linter_utils.py
+F ado/reproot.dlg
 
 *** end
 e

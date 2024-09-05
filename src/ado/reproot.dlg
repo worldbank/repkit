@@ -1,0 +1,47 @@
+// https://www.stata.com/manuals13/pdialogprogramming.pdf#pdialogprogramming
+// ----------------- set version number and define size of box ---------
+VERSION 13
+POSITION . . 500 500
+// ------------------------------------------- define a dialog ---------
+DIALOG main, label("reproot - Manage settings file")
+BEGIN
+  TEXT    tx_intro         10 10  450 ., label("Click the ? below for the help file explaining these inputs.")
+
+  GROUPBOX gb_recdepth 10  +30 450 70, label("Default recursion depth:")
+    TEXT    tx_def_rec_depth +10  +20 200 ., label("Set the number of subfolders to search")
+    SPINNER recdepth         @  +20 50  ., option(recursion_depth) min(1) max(25) default(r(recdepth)) nomemory,
+
+  GROUPBOX gb_spath     10 +40 450 220, label("Search paths:")
+    TEXT    tx_spath    +10 +20 200 ., label("Select paths to be included:")
+    CHECKBOX ck_spath1  @  +20 450 ., label(r(spath1_text)) nomemory
+    CHECKBOX ck_spath2  @  +20 450 ., label(r(spath2_text)) nomemory
+    CHECKBOX ck_spath3  @  +20 450 ., label(r(spath3_text)) nomemory
+    CHECKBOX ck_spath4  @  +20 450 ., label(r(spath4_text)) nomemory
+    CHECKBOX ck_spath5  @  +20 450 ., label(r(spath5_text)) nomemory
+
+    TEXT    tx_searchpath @ +30 200 ., label("Add another search path to list:")
+    FILE    searchpath    @ +20 200 ., directory label("Browse . . . ") option(searchpath) nomemory
+    BUTTON  btn_spath     @ +25 60 ., label("Add path")
+
+  GROUPBOX   gb_skipd	 10 +40  450 110, label("Select skip directories")
+    TEXT     tx_skip  +10 +20 200 ., label("Select paths that should never be searched by reproot")
+    CHECKBOX ck_skip1 @   +20 450 ., label(r(skip1_text))
+    CHECKBOX ck_skip2 @   +20 450 ., label(r(skip2_text))
+    CHECKBOX ck_skip3 @   +20 450 ., label(r(skip3_text))
+
+  TEXT    tx_outro    10 +40  450 ., label("Click OK to update the settings file, or click CANCEL to abort.")
+END
+
+// -------------------- define the u-action and helper buttons ---------
+OK ok1, label("OK")
+CANCEL can1, label("Cancel")
+HELP hlp1, view("help reproot")
+// --------------------------- define how to assemble u-action ---------
+PROGRAM command
+  BEGIN
+    put "reproot_output_test2 "
+    beginoptions
+      optionarg main.recdepth
+      optionarg main.searchpath
+    endoptions
+  END
