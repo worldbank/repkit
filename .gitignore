@@ -56,6 +56,9 @@
 !src/stata.toc
 !src/*.pkg
 
+# Python
+!/**/*.py
+
 # Markdown and web docs files
 !/**/*.md
 !src/dev/assets/*.png
