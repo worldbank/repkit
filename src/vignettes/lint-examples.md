@@ -1,5 +1,7 @@
 # lint - Stata command for do file linter
 
+This section presents examples for the `lint` command. For more information on the command, please refer to the [helpfile.](https://github.com/worldbank/repkit/blob/add-linter/src/mdhlp/lint.md)
+
 ## Installation
 
 ### Installing in Stata

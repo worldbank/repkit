@@ -145,7 +145,7 @@ If the option `automatic` is omitted, Stata will prompt the user to confirm that
 
 # Examples
 
-The following examples illustrate the basic usage of lint. Additional examples can be found at XXXXX
+The following examples illustrate the basic usage of lint. Additional examples can be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
  
 ## Detecting bad coding practices
 

@@ -181,7 +181,7 @@
 
 {title:Examples}
 
-{pstd}The following examples illustrate the basic usage of lint. Additional examples can be found at XXXXX
+{pstd}The following examples illustrate the basic usage of lint. Additional examples can be found {browse "https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md":here}
 {p_end}
 
 {dlgtab:Detecting bad coding practices}
