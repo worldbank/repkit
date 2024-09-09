@@ -1,241 +1,268 @@
 {smcl}
-{* 06 Apr 2023}{...}
+{* *! version 2.2 20240730}{...}
 {hline}
-help for {hi:lint}
+{pstd}help file for {hi:lint}{p_end}
 {hline}
 
 {title:Title}
 
-{p 4 4 2}
-
-{cmdab:lint} {hline 2} detects and corrects bad coding practices in Stata do-files following the {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":DIME Analytics Stata Style Guide}.
-
-{p 4 4 2}
-For this command to run, you will need Stata version 16 or greater, Python,
-  and the Python package {browse "https://pandas.pydata.org/":Pandas} installed. {break}
-	To install Python and integrate it with Stata, refer to {browse "https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/":this page}. {break}
-  To install Python packages, refer to {browse "https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/":this page}.
-
-{title:Basic syntax}
-
-{p 4 6 6}
-{cmdab:lint} "{it:input_file}" [using "{it:output_file}"] , [{it:options}]
+{phang}{bf:lint} -  detects and corrects bad coding practices in Stata do-files following the {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":DIME Analytics Stata Style Guide}.
 {p_end}
-{break}
-{p 4 4 2} The lint command can be broken into two functionalities:
-      {break}1. {hi:Detection} identifies bad coding practices in a Stata do-files
-      {break}2. {hi:Correction} corrects bad coding practices in a Stata do-file.
-{p_end}
-{break}
-{p 4 4 6} If an {it:output_file} is specified with {opt using},
-  then the linter will apply the {hi:Correction} functionality and will write
-  a new file with corrections.{break}
-	If not, the command will only apply the {hi:Detection} functionality, returning
-  a report of suggested corrections	and potential issues of the do-file
-  in Stata's Results window.{break}
-  Users should note that not all the bad practices identified in {hi:Detection}
-  can be amended by {hi:Correction}.{p_end}
 
-{marker opts}{...}
-{synoptset 25}{...}
-{synopthdr:Option}
+{phang}For this command to run, you will need Stata version 16 or greater, Python, and the Python package {browse "https://pandas.pydata.org":Pandas} installed.
+{p_end}
+
+{phang}To install Python and integrate it with Stata, refer to {browse "https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/":this page}.
+{p_end}
+
+{phang}To install Python packages, refer to {browse "https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/":this page}.
+{p_end}
+
+{title:Syntax}
+
+{phang}{bf:lint} {c 34}{it:input_file}{c 34} [using {c 34}{it:output_file}{c 34}] , [{it:options}]
+{p_end}
+
+{phang}The lint command can be broken into two functionalities:
+{p_end}
+
+{phang}1. {bf:Detection} identifies bad coding practices in a Stata do-files
+{p_end}
+
+{phang}2. {bf:Correction} corrects bad coding practices in a Stata do-file.
+{p_end}
+
+{phang}If an {it:output_file} is specified with {bf:using}, then the linter will apply the {bf:Correction} functionality and will write a new file with corrections. If not, the command will only apply the {bf:Detection} functionality, returning a report of suggested corrections and potential issues of the do-file in Stata{c 39}s Results window. Users should note that not all the bad practices identified in {bf:Detection} can be amended by {bf:Correction}.
+{p_end}
+
+{synoptset 16}{...}
+{p2coldent:{it:options}}Description{p_end}
+{synoptline}
+{synopt: {bf:{ul:v}erbose}}Report bad practices and issues found on each line of the do-file.{p_end}
+{synopt: {bf:{ul:nosum}mary}}Suppress summary table of bad practices and potential issues.{p_end}
+{synopt: {bf:{ul:i}ndent}({it:integer})}Number of whitespaces used when checking indentation coding practices (default: 4).{p_end}
+{synopt: {bf:{ul:s}pace}({it:integer})}Number of whitespaces used instead of hard tabs when checking indentation practices (default: same as indent).{p_end}
+{synopt: {bf:{ul:l}inemax}({it:integer})}Maximum number of characters in a line when checking line extension practices (default: 80).{p_end}
+{synopt: {bf:{ul:e}xcel}({it:filename})}Save an Excel file of line-by-line results.{p_end}
+{synopt: {bf:force}}Allow the output file name to be the same as the name of the input file; overwriting the original do-file. {bf:The use of this option is not recommended} because it is slightly possible that the corrected do-file created by the command will break something in your code and you should always keep a backup of it.{p_end}
+{synopt: {bf:{ul:auto}matic}}Correct all bad coding practices without asking if you want each bad coding practice to be corrected or not.  By default, the command will ask the user about each correction interactively after producing the summary report.{p_end}
+{synopt: {bf:replace}}Overwrite any existing {it:output} file.{p_end}
 {synoptline}
 
-{synopt :{cmdab:v:erbose}}Report bad practices and issues found on each line of the do-file.{p_end}
-{synopt :{cmdab:nosum:mary}}Suppress summary table of bad practices and potential issues.{p_end}
-{synopt :{cmdab:i:ndent(}{it:integer}{cmd:)}}Number of whitespaces used when checking indentation coding practices (default: 4).{p_end}
-{synopt :{cmdab:s:pace(}{it:integer}{cmd:)}}Number of whitespaces used instead of hard tabs when checking indentation practices (default: same as {it:indent}).{p_end}
-{synopt :{cmdab:l:inemax(}{it:integer}{cmd:)}}Maximum number of characters in a line when checking line extension practices (default: 80).{p_end}
-{synopt :{cmdab:e:xcel(}{it:{help filename}}{cmd:)}}Save an Excel file of line-by-line results.{p_end}
-{synopt :{cmdab:force}}Allow the output file name to be the same as the name of the input file;
-  overwriting the original do-file. {hi:The use of this option is not recommended} because it is
-  slightly possible that the corrected do-file created by the command will break something
-  in your code and you should always keep a backup of it.{p_end}
-{synopt :{cmdab:auto:matic}}Correct all bad coding practices without asking
-  if you want each bad coding practice to be corrected or not.
-	By default, the command will ask the user about each correction interactively
-	after producing the summary report.{p_end}
-{synopt :{cmdab:replace}}Overwrite any existing {it:output} file.{p_end}
+{title:Description}
 
-{synoptline}
+{dlgtab:Detect functionality}
 
+{pstd}{bf:Bad style practices and potential issues detected:}
+{p_end}
 
-{title:{it:Detect} functionality: Bad style practices and potential issues detected}
+{pstd}{bf:Use whitespaces instead of hard tabs}
+{p_end}
 
-{pstd}{hi:Use whitespaces instead of hard tabs}
-{break}
-Use whitespaces (usually 2 or 4) instead of hard tabs.
+{pstd}- Use whitespaces (usually 2 or 4) instead of hard tabs.
+{p_end}
 
-{pstd}{hi:Avoid abstract index names}
-{break}
-In for-loop statements, index names should describe what the code is looping over.
-For example, avoid writing code like this:
+{pstd}{bf:Avoid abstract index names}
+{p_end}
 
-{pmore}{input:foreach i of varlist cassava maize wheat {  }}
+{pstd}- In for-loop statements, index names should describe what the code is looping over. For example, avoid writing code like this:
+{p_end}
 
-{pstd}Instead, looping commands should name the index local descriptively:
+{input}{space 8}  foreach i of varlist cassava maize wheat { }
+{text}
+{pstd}- Instead, looping commands should name the index local descriptively:
+{p_end}
 
-{pmore}{input:foreach crop of varlist cassava maize wheat {  }}
+{input}{space 8}  foreach crop of varlist cassava maize wheat { }
+{text}
+{pstd}{bf:Use proper indentations}
+{p_end}
 
-{pstd}{hi:Use proper indentations}
-{break}
-After declaring for-loop statements or if-else statements, add indentation with
-whitespaces (usually 2 or 4) in the lines inside the loop.
+{pstd}- After declaring for-loop statements or if-else statements, add indentation with whitespaces (usually 2 or 4) in the lines inside the loop.
+{p_end}
 
-{pstd}{hi:Use indentations after declaring newline symbols (///)}
-{break}
-After a new line statement (///), add indentation (usually 2 or 4 whitespaces).
+{pstd}{bf:Use indentations after declaring newline symbols (///)}
+{p_end}
 
-{pstd}{hi:Use the "{cmdab:!missing()}" function for conditions with missing values}
-{break}
-For clarity, use {cmdab:!missing(var)} instead of {cmdab:var < .} or {cmdab:var != .}
+{pstd}- After a new line statement (///), add indentation (usually 2 or 4 whitespaces).
+{p_end}
 
-{pstd}{hi:Add whitespaces around math symbols ({cmdab:+, =, <, >})}
-{break}
-For better readability, add whitespaces around math symbols.
-For example, do {cmdab:gen a = b + c if d == e} instead of {cmdab:gen a=b+c if d==e}.
+{pstd}{bf:Use the {c 34}!missing(){c 34} function for conditions with missing values}
+{p_end}
 
-{pstd}{hi:Specify the condition in an "if" statement}
-{break}
-Always explicitly specify the condition in the if statement.
-For example, declare {cmdab:if var == 1} instead of just using {cmdab:if var}.
+{pstd}- For clarity, use {inp:!missing(var)} instead of {inp:var < .} or {inp:var != .} 
+{p_end}
 
-{pstd}{hi:Do not use "{cmdab:#delimit}", instead use "///" for line breaks}
-{break}
-More information about the use of line breaks {browse "https://worldbank.github.io/dime-data-handbook/coding.html#line-breaks":here}.
+{pstd}{bf:Add whitespaces around math symbols (+, =, <, >)}
+{p_end}
 
-{pstd}{hi:Do not use cd to change current folder}
-{break}
-Use absolute and dynamic file paths. More about this {browse "https://worldbank.github.io/dime-data-handbook/coding.html#writing-file-paths":here}.
+{pstd}- For better readability, add whitespaces around math symbols.  For example, do {inp:gen a = b + c if d == e} instead of {inp:gen a=b+c if d==e}. 
+{p_end}
 
-{pstd}{hi:Use line breaks in long lines}
-{break}
-For lines that are too long, use {cmdab:///} to divide them into multiple lines.
-It is recommended to restrict the number of characters in a line to 80 or less.
+{pstd}{bf:Specify the condition in an {c 34}if{c 34} statement}
+{p_end}
 
-{pstd}{hi:Use curly brackets for global macros}
-{break}
-Always use {cmdab:${ }} for global macros.
-For exmaple, use {cmdab:${global_name}} instead of {cmdab:$global_name}.
+{pstd}- Always explicitly specify the condition in the if statement.  For example, declare {inp:if var == 1} instead of just using {inp:if var}. 
+{p_end}
 
-{pstd}{hi:Include missing values in condition expressions}
-{break}
-Condition expressions like {cmdab:var != 0} or {cmdab:var > 0} are evaluated to true for missing values.
-Make sure to explicitly take missing values into account by using {cmdab:missing(var)} in expressions.
+{pstd}{bf:Do not use {c 34}#delimit{c 34}, instead use {c 34}///{c 34} for line breaks}
+{p_end}
 
-{pstd}{hi:Check if backslashes are not used in file paths}
-{break}
-Check if backslashes ({cmdab:\}) are not used in file paths.
-If you are using them, then replace them with forward slashes ({cmdab:/}).
-Users should note that the linter might not distinguish perfectly which uses of
-a backslash are file paths. In general, this flag will come up every time a
-backslash is used in the same line as a local, glocal, or the {it:cd} command.
+{pstd}- More information about the use of line breaks {browse "https://worldbank.github.io/dime-data-handbook/coding.html#line-breaks":here}.
+{p_end}
 
-{pstd}{hi:Check if tildes (~) are not used for negations}
-{break}
-If you are using tildes ({cmdab:~}) are used for negations, replace them with bangs ({cmdab:!}).
+{pstd}{bf:Do not use cd to change current folder}
+{p_end}
 
-{title:{it:Correct} functionality: coding practices to be corrected}
+{pstd}- Use absolute and dynamic file paths. More about this {browse "https://worldbank.github.io/dime-data-handbook/coding.html#writing-file-paths":here}.
+{p_end}
 
-{p 4 4 2}
-Users should note that the {it:Correct} feature does not correct all the bad practices detected.
-It only corrects the following:
+{pstd}{bf:Use line breaks in long lines}
+{p_end}
 
-{pstd}- Replaces the use of {cmdab:#delimit} with three forward slashes ({cmdab:///}) in each line affected by {cmdab:#delimit}
+{pstd}- For lines that are too long, use {inp:///} to divide them into multiple lines.  It is recommended to restrict the number of characters in a line to 80 or less. 
+{p_end}
 
-{pstd}- Replaces hard tabs with soft spaces (4 by default). The amount of spaces can be set with the {cmdab:tab_space()} option
+{pstd}{bf:Use curly brackets for global macros}
+{p_end}
 
-{pstd}- Indents lines inside curly brackets with 4 spaces by default. The amount of spaces can be set with the {cmdab:indent()} option
+{pstd}- Always use {inp:} for global macros.  For example, use {inp:} instead of {inp:}. 
+{p_end}
 
-{pstd}- Breaks long lines into multiple lines. Long lines are considered to have more than 80 characters by default,
-but this setting can be changed with the option {cmdab:linemax()}.
-Note that lines can only be split in whitespaces that are not inside
-parentheses, curly brackets, or double quotes. If a line does not have any
-whitespaces, the linter will not be able to break a long line.
+{pstd}{bf:Include missing values in condition expressions}
+{p_end}
+
+{pstd}- Condition expressions like {inp:var != 0} or {inp:var > 0} are evaluated to true for missing values. Make sure to explicitly take missing values into account by using {inp:missing(var)} in expressions. 
+{p_end}
+
+{pstd}{bf:Check if backslashes are not used in file paths}
+{p_end}
+
+{pstd}- Check if backslashes {inp:(%} are not used in file paths. If you are using them, then replace them with forward slashes {inp:(/)}. Users should note that the linter might not distinguish perfectly which uses of a backslash are file paths. In general, this flag will come up every time a backslash is used in the same line as a local, glocal, or the cd command. 
+{p_end}
+
+{pstd}{bf:Check if tildes (~) are not used for negations}
+{p_end}
+
+{pstd}- If you are using tildes {inp:(~)} are used for negations, replace them with bangs {inp:(!)}. 
+{p_end}
+
+{dlgtab:Correct functionality}
+
+{pstd}{bf:Coding practices to be corrected:}
+{p_end}
+
+{pstd}Users should note that the Correct feature does not correct all the bad practices detected.  It only corrects the following:
+{p_end}
+
+{pstd}- Replaces the use of {inp:#delimit} with three forward slashes {inp:(///)} in each line affected by {inp:#delimit} 
+{p_end}
+
+{pstd}- Replaces hard tabs with soft spaces (4 by default). The amount of spaces can be set with the {inp:tab_space()} option 
+{p_end}
+
+{pstd}- Indents lines inside curly brackets with 4 spaces by default. The amount of spaces can be set with the {inp:indent()} option 
+{p_end}
+
+{pstd}- Breaks long lines into multiple lines. Long lines are considered to have more than 80 characters by default, but this setting can be changed with the option {inp:linemax()}.  Note that lines can only be split in whitespaces that are not inside parentheses, curly brackets, or double quotes. If a line does not have any whitespaces, the linter will not be able to break a long line. 
+{p_end}
 
 {pstd}- Adds a whitespace before opening curly brackets, except for globals
+{p_end}
 
 {pstd}- Removes redundant blank lines after closing curly brackets
+{p_end}
 
 {pstd}- Removes duplicated blank lines
+{p_end}
 
-{p 4 4 2}
-If the option {cmdab:automatic} is omitted, Stata will prompt the user to confirm that
-they want to correct each of these bad practices only in case they are detected.
-If none of these are detected, it will show a message saying that none of the
-bad practices it can correct were detected.
+{pstd}If the option {inp:automatic} is omitted, Stata will prompt the user to confirm that they want to correct each of these bad practices only in case they are detected.  If none of these are detected, it will show a message saying that none of the bad practices it can correct were detected. 
+{p_end}
 
-{marker exa}
 {title:Examples}
 
-{p 4 4 2}
-The following examples illustrate the basic usage of {cmd:lint}.
-Additional examples can be found at
-{browse "https://github.com/worldbank/stata-linter/"}.
+{pstd}The following examples illustrate the basic usage of lint. Additional examples can be found at XXXXX
+{p_end}
 
-{pstd}{hi:1. Detecting bad coding practices}
+{dlgtab:Detecting bad coding practices}
 
-{p 4 4 2} The basic usage is to point to a do-file that requires revision as follows:
+{pstd}The basic usage is to point to a do-file that requires revision as follows:
+{p_end}
 
-        {com}. lint "test/bad.do"
+{input}{space 8}lint "test/bad.do"
+{text}
+{pstd}For the detection feature you can use all the options but {it:automatic}, {it:force}, and {it:replace}, which are part of the correction functionality.
+{p_end}
 
-{p 4 4 2} For the detection feature you can use all the options but {it:automatic}, {it:force}, and {it:replace}, which are part of the correction functionality.
+{pstd}{bf:{ul:Options:}}
+{p_end}
 
-        Options:
+{pstd}1. Show bad coding practices line-by-line
+{p_end}
 
-        1. Show bad coding practices line-by-line
-        {com}. lint "test/bad.do", verbose
+{input}{space 8}lint "test/bad.do", verbose
+{text}
+{pstd} 2. Remove the summary of bad practices
+{p_end}
 
-        2. Remove the summary of bad practices
-        {com}. lint "test/bad.do", nosummary
+{input}{space 8}lint "test/bad.do", nosummary
+{text}
+{pstd}3. Specify the number of whitespaces used for detecting indentation practices (default: 4):
+{p_end}
 
-        3. Specify the number of whitespaces used for detecting indentation practices (default: 4):
-        {com}. lint "test/bad.do", indent(2)
+{input}{space 8}lint "test/bad.do", indent(2)
+{text}
+{pstd}4. Specify the number of whitespaces used instead of hard tabs for detecting indentation practices (default: same value used in indent):
+{p_end}
 
-        4. Specify the number of whitespaces used instead of hard tabs for detecting indentation practices (default: same value used in {it:indent}):
-        {com}. lint "test/bad.do", tab_space(6)
+{input}{space 8}lint "test/bad.do", tab_space(6)
+{text}
+{pstd}5. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
+{p_end}
 
-        5. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
-        {com}. lint "test/bad.do", linemax(100)
+{input}{space 8}lint "test/bad.do", linemax(100)
+{text}
+{pstd}6. Export to Excel the results of the line by line analysis
+{p_end}
 
-        6. Export to Excel the results of the line by line analysis
-        {com}. lint "test/bad.do", excel("test_dir/detect_output.xlsx")
+{input}{space 8}lint "test/bad.do", excel("test_dir/detect_output.xlsx")
+{text}
+{pstd}7. You can also use this command to test all the do-files in a folder:
+{p_end}
 
-        7. You can also use this command to test all the do-files in a folder:
-        {com}. lint "test/"
+{input}{space 8}lint "test/"
+{text}
+{dlgtab:Correcting bad coding practices}
 
-{pstd}{hi:2. Correcting bad coding practices}
+{pstd}The basic usage of the correction feature requires to specify the input do-file and the output do-file that will have the corrections. If you do not include any options, the linter will ask you confirm if you want a specific bad practice to be corrected for each bad practice detected:
+{p_end}
 
-{p 4 4 2} The basic usage of the correction feature requires to specify the input do-file
-and the output do-file that will have the corrections.
-If you do not include any options, the linter will ask you confirm if you want a specific bad practice to be corrected
-for each bad practice detected:
+{pstd}1. Basic correction use (the linter will ask what to correct):
+{p_end}
 
-        1. Basic correction use (the linter will ask what to correct):
-        {com}. lint "test/bad.do" using "test/bad_corrected.do"
+{input}{space 8}lint "test/bad.do" using "test/bad_corrected.do"
+{text}
+{pstd}2. Automatic use (Stata will correct the file automatically):
+{p_end}
 
-        2. Automatic use (Stata will correct the file automatically):
-        {com}. lint "test/bad.do" using "test/bad_corrected.do", automatic
+{input}{space 8}lint "test/bad.do" using "test/bad_corrected.do", automatic
+{text}
+{pstd}3. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
+{p_end}
 
-        3. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
-        {com}. lint "test/bad.do" using "test/bad.do", automatic force
+{input}{space 8}lint "test/bad.do" using "test/bad.do", automatic force
+{text}
+{pstd}4. Replace the output file if it already exists
+{p_end}
 
-        4. Replace the output file if it already exists
-        {com}. lint "test/bad.do" using "test/bad_corrected.do", automatic replace
+{input}{space 8}lint "test/bad.do" using "test/bad_corrected.do", automatic replace
+{text}
+{title:Feedback, bug reports and contributions}
 
-{title:Acknowledgements}
-
-{phang}This work is a product of the initial idea and work of Mizuhiro Suzuki.
-  Rony Rodriguez Ramirez, Luiza Cardoso de Andrade and Luis Eduardo San Martin also contributed to this command,
-  and Kristoffer Bjärkefur and Benjamin B. Daniels provided comments and code reviews.
+{pstd}Read more about these commands on {browse "https://github.com/worldbank/repkit":this repo} where this package is developed. Please provide any feedback by {browse "https://github.com/worldbank/repkit/issues":opening an issue}. PRs with suggestions for improvements are also greatly appreciated.
+{p_end}
 
 {title:Authors}
 
-{phang}This command was developed by DIME Analytics at DIME, The World Bank's department for Development Impact Evaluations.
-
-{phang}Please send bug reports, suggestions, and requests for clarifications
-  writing "Stata linter" in the subject line to:{break}
-  dimeanalytics@worldbank.org
-
-{phang}You can also see the code, make comments to the code, see the version
-		 history of the code, and submit additions or edits to the code through {browse "https://github.com/worldbank/stata-linter":the GitHub repository of this package}.{p_end}
+{pstd}DIME Analytics, The World Bank dimeanalytics@worldbank.org
+{p_end}
