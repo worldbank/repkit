@@ -24,6 +24,7 @@ d
 d Distribution-Date: 20240730
 d
 *** adofiles
+f ado/lint.ado
 f ado/reproot_setup.ado
 f ado/repadolog.ado
 f ado/reproot_search.ado
@@ -35,6 +36,7 @@ f ado/repado.ado
 f ado/repkit.ado
 
 *** helpfiles
+f sthlp/lint.sthlp
 f sthlp/reproot_setup.sthlp
 f sthlp/repadolog.sthlp
 f sthlp/reproot.sthlp
@@ -43,6 +45,9 @@ f sthlp/repado.sthlp
 f sthlp/repkit.sthlp
 
 *** ancillaryfiles
+f ado/stata_linter_detect.py
+f ado/stata_linter_correct.py
+f ado/stata_linter_utils.py
 
 *** end
 e
