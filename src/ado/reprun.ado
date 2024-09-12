@@ -130,21 +130,31 @@ qui {
     output_writetitle , outputcolumns("`outputcolumns'")
     noi write_and_print_output, h_smcl(`h_smcl') ///
       l1(`"{phang}Done checking file:{p_end}"') ///
-      l2(`"{pstd}{c BLC}{hline 1}> `dofile'{p_end}"') l3("{hline}")
+      l2(`"{pstd}{c BLC}{hline 1}> `dofile'{p_end}"') l3("{hline}")		
+	  
+	if "`mmmflag'" != "" {
+		noi write_and_print_output, h_smcl(`h_smcl') ///
+		l1(" ") ///
+		l2(`"{pstd}{red:Reproducibility Warning:} Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"') ///
+		l3(`"{pstd}As the {mansection D merge:Stata Manual} says: {it:if you think you need to perform an m:m merge, then we suspect you are wrong}.{p_end}"') ///
+		l4(`"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"')
+		
+	}
+	
+	if "`sssflag'" != "" {
+		noi write_and_print_output, h_smcl(`h_smcl') ///
+		l1(" ") ///
+		l2(`"{pstd}{red:Reproducibility Warning:} Your code set the sortseed on lines:`sssflag'.{p_end}"') ///
+		l3(`"{pstd}As the {mansection D sort:Stata Manual} says: {it:You must be sure that the ordering really does not matter. If that is the case, then why did you sort in the first place?}{p_end}"') ///
+		l4(`"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"')
+		
+	}  
+
+	
+
+	  
+	  
     file close `h_smcl'
-
-    if "`mmmflag'" != "" {
-      noi di as res `"{pstd}{red:Reproducibility Warning:} Your code contains many-to-many merges on lines:`mmmflag'.{p_end}"'
-      noi di as res `"{pstd}As the {mansection D merge:Stata Manual} says: {it:if you think you need to perform an m:m merge, then we suspect you are wrong}.{p_end}"'
-      noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
-    }
-
-    if "`sssflag'" != "" {
-      noi di as res `" "'
-      noi di as res `"{pstd}{red:Reproducibility Warning:} Your code set the sortseed on lines:`sssflag'.{p_end}"'
-      noi di as res `"{pstd}As the {mansection D sort:Stata Manual} says: {it:You must be sure that the ordering really does not matter. If that is the case, then why did you sort in the first place?}{p_end}"'
-      noi di as res `"{pstd}Reference the above section of the Stata Manual for troubleshooting.{p_end}"'
-    }
 
   /*****************************************************************************
         Write smcl file to disk and clean up intermediate files unless debugging

@@ -36,6 +36,9 @@
 * In repkit, ignore reproot files in test files
 /**/tests/**/reproot.yaml
 
+* in reprun, unignore the images folder
+!src/vignettes/img/*.png
+
 #######################
 # For performance reasons, if a folder is already ignored, then
 # GitHub does not check the content for that folder for matches
