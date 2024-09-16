@@ -1,35 +1,80 @@
 // https://www.stata.com/manuals13/pdialogprogramming.pdf#pdialogprogramming
 // ----------------- set version number and define size of box ---------
 VERSION 13
-POSITION . . 500 500
+POSITION . . 500 400
 // ------------------------------------------- define a dialog ---------
-DIALOG main, label("reproot - Manage settings file")
+DIALOG overview, label("reproot - Manage settings file") tabtitle("Overview")
 BEGIN
-  TEXT    tx_intro         10 10  450 ., label("Click the ? below for the help file explaining these inputs.")
+  TEXT    tx_title1 10  20 450 ., label("REPROOT")
+  TEXT    tx_title2 @  +20 @   ., label("Manage the settings file with this wizard")
 
-  GROUPBOX gb_recdepth 10  +30 450 70, label("Default recursion depth:")
-    TEXT    tx_def_rec_depth +10  +20 200 ., label("Set the number of subfolders to search")
-    SPINNER recdepth         @  +20 50  ., option(recursion_depth) min(1) max(25) default(r(recdepth)) nomemory,
+  TEXT    tx_body1  @  +30 @   ., label("This dialog box helps you set up the environment required to use reproot.")
+  TEXT    tx_body2  @  +20 @   ., label("Click through the tabs above to specify the settings to be included in the settings file.")
 
-  GROUPBOX gb_spath     10 +40 450 220, label("Search paths:")
-    TEXT    tx_spath    +10 +20 200 ., label("Select paths to be included:")
-    CHECKBOX ck_spath1  @  +20 450 ., label(r(spath1_text)) nomemory
-    CHECKBOX ck_spath2  @  +20 450 ., label(r(spath2_text)) nomemory
-    CHECKBOX ck_spath3  @  +20 450 ., label(r(spath3_text)) nomemory
-    CHECKBOX ck_spath4  @  +20 450 ., label(r(spath4_text)) nomemory
-    CHECKBOX ck_spath5  @  +20 450 ., label(r(spath5_text)) nomemory
+  TEXT    tx_outro1 @  +40 @   ., label("Click CANCEL to abort at any time. Click OK to write (or overwrite) the settings file.")
+  TEXT    tx_outro2 @  +40 @   ., label("Click the ? below to read the helpfile explaining these inputs.")
+END
 
-    TEXT    tx_searchpath @ +30 200 ., label("Add another search path to list:")
-    FILE    searchpath    @ +20 200 ., directory label("Browse . . . ") option(searchpath) nomemory
-    BUTTON  btn_spath     @ +25 60 ., label("Add path")
+DIALOG recdepth, label("reproot - Manage settings file") tabtitle("Recurse depth")
+BEGIN
 
-  GROUPBOX   gb_skipd	 10 +40  450 110, label("Select skip directories")
-    TEXT     tx_skip  +10 +20 200 ., label("Select paths that should never be searched by reproot")
-    CHECKBOX ck_skip1 @   +20 450 ., label(r(skip1_text))
-    CHECKBOX ck_skip2 @   +20 450 ., label(r(skip2_text))
-    CHECKBOX ck_skip3 @   +20 450 ., label(r(skip3_text))
+  // Default search dept tab
+  GROUPBOX gb_rd_desc  10  10 450 70, label("Description:")
+    TEXT   tx_rd_1     +10 +20 400 . , label("This sets the default number of subfolders to search in each search path.")
+    TEXT   tx_rd_2      @  +20 400 . , label("This value is used for all search paths that does not has it own value.")
 
-  TEXT    tx_outro    10 +40  450 ., label("Click OK to update the settings file, or click CANCEL to abort.")
+  TEXT    tx_rdl_1      10 +40 200 . , label("Set the default search depth:")
+  SPINNER recdepth      @  +25 50  . , option(recursion_depth) min(1) max(25) default(r(recdepth)) nomemory
+
+END
+
+// Default search dept tab
+DIALOG searchpaths, label("reproot - Manage settings file") tabtitle("Search Paths")
+BEGIN
+
+  // Default search dept tab
+  GROUPBOX gb_sd_desc  10  10 450 50, label("Description:")
+    TEXT   tx_sp_1     +10 +20 400 . , label("This sets the paths reproot will search for root files.")
+
+  GROUPBOX gb_spath      10 +35 450 190, label("Select the search paths to be included:")
+    CHECKBOX ck_spath1  +10 +20 450 ., label(r(spath1_text)) nomemory
+    CHECKBOX ck_spath2   @  +20 450 ., label(r(spath2_text)) nomemory
+    CHECKBOX ck_spath3   @  +20 450 ., label(r(spath3_text)) nomemory
+    CHECKBOX ck_spath4   @  +20 450 ., label(r(spath4_text)) nomemory
+    CHECKBOX ck_spath5   @  +20 450 ., label(r(spath5_text)) nomemory
+    CHECKBOX ck_spath6   @  +20 450 ., label(r(spath6_text)) nomemory
+    CHECKBOX ck_spath7   @  +20 450 ., label(r(spath7_text)) nomemory
+    CHECKBOX ck_spath8   @  +20 450 ., label(r(spath8_text)) nomemory
+
+
+  TEXT    tx_searchpath 10 +40 200 ., label("Add another search path:")
+  FILE    searchpath    @  +20 400 ., directory label("Browse . . . ") option(searchpath) nomemory
+  TEXT    tx_sp_rd1     10 +20 200 ., label("Search depth specific to this search path (optional)")
+  SPINNER sp_recdepth   @  +25 50  ., option(sp_rd) min(0) max(25) default(0) nomemory
+  BUTTON  btn_spath     @  +25 60  ., label("Add path")
+
+END
+
+// Default search dept tab
+DIALOG skippaths, label("reproot - Manage settings file") tabtitle("Skip Paths")
+BEGIN
+
+  // Default search dept tab
+  GROUPBOX gb_skip_desc  10  10 450 50, label("Description:")
+    TEXT   tx_skip_1      +10 +20 400 . , label("This sets the folder names that reproot always should skip.")
+
+  GROUPBOX   gb_skipd	 10 +35 450 150, label("Select paths that should never be searched by reproot:")
+    CHECKBOX ck_skip1 +10 +20 450 ., label(r(skip1_text))
+    CHECKBOX ck_skip2  @  +20 450 ., label(r(skip2_text))
+    CHECKBOX ck_skip3  @  +20 450 ., label(r(skip3_text))
+    CHECKBOX ck_skip4  @  +20 450 ., label(r(skip4_text))
+    CHECKBOX ck_skip5  @  +20 450 ., label(r(skip5_text))
+    CHECKBOX ck_skip6  @  +20 450 ., label(r(skip6_text))
+
+  TEXT    tx_skippath  10 +40 200 ., label("Add another skip folder to list:")
+  FILE    skippath     @  +20 400 ., directory label("Browse . . . ") option(skippath) nomemory
+  BUTTON  btn_skippath @  +25 100 ., label("Add skip folder")
+
 END
 
 // -------------------- define the u-action and helper buttons ---------
