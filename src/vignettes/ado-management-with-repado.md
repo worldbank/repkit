@@ -372,7 +372,7 @@ is tracked in the repository, this difference becomes less significant.
 * Set user root folder
 global root "C:\Users\user123\github\myproject"
 
-* Set PLUS to adopath and list it first, then list BASE first.
+* Set the project adopath as an unnamed path and list it first, then list BASE first.
 * This means that BASE is first and PLUS is second.
 adopath ++  "${root}/code/ado"
 adopath ++  BASE
