@@ -1,4 +1,4 @@
-*! version 2.2 20240730 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.0 20240923 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   repkit
     program define repkit, rclass
@@ -6,8 +6,8 @@ cap program drop   repkit
     version 14.1
 
     * UPDATE THESE LOCALS FOR EACH NEW VERSION PUBLISHED
-    local version "2.2" 
-    local versionDate "20240730" 
+    local version "3.0" 
+    local versionDate "20240923" 
     local cmd    "repkit"
 
   	syntax [anything]

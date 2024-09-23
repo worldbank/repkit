@@ -1,9 +1,9 @@
-*! version 1.02  06apr2023  DIME Analytics dimeanalytics@worldbank.org
+*! version 3.0 20240923 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 capture program drop lint
 		program 	 lint
 
-  version 16
+    version 14.1
 
   syntax anything [using/],        	///
 									/// Options
