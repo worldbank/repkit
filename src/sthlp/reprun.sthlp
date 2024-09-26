@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 2.2 20240730}{...}
+{* *! version 3.0 20240923}{...}
 {hline}
 {pstd}help file for {hi:reprun}{p_end}
 {hline}
@@ -73,6 +73,14 @@
 {dlgtab:Other options}
 
 {pstd}By default, {bf:reprun} invokes {bf:clear} and {bf:set seed 12345} to match the default Stata state before beginning Run 1. {bf:{ul:noc}lear} prevents this behavior. It is not recommended unless you have a rare issue that you need to check at the very beginning of the file, because most projects should very quickly set these states appropriately for reproducibility.
+{p_end}
+
+{dlgtab:Note on Reproducibility of certain commands}
+
+{pstd}{inp:by} and {inp:bysort}: Users will often use {inp:by} and {inp:bysort} or equivalent commands to produce “group-level” statistics. The syntax used is usually something like {inp:bysort groupvarname : egen newvarname = function(varlist)}. However, we note that such an approach necessarily introduces an instability in the sort order within each group. {inp:reprun} will flag these instances as indeterminate sorts, since they can introduce issues later in the code when code is order-dependent; and will do so right away, for functions like {inp:rank()} or other approaches like {inp:bysort groupvarname : egen newvarname = n}. To avoid this, and to write truly reproducible code, users should use the less common but fully reproducible unique sorting syntax of {inp:bysort groupvarname (uniqueidvar) ...} to ensure a unique sort with by-able commands. For commands with {inp:by()} options, users should check whether this syntax is available, or remember to re-sort uniquely before any further processes are done. If {inp:bysort} or the equivalent is called in intermediate or user-written commands that cannot be made to return the data sorted uniquely, those lines will continue to be flagged by ‘reprun‘. There is not a technical solution to this, to the best of our knowledge; therefore, the flag will remain as a reminder that the user should implement a unique sort after the indicated lines. 
+{p_end}
+
+{pstd}{inp:merge m:m} and {inp:set sortseed}: These commands will be flagged interactively by {inp:reprun} with warnings following the results table, regardless of whether any instability is obviously introduced according to the Stata RNG states. This is because {inp:merge m:m} and {inp:set sortseed}, while they often appear to work reproducibly, generally have the function of creating false stability that masks underlying issues in the code. In the case of {inp:merge m:m}, the data that is produced is always sort-dependent in both datasets, and almost always meaningless as a result. In the case of {inp:set sortseed}, the command often works to hide an instability in the underlying code that is sort-dependent. Users should instead remove all instances of these commands, and fix whatever issues in the process are causing their results to depend on the (indeterminate) sort order of the data 
 {p_end}
 
 {title:Examples}
