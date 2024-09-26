@@ -51,7 +51,7 @@ reprun "path/to/folder/myfile1.do"
 
 A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called `/reprun/` in the same location as "_myfile1.do_" and will look like:
 
-```stata
+```
 --------------------------------------------------------------------------------------------------------------
     reprun output created by user wb558768 at 26 Sep 2024 11:24:39
     Operating System PC (64-bit x86-64) Windows 64-bit
@@ -86,7 +86,7 @@ gen group = runiform() < .5
 
 Running the reproducibility check on the modified do-file using `reprun` will confirm that there are no mismatches in Stata state between Run 1 and Run 2:
 
-```stata
+```
 ------------------------------------------------------------------------------------------------------------
     reprun output created by user wb558768 at 26 Sep 2024 11:29:35
     Operating System PC (64-bit x86-64) Windows 64-bit
@@ -117,8 +117,7 @@ reprun "path/to/folder/myfile1.do", verbose
 
 In addition to the output in Example 3, it will also report line 2 for **changes** in "sort order RNG" and "data checksum:
 
-```stata
-
+```
 -------------------------------------------------------------------------------------------------------------
     reprun output created by user wb558768 at 26 Sep 2024 11:26:38
     Operating System PC (64-bit x86-64) Windows 64-bit
@@ -158,7 +157,7 @@ reprun "path/to/folder/myfile2.do"
 
 In "_myfile2.do_", Line 2 sorts the data by the non-unique variable `mpg`, causing the sort order to vary between runs. This results in a mismatch in the "sort order RNG". Consequently, Line 2 and Line 3 (`gen sequence = _n`) will be flagged for "data checksum" mismatches due to the differences in sort order, leading to discrepancies in the generated `sequence` variable, as shown in the results below:
 
-```stata
+```
 -------------------------------------------------------------------------------------------------------------
     reprun output created by user wb558768 at 26 Sep 2024 11:27:34
     Operating System PC (64-bit x86-64) Windows 64-bit
@@ -198,7 +197,7 @@ reprun "path/to/folder/myfile2.do", compact
 
 The output will be similar to Example 5, except that line 3 will no longer be flagged for "data checksum":
 
-```stata
+```
 -------------------------------------------------------------------------------------------------------------
     reprun output created by user wb558768 at 26 Sep 2024 11:30:59
     Operating System PC (64-bit x86-64) Windows 64-bit
@@ -235,7 +234,7 @@ reprun ""path/to/folder/main.do"
 
 `reprun` on "_main.do_" performs reproducibility checks across "_main.do_", as well as "_myfile1.do_", and "_myfile2.do_" and the result will look like:
 
-```stata
+```
 ------------------------------------------------------------------------------------------------------------
     reprun output created by user wb558768 at 26 Sep 2024 11:33:05
     Operating System PC (64-bit x86-64) Windows 64-bit
