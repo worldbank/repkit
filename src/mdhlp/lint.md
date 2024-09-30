@@ -1,12 +1,6 @@
 # Title
 
-__lint__ -  detects and corrects bad coding practices in Stata do-files following the [DIME Analytics Stata Style Guide](https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide).
-
-For this command to run, you will need Stata version 16 or greater, Python, and the Python package [Pandas](https://pandas.pydata.org) installed.
-
-To install Python and integrate it with Stata, refer to [this page](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/).
-
-To install Python packages, refer to [this page](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/).
+__lint__ - detects and corrects bad coding practices in Stata do-files.
 
 # Syntax
 
@@ -20,23 +14,25 @@ The lint command can be broken into two functionalities:
 
 If an _output_file_ is specified with __using__, then the linter will apply the __Correction__ functionality and will write a new file with corrections. If not, the command will only apply the __Detection__ functionality, returning a report of suggested corrections and potential issues of the do-file in Stata's Results window. Users should note that not all the bad practices identified in __Detection__ can be amended by __Correction__.
 
+For this command to run, you will need Stata version 16 or greater, Python, and the Python package [Pandas](https://pandas.pydata.org) installed. To install Python and integrate it with Stata, refer to [this page](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/). To install Python packages, refer to [this page](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages).
 
 | _options_ | Description |
 |-----------|-------------|
 | __**v**erbose__ | Report bad practices and issues found on each line of the do-file. |
 | __**nosum**mary__ | Suppress summary table of bad practices and potential issues. |
 | __**i**ndent__(_integer_) | Number of whitespaces used when checking indentation coding practices (default: 4). |
-| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when checking indentation practices (default: same as indent). | 
+| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when checking indentation practices (default: same as indent). |
 | __**l**inemax__(_integer_) | Maximum number of characters in a line when checking line extension practices (default: 80). |
 | __**e**xcel__(_filename_) | Save an Excel file of line-by-line results. |
 | __force__ | Allow the output file name to be the same as the name of the input file; overwriting the original do-file. __The use of this option is not recommended__ because it is slightly possible that the corrected do-file created by the command will break something in your code and you should always keep a backup of it. |
 | __**auto**matic__ | Correct all bad coding practices without asking if you want each bad coding practice to be corrected or not.  By default, the command will ask the user about each correction interactively after producing the summary report. |
 | __replace__ | Overwrite any existing _output_ file. |
 
-
 # Description
 
-## Detect functionality 
+This package is based on the DIME Analytics [Stata Style Guide](https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide).
+
+## Detect functionality
 
 __Bad style practices and potential issues detected:__
 
@@ -51,7 +47,7 @@ __Avoid abstract index names__
 
 ```
   foreach i of varlist cassava maize wheat { }
-``` 
+```
 
 - Instead, looping commands should name the index local descriptively:
 
@@ -64,7 +60,7 @@ __Use proper indentations__
 
 - After declaring for-loop statements or if-else statements, add indentation with whitespaces (usually 2 or 4) in the lines inside the loop.
 
-    
+
 __Use indentations after declaring newline symbols (///)__
 
 - After a new line statement (///), add indentation (usually 2 or 4 whitespaces).
@@ -146,7 +142,7 @@ If the option `automatic` is omitted, Stata will prompt the user to confirm that
 # Examples
 
 The following examples illustrate the basic usage of lint. Additional examples can be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
- 
+
 ## Detecting bad coding practices
 
 The basic usage is to point to a do-file that requires revision as follows:
@@ -166,7 +162,7 @@ lint "test/bad.do", verbose
 ```
 
  2. Remove the summary of bad practices
- 
+
 ```
 lint "test/bad.do", nosummary
 ```
