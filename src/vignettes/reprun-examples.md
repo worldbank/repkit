@@ -51,7 +51,26 @@ reprun "path/to/folder/myfile1.do"
 
 A table of mismatches will be reported in the Results window, as well as in a SMCL file in a new directory called `/reprun/` in the same location as "_myfile1.do_" and will look like:
 
-![](img/reprun-ex-3.png)
+```
+--------------------------------------------------------------------------------------------------------------
+    reprun output created by user wb558768 at 26 Sep 2024 11:24:39
+    Operating System PC (64-bit x86-64) Windows 64-bit
+    Stata MP - Version 18 running as version 14.1
+--------------------------------------------------------------------------------------------------------------
+ 
+    Checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile1.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
+| 3      | Change   Change   DIFF   |                          | Change   Change   DIFF   |
++------------------------------------------------------------------------------------------------------------
+ 
+    Done checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile1.do
+-------------------------------------------------------------------------------------------------------------
+```
 
 
 The table shows that Line 3 is flagged. Line 3 (`gen group = runiform() < .5`) generates a new variable `group` based on a random uniform distribution. The RNG state will differ between Run 1 and Run 2 unless the random seed is explicitly set before this command. As a result, a mismatch in the "seed RNG state" as well as "data checksum" will be flagged.
@@ -67,7 +86,26 @@ gen group = runiform() < .5
 
 Running the reproducibility check on the modified do-file using `reprun` will confirm that there are no mismatches in Stata state between Run 1 and Run 2:
 
-![](img/reprun-ex-3-fix.png)
+```
+------------------------------------------------------------------------------------------------------------
+    reprun output created by user wb558768 at 26 Sep 2024 11:29:35
+    Operating System PC (64-bit x86-64) Windows 64-bit
+    Stata MP - Version 18 running as version 14.1
+------------------------------------------------------------------------------------------------------------
+ 
+    Checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile1.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
++------------------------------------------------------------------------------------------------------------
+No mismatches and/or changes detected
+ 
+    Done checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile1.do
+-------------------------------------------------------------------------------------------------------------
+```
 
 ## Example 4
 
@@ -79,7 +117,27 @@ reprun "path/to/folder/myfile1.do", verbose
 
 In addition to the output in Example 3, it will also report line 2 for **changes** in "sort order RNG" and "data checksum:
 
-![](img/reprun-ex-4.png)
+```
+-------------------------------------------------------------------------------------------------------------
+    reprun output created by user wb558768 at 26 Sep 2024 11:26:38
+    Operating System PC (64-bit x86-64) Windows 64-bit
+    Stata MP - Version 18 running as version 14.1
+-------------------------------------------------------------------------------------------------------------
+ 
+    Checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile1.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
+| 2      |                          | Change   Change   OK!    | Change   Change   OK!    |
+| 3      | Change   Change   DIFF   |                          | Change   Change   DIFF   |
++------------------------------------------------------------------------------------------------------------
+ 
+    Done checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile1.do
+-------------------------------------------------------------------------------------------------------------
+```
 
 ## Example 5 
 
@@ -99,7 +157,27 @@ reprun "path/to/folder/myfile2.do"
 
 In "_myfile2.do_", Line 2 sorts the data by the non-unique variable `mpg`, causing the sort order to vary between runs. This results in a mismatch in the "sort order RNG". Consequently, Line 2 and Line 3 (`gen sequence = _n`) will be flagged for "data checksum" mismatches due to the differences in sort order, leading to discrepancies in the generated `sequence` variable, as shown in the results below:
 
-![](img/reprun-ex-5.png)
+```
+-------------------------------------------------------------------------------------------------------------
+    reprun output created by user wb558768 at 26 Sep 2024 11:27:34
+    Operating System PC (64-bit x86-64) Windows 64-bit
+    Stata MP - Version 18 running as version 14.1
+-------------------------------------------------------------------------------------------------------------
+ 
+    Checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile2.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
+| 2      |                          | Change   Change   DIFF   | Change   Change   DIFF   |
+| 3      |                          |                          | Change   Change   DIFF   |
++------------------------------------------------------------------------------------------------------------
+ 
+    Done checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile2.do
+-------------------------------------------------------------------------------------------------------------
+```
 
 The issue can be resolved by sorting the data on a unique combination of variables:
 
@@ -119,7 +197,26 @@ reprun "path/to/folder/myfile2.do", compact
 
 The output will be similar to Example 5, except that line 3 will no longer be flagged for "data checksum":
 
-![](img/reprun-ex-6.png)
+```
+-------------------------------------------------------------------------------------------------------------
+    reprun output created by user wb558768 at 26 Sep 2024 11:30:59
+    Operating System PC (64-bit x86-64) Windows 64-bit
+    Stata MP - Version 18 running as version 14.1
+-------------------------------------------------------------------------------------------------------------
+ 
+    Checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile2.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
+| 2      |                          | Change   Change   DIFF   | Change   Change   DIFF   |
++------------------------------------------------------------------------------------------------------------
+ 
+    Done checking file:
+    +-> C:/Users/wb558768/reprun-example/myfile2.do
+-------------------------------------------------------------------------------------------------------------
+```
 
 ## Example 7
 
@@ -137,7 +234,65 @@ reprun ""path/to/folder/main.do"
 
 `reprun` on "_main.do_" performs reproducibility checks across "_main.do_", as well as "_myfile1.do_", and "_myfile2.do_" and the result will look like:
 
-![](img/reprun-ex-7.png)
+```
+------------------------------------------------------------------------------------------------------------
+    reprun output created by user wb558768 at 26 Sep 2024 11:33:05
+    Operating System PC (64-bit x86-64) Windows 64-bit
+    Stata MP - Version 18 running as version 14.1
+------------------------------------------------------------------------------------------------------------
+ 
+    Checking file:
+    +-> C:/Users/wb558768/reprun-example/main.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
++------------------------------------------------------------------------------------------------------------
+No mismatches and/or changes detected
+ 
+    Stepping into sub-file:
+    +-> C:/Users/wb558768/reprun-example/main.do
+    +--> C:/Users/wb558768/reprun-example/myfile1.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
+| 3      | Change   Change   DIFF   |                          | Change   Change   DIFF   |
++------------------------------------------------------------------------------------------------------------
+ 
+    Stepping back into file:
+    +-> C:/Users/wb558768/reprun-example/main.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
+| 2      | Change   Change   DIFF   | Change   Change   DIFF   | Change   Change   DIFF   |
++------------------------------------------------------------------------------------------------------------
+ 
+    Stepping into sub-file:
+    +-> C:/Users/wb558768/reprun-example/main.do
+    +--> C:/Users/wb558768/reprun-example/myfile2.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
+| 2      |                          | Change   Change   DIFF   | Change   Change   DIFF   |
+| 3      |                          |                          | Change   Change   DIFF   |
++------------------------------------------------------------------------------------------------------------
+ 
+    Stepping back into file:
+    +-> C:/Users/wb558768/reprun-example/main.do
++------------------------------------------------------------------------------------------------------------
+|        |      Seed RNG State      |      Sort Order RNG      |      Data Checksum       |
+| Line # | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Run 1  | Run 2  | Match  | Loop iteration:
+|--------+--------+--------+--------+--------+--------+--------+--------+--------+--------+------------------
+| 3      |                          | Change   Change   DIFF   | Change   Change   DIFF   |
++------------------------------------------------------------------------------------------------------------
+ 
+    Done checking file:
+    +-> C:/Users/wb558768/reprun-example/main.do
+-------------------------------------------------------------------------------------------------------------
+````
 
 The output will include tables for each do-file, illustrating the following process:
 
