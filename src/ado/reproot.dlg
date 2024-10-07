@@ -2,6 +2,7 @@
 // ----------------- set version number and define size of box ---------
 VERSION 13
 POSITION . . 500 400
+
 // ------------------------------------------- define a dialog ---------
 DIALOG overview, label("reproot - Manage settings file") tabtitle("Overview")
 BEGIN
@@ -73,7 +74,19 @@ BEGIN
 
   TEXT    tx_skippath  10 +40 200 ., label("Add another skip folder to list:")
   FILE    skippath     @  +20 400 ., directory label("Browse . . . ") option(skippath) nomemory
-  BUTTON  btn_skippath @  +25 100 ., label("Add skip folder")
+  BUTTON  btn_skippath @  +25 200 ., label("Add skip folder to possible options")
+
+END
+
+
+// -------------------- define the scripts used in this dialog box ---------
+
+PREINIT_PROGRAM
+
+  forvalues envi = 1/10 {
+    if missing()
+
+  }
 
 END
 
