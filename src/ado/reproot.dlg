@@ -1,6 +1,6 @@
 // https://www.stata.com/manuals13/pdialogprogramming.pdf#pdialogprogramming
 // ----------------- set version number and define size of box ---------
-VERSION 13
+VERSION 14
 POSITION . . 500 400
 
 // ------------------------------------------- define a dialog ---------
