@@ -81,14 +81,12 @@ END
 
 // -------------------- define the scripts used in this dialog box ---------
 
-PREINIT_PROGRAM
+POSTINIT_PROGRAM test
+  BEGIN
 
-  forvalues envi = 1/10 {
-    if missing()
+  END
 
-  }
 
-END
 
 // -------------------- define the u-action and helper buttons ---------
 OK ok1, label("OK")
