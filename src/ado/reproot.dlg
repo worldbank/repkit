@@ -1,91 +1,201 @@
 // https://www.stata.com/manuals13/pdialogprogramming.pdf#pdialogprogramming
 // ----------------- set version number and define size of box ---------
 VERSION 14
-POSITION . . 500 400
+POSITION . . 600 500
 
 // ------------------------------------------- define a dialog ---------
-DIALOG overview, label("reproot - Manage settings file") tabtitle("Overview")
-BEGIN
-  TEXT    tx_title1 10  20 450 ., label("REPROOT")
-  TEXT    tx_title2 @  +20 @   ., label("Manage the settings file with this wizard")
-
-  TEXT    tx_body1  @  +30 @   ., label("This dialog box helps you set up the environment required to use reproot.")
-  TEXT    tx_body2  @  +20 @   ., label("Click through the tabs above to specify the settings to be included in the settings file.")
-
-  TEXT    tx_outro1 @  +40 @   ., label("Click CANCEL to abort at any time. Click OK to write (or overwrite) the settings file.")
-  TEXT    tx_outro2 @  +40 @   ., label("Click the ? below to read the helpfile explaining these inputs.")
-END
-
-DIALOG recdepth, label("reproot - Manage settings file") tabtitle("Recurse depth")
-BEGIN
-
-  // Default search dept tab
-  GROUPBOX gb_rd_desc  10  10 450 70, label("Description:")
-    TEXT   tx_rd_1     +10 +20 400 . , label("This sets the default number of subfolders to search in each search path.")
-    TEXT   tx_rd_2      @  +20 400 . , label("This value is used for all search paths that does not has it own value.")
-
-  TEXT    tx_rdl_1      10 +40 200 . , label("Set the default search depth:")
-  SPINNER recdepth      @  +25 50  . , option(recursion_depth) default(r(recdepth)) nomemory
-
-END
-
 // Default search dept tab
-DIALOG searchpaths, label("reproot - Manage settings file") tabtitle("Search Paths")
+DIALOG searchpaths, title("reproot - settings file setup") tabtitle("Search Paths")
 BEGIN
 
   // Default search dept tab
   GROUPBOX gb_sd_desc  10  10 450 50, label("Description:")
     TEXT   tx_sp_1     +10 +20 400 . , label("This sets the paths reproot will search for root files.")
 
-  GROUPBOX gb_envpath      10 +35 450 190, label("Select the search paths to be included:")
-    CHECKBOX ck_envpath1  +10 +20 450 ., label(r(envpath1_text)) nomemory default(r(envpath1_default))
-    CHECKBOX ck_envpath2   @  +20 450 ., label(r(envpath2_text)) nomemory default(r(envpath2_default))
-    CHECKBOX ck_envpath3   @  +20 450 ., label(r(envpath3_text)) nomemory default(r(envpath3_default))
-    CHECKBOX ck_envpath4   @  +20 450 ., label(r(envpath4_text)) nomemory default(r(envpath4_default))
-    CHECKBOX ck_envpath5   @  +20 450 ., label(r(envpath5_text)) nomemory default(r(envpath5_default))
-    CHECKBOX ck_envpath6   @  +20 450 ., label(r(envpath6_text)) nomemory default(r(envpath6_default))
-    CHECKBOX ck_envpath7   @  +20 450 ., label(r(envpath7_text)) nomemory default(r(envpath7_default))
-    CHECKBOX ck_envpath8   @  +20 450 ., label(r(envpath8_text)) nomemory default(r(envpath8_default))
+  GROUPBOX gb_envpath      10 +35 450 250, label("Select the search paths to be included:")
+
+    CHECKBOX ck_path1 +10 +20 20 .
+    EDIT ed_path1 +20 @ 400 ., default(r(envpath1_text)) nomemory
+    CHECKBOX ck_path2 -20 +25 20 .
+    EDIT ed_path2 +20 @ 400 ., default(r(envpath2_text)) nomemory
+    CHECKBOX ck_path3 -20 +25 20 .
+    EDIT ed_path3 +20 @ 400 ., default(r(envpath3_text)) nomemory
+    CHECKBOX ck_path4 -20 +25 20 .
+    EDIT ed_path4 +20 @ 400 ., default(r(envpath4_text)) nomemory
+    CHECKBOX ck_path5 -20 +25 20 .
+    EDIT ed_path5 +20 @ 400 ., default(r(envpath5_text)) nomemory
+    CHECKBOX ck_path6 -20 +25 20 .
+    EDIT ed_path6 +20 @ 400 ., default(r(envpath6_text)) nomemory
+    CHECKBOX ck_path7 -20 +25 20 .
+    EDIT ed_path7 +20 @ 400 ., default(r(envpath7_text)) nomemory
+    CHECKBOX ck_path8 -20 +25 20 .
+    EDIT ed_path8 +20 @ 400 ., default(r(envpath8_text)) nomemory
 
 
   TEXT    tx_searchpath 10 +40 200 ., label("Add another search path:")
-  FILE    searchpath    @  +20 400 ., directory label("Browse . . . ") option(searchpath) nomemory
+  FILE    new_path    @  +20 400 ., directory label("Browse . . . ") option(searchpath) nomemory
+
   TEXT    tx_sp_rd1     10 +20 200 ., label("Search depth specific to this search path (optional)")
   SPINNER sp_recdepth   @  +25 50  ., option(sp_rd) min(0) max(25) default(0) nomemory
-  BUTTON  btn_envpath     @  +25 200 ., label("Add path to possible options")
+
+  BUTTON  btn_envpath   @  +25 200 ., label("Add path to possible options") onpush(program add_searchpath)
 
 END
 
-// Default search dept tab
-DIALOG skippaths, label("reproot - Manage settings file") tabtitle("Skip Paths")
-BEGIN
-
-  // Default search dept tab
-  GROUPBOX gb_skippath_desc  10  10 450 50, label("Description:")
-    TEXT   tx_skippath_1      +10 +20 400 . , label("This sets the folder names that reproot always should skip.")
-
-  GROUPBOX   gb_skippathd	 10 +35 450 150, label("Select paths that should never be searched by reproot:")
-    CHECKBOX ck_skippath1 +10 +20 450 ., label(r(skippath1_text)) nomemory default(r(skippath1_default))
-    CHECKBOX ck_skippath2  @  +20 450 ., label(r(skippath2_text)) nomemory default(r(skippath2_default))
-    CHECKBOX ck_skippath3  @  +20 450 ., label(r(skippath3_text)) nomemory default(r(skippath3_default))
-    CHECKBOX ck_skippath4  @  +20 450 ., label(r(skippath4_text)) nomemory default(r(skippath4_default))
-    CHECKBOX ck_skippath5  @  +20 450 ., label(r(skippath5_text)) nomemory default(r(skippath5_default))
-    CHECKBOX ck_skippath6  @  +20 450 ., label(r(skippath6_text)) nomemory default(r(skippath6_default))
-
-  TEXT    tx_skippath  10 +40 200 ., label("Add another skip folder to list:")
-  FILE    skippath     @  +20 400 ., directory label("Browse . . . ") option(skippath) nomemory
-  BUTTON  btn_skippath @  +25 200 ., label("Add skip folder to possible options")
-
-END
 
 
 // -------------------- define the scripts used in this dialog box ---------
 
-POSTINIT_PROGRAM test
+PROGRAM POSTINIT_PROGRAM
   BEGIN
-
+    call program disable_fields
+    call program initial_checking
   END
 
+  PROGRAM add_searchpath
+    BEGIN
+
+        // Crate the new path in reproot format
+        call create string new_reproot_path
+        call new_reproot_path.setstring(searchpaths.sp_recdepth)
+        //call new_reproot_path.append(":")
+        call new_reproot_path.append(searchpaths.new_path)
+
+        call searchpaths.ed_path8.setvalue(new_reproot_path)
+
+        if searchpaths.ed_path1.iseq("") {
+          call searchpaths.ed_path1.setvalue(new_reproot_path)
+        }
+        else if searchpaths.ed_path2.iseq("") {
+          call searchpaths.ed_path2.setvalue(new_reproot_path)
+        }
+        else if searchpaths.ed_path3.iseq("") {
+          call searchpaths.ed_path3.setvalue(new_reproot_path)
+        }
+        else if searchpaths.ed_path4.iseq("") {
+          call searchpaths.ed_path4.setvalue(new_reproot_path)
+        }
+        else if searchpaths.ed_path5.iseq("") {
+          call searchpaths.ed_path5.setvalue(new_reproot_path)
+        }
+        else if searchpaths.ed_path6.iseq("") {
+          call searchpaths.ed_path6.setvalue(new_reproot_path)
+        }
+        else if searchpaths.ed_path7.iseq("") {
+          call searchpaths.ed_path7.setvalue(new_reproot_path)
+        }
+        else if searchpaths.ed_path8.iseq("") {
+          call searchpaths.ed_path8.setvalue(new_reproot_path)
+        }
+
+        call program disable_fields
+    END
+
+PROGRAM initial_checking
+  BEGIN
+      // For paths read from existing settings file - check the checkboxes
+      if searchpaths.ed_path1.isneq("") {
+        call searchpaths.ck_path1.seton
+      }
+      if searchpaths.ed_path2.isneq("") {
+        call searchpaths.ck_path2.seton
+      }
+      if searchpaths.ed_path3.isneq("") {
+        call searchpaths.ck_path3.seton
+      }
+      if searchpaths.ed_path4.isneq("") {
+        call searchpaths.ck_path4.seton
+      }
+      if searchpaths.ed_path5.isneq("") {
+        call searchpaths.ck_path5.seton
+      }
+      if searchpaths.ed_path6.isneq("") {
+        call searchpaths.ck_path6.seton
+      }
+      if searchpaths.ed_path7.isneq("") {
+        call searchpaths.ck_path7.seton
+      }
+      if searchpaths.ed_path8.isneq("") {
+        call searchpaths.ck_path8.seton
+      }
+  END
+
+PROGRAM disable_fields
+  BEGIN
+    // Enable checkbox if path exists, otherwise disable
+
+    if searchpaths.ed_path1.isneq("") {
+      call searchpaths.ck_path1.enable
+      call searchpaths.ed_path1.enable
+    }
+    else {
+      call searchpaths.ed_path1.disable
+      call searchpaths.ck_path1.disable
+    }
+
+    if searchpaths.ed_path2.isneq("") {
+      call searchpaths.ck_path2.enable
+      call searchpaths.ed_path2.enable
+    }
+    else {
+      call searchpaths.ed_path2.disable
+      call searchpaths.ck_path2.disable
+    }
+
+    if searchpaths.ed_path3.isneq("") {
+      call searchpaths.ck_path3.enable
+      call searchpaths.ed_path3.enable
+    }
+    else {
+      call searchpaths.ed_path3.disable
+      call searchpaths.ck_path3.disable
+    }
+
+    if searchpaths.ed_path4.isneq("") {
+      call searchpaths.ck_path4.enable
+      call searchpaths.ed_path4.enable
+    }
+    else {
+      call searchpaths.ed_path4.disable
+      call searchpaths.ck_path4.disable
+    }
+
+    if searchpaths.ed_path5.isneq("") {
+      call searchpaths.ck_path5.enable
+      call searchpaths.ed_path5.enable
+    }
+    else {
+      call searchpaths.ed_path5.disable
+      call searchpaths.ck_path5.disable
+    }
+
+    if searchpaths.ed_path6.isneq("") {
+      call searchpaths.ck_path6.enable
+      call searchpaths.ed_path6.enable
+    }
+    else {
+      call searchpaths.ed_path6.disable
+      call searchpaths.ck_path6.disable
+    }
+
+    if searchpaths.ed_path7.isneq("") {
+      call searchpaths.ck_path7.enable
+      call searchpaths.ed_path7.enable
+    }
+    else {
+      call searchpaths.ed_path7.disable
+      call searchpaths.ck_path7.disable
+    }
+
+    if searchpaths.ed_path8.isneq("") {
+      call searchpaths.ck_path8.enable
+      call searchpaths.ed_path8.enable
+    }
+    else {
+      call searchpaths.ed_path8.disable
+      call searchpaths.ck_path8.disable
+    }
+  END
 
 
 // -------------------- define the u-action and helper buttons ---------
@@ -97,8 +207,4 @@ HELP hlp1, view("help reproot")
 PROGRAM command
   BEGIN
     put "reproot_output_test2 "
-    beginoptions
-      optionarg main.recdepth
-      optionarg main.searchpath
-    endoptions
   END

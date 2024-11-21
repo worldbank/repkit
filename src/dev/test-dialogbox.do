@@ -1,4 +1,4 @@
-adopath + "C:\Users\WB462869\github\repkit\src\ado"
+adopath ++ "C:\Users\WB462869\github\repkit\src\ado"
 
 cap program drop   reproot_parse_setup
     program define reproot_parse_setup, rclass
@@ -62,9 +62,9 @@ cap program drop   reproot_setup2
     syntax,
 
     reproot_parse_setup
-    //return list
+    return list
     
-    db reproot
+    db reproot, debug
 end
 
 reproot_setup2
