@@ -42,8 +42,8 @@ cap program drop   reproot_parse_setup
       
       local skip_i = 1
       foreach skipdir of local skipdirs {
-         return local  skippath`skip_i'_text `"`skipdir'"'
-         return scalar skippath`skip_i'_default = 1
+         return local  skipdir`skip_i'_text `"`skipdir'"'
+         return scalar skipdir`skip_i'_default = 1
          local ++skip_i
       }
     }
@@ -53,7 +53,7 @@ cap program drop   reproot_parse_setup
         return scalar searchpath`env_default_i'_default = 0
     }
     forvalues skip_default_i = `skip_i'/6 {
-        return scalar skippath`skip_default_i'_default = 0
+        return scalar skipdir`skip_default_i'_default = 0
     }
 
 end
@@ -76,11 +76,18 @@ cap program drop   reproot_output_test
 
     version 14.1
 
-    syntax , [searchpath1(string) searchpath2(string) searchpath3(string) searchpath4(string) searchpath5(string) searchpath6(string) searchpath7(string) searchpath8(string) skipdirs(string)]
+    syntax , [ searchdepth(string)            ///
+      searchpath1(string) searchpath2(string) ///
+      searchpath3(string) searchpath4(string) ///
+      searchpath5(string) searchpath6(string) ///
+      searchpath7(string) searchpath8(string) ///
+      skipdir1(string) skipdir2(string) skipdir3(string) ///
+      skipdir4(string) skipdir5(string) skipdir6(string) ///
+    ]
 
     noi di "oi - reproot_output_test"
-    noi di "searchpaths - `searchpaths'"
-    noi di "skipdirs - `skipdirs'"
+    noi di "searchpath1 - `searchpath1'"
+    noi di "skipdir1 - `skipdir1'"
     
 end
 
