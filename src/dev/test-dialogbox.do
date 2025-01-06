@@ -29,11 +29,11 @@ cap program drop   reproot_parse_setup
       return scalar recdepth = `r(recdepth)'
       
       * Parse env paths
-      local envpaths `"`r(envpaths)'"'
+      local searchpaths `"`r(searchpaths)'"'
       local env_i = 1
-      foreach envpath of local envpaths {
-         return local  envpath`env_i'_text `"`envpath'"'
-         return scalar envpath`env_i'_default = 1
+      foreach searchpath of local searchpaths {
+         return local  searchpath`env_i'_text `"`searchpath'"'
+         return scalar searchpath`env_i'_default = 1
          local ++env_i
       }
       
@@ -50,7 +50,7 @@ cap program drop   reproot_parse_setup
     
     * Set all the other locals to unchecked
     forvalues env_default_i = `env_i'/10 {
-        return scalar envpath`env_default_i'_default = 0
+        return scalar searchpath`env_default_i'_default = 0
     }
     forvalues skip_default_i = `skip_i'/6 {
         return scalar skippath`skip_default_i'_default = 0
@@ -76,10 +76,10 @@ cap program drop   reproot_output_test
 
     version 14.1
 
-    syntax , [envpath1(string) envpath2(string) envpath3(string) envpath4(string) envpath5(string) envpath6(string) envpath7(string) envpath8(string) skipdirs(string)]
+    syntax , [searchpath1(string) searchpath2(string) searchpath3(string) searchpath4(string) searchpath5(string) searchpath6(string) searchpath7(string) searchpath8(string) skipdirs(string)]
 
     noi di "oi - reproot_output_test"
-    noi di "envpaths - `envpaths'"
+    noi di "searchpaths - `searchpaths'"
     noi di "skipdirs - `skipdirs'"
     
 end

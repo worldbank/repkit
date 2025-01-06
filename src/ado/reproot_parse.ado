@@ -12,7 +12,7 @@ qui {
 
     if ("`anything'" == "env")       {
       noi reproot_parse_env , file("`file'")
-      return local envpaths = `"`r(envpaths)'"'
+      return local searchpaths = `"`r(searchpaths)'"'
       return local skipdirs = `"`r(skipdirs)'"'
       return scalar recdepth = `r(recdepth)'
     }
@@ -143,7 +143,7 @@ qui {
       local formatted_paths `"`formatted_paths' "`r(path)'" "'
     }
 
-    return local envpaths = trim(`"`formatted_paths'"')
+    return local searchpaths = trim(`"`formatted_paths'"')
     return local skipdirs `"`skipdirs'"'
     return scalar recdepth = `recursedepth'
 }

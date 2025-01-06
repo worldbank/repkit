@@ -12,24 +12,24 @@ BEGIN
   GROUPBOX gb_sd_desc  10  10 450 50, label("Description:")
     TEXT   tx_sp_1     +10 +20 400 . , label("This sets the paths reproot will search for root files.")
 
-  GROUPBOX gb_envpath      10 +35 450 250, label("Select the search paths to be included:")
+  GROUPBOX gb_searchpath      10 +35 450 250, label("Select the search paths to be included:")
 
     CHECKBOX ck_path1 +10 +20 20 .
-    EDIT ed_path1 +20 @ 400 ., default(r(envpath1_text)) nomemory
+    EDIT ed_path1 +20 @ 400 ., default(r(searchpath1_text)) nomemory
     CHECKBOX ck_path2 -20 +25 20 .
-    EDIT ed_path2 +20 @ 400 ., default(r(envpath2_text)) nomemory
+    EDIT ed_path2 +20 @ 400 ., default(r(searchpath2_text)) nomemory
     CHECKBOX ck_path3 -20 +25 20 .
-    EDIT ed_path3 +20 @ 400 ., default(r(envpath3_text)) nomemory
+    EDIT ed_path3 +20 @ 400 ., default(r(searchpath3_text)) nomemory
     CHECKBOX ck_path4 -20 +25 20 .
-    EDIT ed_path4 +20 @ 400 ., default(r(envpath4_text)) nomemory
+    EDIT ed_path4 +20 @ 400 ., default(r(searchpath4_text)) nomemory
     CHECKBOX ck_path5 -20 +25 20 .
-    EDIT ed_path5 +20 @ 400 ., default(r(envpath5_text)) nomemory
+    EDIT ed_path5 +20 @ 400 ., default(r(searchpath5_text)) nomemory
     CHECKBOX ck_path6 -20 +25 20 .
-    EDIT ed_path6 +20 @ 400 ., default(r(envpath6_text)) nomemory
+    EDIT ed_path6 +20 @ 400 ., default(r(searchpath6_text)) nomemory
     CHECKBOX ck_path7 -20 +25 20 .
-    EDIT ed_path7 +20 @ 400 ., default(r(envpath7_text)) nomemory
+    EDIT ed_path7 +20 @ 400 ., default(r(searchpath7_text)) nomemory
     CHECKBOX ck_path8 -20 +25 20 .
-    EDIT ed_path8 +20 @ 400 ., default(r(envpath8_text)) nomemory
+    EDIT ed_path8 +20 @ 400 ., default(r(searchpath8_text)) nomemory
 
 
   TEXT    tx_searchpath 10 +40 200 ., label("Add another search path:")
@@ -38,7 +38,7 @@ BEGIN
   TEXT    tx_sp_rd1     10 +20 200 ., label("Search depth specific to this search path (optional)")
   SPINNER sp_recdepth   @  +25 50  ., option(sp_rd) min(0) max(25) default(4) nomemory
 
-  BUTTON  btn_envpath   @  +25 200 ., label("Add path to possible options") onpush(program add_searchpath)
+  BUTTON  btn_searchpath   @  +25 200 ., label("Add path to possible options") onpush(program add_searchpath)
 
 END
 
@@ -245,28 +245,28 @@ PROGRAM command
 
       // Set searchpaths
       if searchpaths.ed_path1.isneq("") {
-        put "envpath1(" searchpaths.ed_path1 ") "
+        put "searchpath1(" searchpaths.ed_path1 ") "
       }
       if searchpaths.ed_path2.isneq("") {
-        put "envpath2(" searchpaths.ed_path2 ") "
+        put "searchpath2(" searchpaths.ed_path2 ") "
       }
       if searchpaths.ed_path3.isneq("") {
-        put "envpath3(" searchpaths.ed_path3 ") "
+        put "searchpath3(" searchpaths.ed_path3 ") "
       }
       if searchpaths.ed_path4.isneq("") {
-        put "envpath4(" searchpaths.ed_path4 ") "
+        put "searchpath4(" searchpaths.ed_path4 ") "
       }
       if searchpaths.ed_path5.isneq("") {
-        put "envpath5(" searchpaths.ed_path5 ") "
+        put "searchpath5(" searchpaths.ed_path5 ") "
       }
       if searchpaths.ed_path6.isneq("") {
-        put "envpath6(" searchpaths.ed_path6 ") "
+        put "searchpath6(" searchpaths.ed_path6 ") "
       }
       if searchpaths.ed_path7.isneq("") {
-        put "envpath7(" searchpaths.ed_path7 ") "
+        put "searchpath7(" searchpaths.ed_path7 ") "
       }
       if searchpaths.ed_path8.isneq("") {
-        put "envpath8(" searchpaths.ed_path8 ") "
+        put "searchpath8(" searchpaths.ed_path8 ") "
       }
     endoptions
   END

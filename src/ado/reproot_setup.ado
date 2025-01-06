@@ -1,4 +1,4 @@
-*! version 3.1 20240926 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+searchpath*! version 3.1 20240926 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reproot_setup
     program define reproot_setup
@@ -8,7 +8,7 @@ qui {
     version 14.1
 
     * Update the syntax. This is only a placeholder to make the command run
-    syntax, [ENVPaths(string) debug_home_folder(string)]
+    syntax, [searchpaths(string) debug_home_folder(string)]
 
 
     * Get home folder using cd and then restore the orginal cd
@@ -20,9 +20,9 @@ qui {
     * This is used for testing purpose during development only
     if !missing("`debug_home_folder'") local home_fld  "`debug_home_folder'"
 
-    * Test that envpath exists
-    foreach envpath in `"`envpaths'"' {
-      test_envpath, envpath(`"`envpath'"') error
+    * Test that searchpath exists
+    foreach searchpath in `"`searchpaths'"' {
+      test_searchpath, searchpath(`"`searchpath'"') error
     }
 
     * Hardcoded file names
@@ -38,7 +38,7 @@ qui {
         noi di as result _n `"{pstd}An environment file (reproot-env.yaml) already exists in your home folder: {browse "`home_fld'"}. To modify this file, use a text editor and follow the instructions in {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide}.{p_end}"'
     }
     else {
-      noi reproot_setup_envfile, env_file("`env_file'") envpaths(`"`envpaths'"') home_fld("`home_fld'")
+      noi reproot_setup_envfile, env_file("`env_file'") searchpaths(`"`searchpaths'"') home_fld("`home_fld'")
     }
 }
 end
@@ -48,7 +48,7 @@ cap program drop   reproot_setup_envfile
 
 qui {
 
-    syntax, env_file(string) home_fld(string) [envpaths(string)]
+    syntax, env_file(string) home_fld(string) [searchpaths(string)]
 
     * Ask for confirmation
     noi di as result _n `"{pstd}No environment file was found in your home folder: {browse "`home_fld'"}.{p_end}"' _n `"{pstd}Do you want to create one?{p_end}"'
@@ -67,16 +67,16 @@ qui {
 
     global path_to_add ""
     while (!inlist(upper("${path_to_add}"),"BREAK","DONE")) {
-      noi display_envpath, envpaths(`"`envpaths'"')
+      noi display_searchpath, searchpaths(`"`searchpaths'"')
       noi di as txt _n `"{pstd}Enter a new folder path or enter "DONE" to confirm those you have already entered.{p_end}"' ///
                     _n `"{pstd}Type "BREAK" to discard changes."' ///
         , _request(path_to_add)
 
       * Do not test of add keywords
       if (!inlist(upper("${path_to_add}"),"BREAK","DONE")) {
-        test_envpath, envpath(${path_to_add})
+        test_searchpath, searchpath(${path_to_add})
         if (`r(path_exists)' == 0)  noi di as txt "{pstd}{red:Warning}:This path does not exist.{p_end}"
-        else local envpaths `"`envpaths' "${path_to_add}" "'
+        else local searchpaths `"`searchpaths' "${path_to_add}" "'
       }
     }
 
@@ -87,16 +87,16 @@ qui {
       exit
     }
 
-    noi create_env_file, env_file("`env_file'") envpaths(`"`envpaths'"')
+    noi create_env_file, env_file("`env_file'") searchpaths(`"`searchpaths'"')
 }
 end
 
 
-* DISPLAY ENVPATH
+* DISPLAY searchpath
 cap program drop   create_env_file
     program define create_env_file, rclass
 qui {
-    syntax, env_file(string) [envpaths(string)]
+    syntax, env_file(string) [searchpaths(string)]
 
     * Initiate the tempfile handlers and tempfiles needed
     tempname env_handle
@@ -107,8 +107,8 @@ qui {
 
     * Write the smcl tag at top of file to
     file write `env_handle' "recursedepth: 4" _n "paths:" _n
-    foreach envpath of local envpaths {
-      file write `env_handle' `"    - `envpath'"' _n
+    foreach searchpath of local searchpaths {
+      file write `env_handle' `"    - `searchpath'"' _n
     }
     file write `env_handle' "skipdirs:" _n `"    - ".git""'
 
@@ -120,22 +120,22 @@ qui {
 }
 end
 
-* TEST ENVPATH
-cap program drop   test_envpath
-    program define test_envpath, rclass
+* TEST searchpath
+cap program drop   test_searchpath
+    program define test_searchpath, rclass
 qui {
-    syntax, [envpath(string) error]
+    syntax, [searchpath(string) error]
 
-    if !missing("`envpath'") {
-      * Parse the envpath that can be on either of these formats:
+    if !missing("`searchpath'") {
+      * Parse the searchpath that can be on either of these formats:
       *  - "4:C:\Users\user1234\github"
       *  - "C:\Users\user1234\github"
-      gettoken depth path : envpath, parse(":")
+      gettoken depth path : searchpath, parse(":")
 
-      * Test if envpath has depth prepended
+      * Test if searchpath has depth prepended
       cap confirm integer number `depth'
-      * no depth prepended, use envpath as is
-      if _rc local path = `"`envpath'"'
+      * no depth prepended, use searchpath as is
+      if _rc local path = `"`searchpath'"'
       * depth prepended, use path after removing parse char
       else   local path = substr("`path'",2,.)
 
@@ -161,16 +161,16 @@ qui {
 end
 
 
-* DISPLAY ENVPATH
-cap program drop   display_envpath
-    program define display_envpath, rclass
+* DISPLAY searchpath
+cap program drop   display_searchpath
+    program define display_searchpath, rclass
 qui {
-    syntax, [envpaths(string)]
-    if !missing(`"`envpaths'"') {
+    syntax, [searchpaths(string)]
+    if !missing(`"`searchpaths'"') {
       local di_paths ""
-      * Test that envpath exists
-      foreach envpath of local envpaths {
-        local di_paths "`di_paths'{break}- `envpath'"
+      * Test that searchpath exists
+      foreach searchpath of local searchpaths {
+        local di_paths "`di_paths'{break}- `searchpath'"
       }
       noi di as result _n `"{pstd}This is the list of paths that will be added:`di_paths'{p_end}"' _n
     }
