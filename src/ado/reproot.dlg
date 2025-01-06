@@ -33,10 +33,10 @@ BEGIN
 
 
   TEXT    tx_searchpath 10 +40 200 ., label("Add another search path:")
-  FILE    new_path    @  +20 400 ., directory label("Browse . . . ") option(searchpath) nomemory
+  FILE    new_path      @  +20 400 ., directory label("Browse . . . ") nomemory
 
   TEXT    tx_sp_rd1     10 +20 200 ., label("Search depth specific to this search path (optional)")
-  SPINNER sp_recdepth   @  +25 50  ., option(sp_rd) min(0) max(25) default(0) nomemory
+  SPINNER sp_recdepth   @  +25 50  ., option(sp_rd) min(0) max(25) default(4) nomemory
 
   BUTTON  btn_envpath   @  +25 200 ., label("Add path to possible options") onpush(program add_searchpath)
 
@@ -55,39 +55,59 @@ PROGRAM POSTINIT_PROGRAM
   PROGRAM add_searchpath
     BEGIN
 
-        // Crate the new path in reproot format
-        call create string new_reproot_path
-        call new_reproot_path.setstring(searchpaths.sp_recdepth)
-        //call new_reproot_path.append(":")
-        call new_reproot_path.append(searchpaths.new_path)
+        // Enable all fields so they can be modified
+        call program enable_all_fields
 
-        call searchpaths.ed_path8.setvalue(new_reproot_path)
+        //Crate the new path in reproot format
+        call create STRING newreprootpath
+        call searchpaths.sp_recdepth.withvalue newreprootpath.setvalue "@"
+        call newreprootpath.append ":"
+        call searchpaths.new_path.withvalue newreprootpath.append "@"
 
+        // Find the first empty field and add it there - "if else" is not supported
         if searchpaths.ed_path1.iseq("") {
-          call searchpaths.ed_path1.setvalue(new_reproot_path)
+          call newreprootpath.withvalue searchpaths.ed_path2.setvalue "@"
         }
-        else if searchpaths.ed_path2.iseq("") {
-          call searchpaths.ed_path2.setvalue(new_reproot_path)
-        }
-        else if searchpaths.ed_path3.iseq("") {
-          call searchpaths.ed_path3.setvalue(new_reproot_path)
-        }
-        else if searchpaths.ed_path4.iseq("") {
-          call searchpaths.ed_path4.setvalue(new_reproot_path)
-        }
-        else if searchpaths.ed_path5.iseq("") {
-          call searchpaths.ed_path5.setvalue(new_reproot_path)
-        }
-        else if searchpaths.ed_path6.iseq("") {
-          call searchpaths.ed_path6.setvalue(new_reproot_path)
-        }
-        else if searchpaths.ed_path7.iseq("") {
-          call searchpaths.ed_path7.setvalue(new_reproot_path)
-        }
-        else if searchpaths.ed_path8.iseq("") {
-          call searchpaths.ed_path8.setvalue(new_reproot_path)
+        else {
+          if searchpaths.ed_path2.iseq("") {
+            call newreprootpath.withvalue searchpaths.ed_path3.setvalue "@"
+          }
+          else {
+            if searchpaths.ed_path3.iseq("") {
+              call newreprootpath.withvalue searchpaths.ed_path3.setvalue "@"
+            }
+            else {
+              if searchpaths.ed_path4.iseq("") {
+                call newreprootpath.withvalue searchpaths.ed_path4.setvalue "@"
+              }
+              else {
+                if searchpaths.ed_path5.iseq("") {
+                  call newreprootpath.withvalue searchpaths.ed_path5.setvalue "@"
+                }
+                else {
+                  if searchpaths.ed_path6.iseq("") {
+                    call newreprootpath.withvalue searchpaths.ed_path6.setvalue "@"
+                  }
+                  else {
+                    if searchpaths.ed_path7.iseq("") {
+                      call newreprootpath.withvalue searchpaths.ed_path7.setvalue "@"
+                    }
+                    else {
+                      if searchpaths.ed_path8.iseq("") {
+                        call newreprootpath.withvalue searchpaths.ed_path8.setvalue "@"
+                      }
+                      else {
+                        // do nothing
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
 
+        // Disable empty fields
         call program disable_fields
     END
 
@@ -197,6 +217,20 @@ PROGRAM disable_fields
     }
   END
 
+  PROGRAM enable_all_fields
+    BEGIN
+      // Enable checkbox if path exists, otherwise disable
+
+      call searchpaths.ed_path1.enable
+      call searchpaths.ed_path2.enable
+      call searchpaths.ed_path3.enable
+      call searchpaths.ed_path4.enable
+      call searchpaths.ed_path5.enable
+      call searchpaths.ed_path6.enable
+      call searchpaths.ed_path7.enable
+      call searchpaths.ed_path8.enable
+    END
+
 
 // -------------------- define the u-action and helper buttons ---------
 OK ok1, label("OK")
@@ -206,5 +240,33 @@ HELP hlp1, view("help reproot")
 // --------------------------- define how to assemble u-action ---------
 PROGRAM command
   BEGIN
-    put "reproot_output_test2 "
+    put "reproot_output_test "
+    beginoptions
+
+      // Set searchpaths
+      if searchpaths.ed_path1.isneq("") {
+        put "envpath1(" searchpaths.ed_path1 ") "
+      }
+      if searchpaths.ed_path2.isneq("") {
+        put "envpath2(" searchpaths.ed_path2 ") "
+      }
+      if searchpaths.ed_path3.isneq("") {
+        put "envpath3(" searchpaths.ed_path3 ") "
+      }
+      if searchpaths.ed_path4.isneq("") {
+        put "envpath4(" searchpaths.ed_path4 ") "
+      }
+      if searchpaths.ed_path5.isneq("") {
+        put "envpath5(" searchpaths.ed_path5 ") "
+      }
+      if searchpaths.ed_path6.isneq("") {
+        put "envpath6(" searchpaths.ed_path6 ") "
+      }
+      if searchpaths.ed_path7.isneq("") {
+        put "envpath7(" searchpaths.ed_path7 ") "
+      }
+      if searchpaths.ed_path8.isneq("") {
+        put "envpath8(" searchpaths.ed_path8 ") "
+      }
+    endoptions
   END

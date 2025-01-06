@@ -1,4 +1,8 @@
+clear all
+
 adopath ++ "C:\Users\WB462869\github\repkit\src\ado"
+
+
 
 cap program drop   reproot_parse_setup
     program define reproot_parse_setup, rclass
@@ -66,6 +70,20 @@ cap program drop   reproot_setup2
     
     db reproot, debug
 end
+
+cap program drop   reproot_output_test
+    program define reproot_output_test
+
+    version 14.1
+
+    syntax , [envpath1(string) envpath2(string) envpath3(string) envpath4(string) envpath5(string) envpath6(string) envpath7(string) envpath8(string) skipdirs(string)]
+
+    noi di "oi - reproot_output_test"
+    noi di "envpaths - `envpaths'"
+    noi di "skipdirs - `skipdirs'"
+    
+end
+
 
 reproot_setup2
 
