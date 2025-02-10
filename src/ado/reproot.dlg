@@ -1,37 +1,44 @@
 // https://www.stata.com/manuals13/pdialogprogramming.pdf#pdialogprogramming
 // ----------------- set version number and define size of box ---------
 VERSION 14
-POSITION . . 600 500
+POSITION . . 550 500
 
 // ------------------------------------------- define a dialog ---------
-DIALOG overview, label("reproot - Manage settings file") tabtitle("Overview")
+
+
+//////////////////////////////
+// Overview
+//////////////////////////////
+
+DIALOG overview, label("REPROOT - Settings File Setup") tabtitle(" Overview ")
 BEGIN
-  TEXT    tx_title1 10  20 450 ., label("REPROOT")
-  TEXT    tx_title2 @  +20 @   ., label("Manage the settings file with this wizard")
+  GROUPBOX gb_overview_1 10  20 500 210, label("REPROOT - settings file")
+    TEXT    tx_title1   +10 +30 450  ., label("This dialog box helps you to set up and manage the reproot settings file.")
+    TEXT    tx_title2    @  +40 450  ., label("reproot is a command that automates setting root folder paths across users collaborating")
+    TEXT    tx_title3    @  +20 450  ., label("on a project. reproot searches for root files across the users computer, but since an")
+    TEXT    tx_title4    @  +20 450  ., label("exhaustive search of all folders would be too slow, this settings file is used to indicate")
+    TEXT    tx_title5    @  +20 450  ., label("which high level folders to search for project root files.")
+    TEXT    tx_title6    @  +40 450  ., label("Read more how to use the command here: https://worldbank.github.io/repkit")
 
-  TEXT    tx_body1  @  +30 @   ., label("This dialog box helps you set up the environment required to use reproot.")
-  TEXT    tx_body2  @  +20 @   ., label("Click through the tabs above to specify the settings to be included in the settings file.")
 
-  TEXT    tx_outro1 @  +40 @   ., label("Click CANCEL to abort at any time. Click OK to write (or overwrite) the settings file.")
-  TEXT    tx_outro2 @  +40 @   ., label("Click the ? below to read the helpfile explaining these inputs.")
+  GROUPBOX gb_overview_2 10 +60 500 90, label("Three settings")
+    TEXT    tx_body1    +10 +30 450  ., label("You find three tabs in this dialog box one for each setting.")
+    TEXT    tx_body2     @  +20 450  ., label("Click through each tab to read more and manage each setting.")
+
+
+  GROUPBOX gb_overview_3 10 +60 500 90, label("Apply settings or abort")
+    TEXT    tx_outro1   +10 +30 450  ., label("Click CANCEL to abort at any time. Click OK to write (or overwrite) the settings file.")
+    TEXT    tx_outro2    @  +20 450  ., label("Click the ? below to read the helpfile explaining these inputs.")
+
+
 END
 
-DIALOG searchdepth, label("reproot - Manage settings file") tabtitle("Default search depth")
-BEGIN
 
-  // Default search dept tab
-  GROUPBOX gb_searchdepth_desc 10 10 450 70, label("Description:")
-    TEXT   tx_searchdepth_1 +10 +20 400 . , label("This sets the default number of subfolders to search in each search path.")
-    TEXT   tx_searchdepth_2 @  +20 400 . , label("This value is used for all search paths that does not has it own value.")
+//////////////////////////////
+// Search paths
+//////////////////////////////
 
-  TEXT    tx_searchdepth_3  10 +40 200 . , label("Set the default search depth:")
-  SPINNER searchdepth_count @  +25 50  . , default(r(recdepth)) nomemory
-
-END
-
-// Default search dept tab
-
-DIALOG searchpaths, title("reproot - settings file setup") tabtitle("Search paths")
+DIALOG searchpaths, tabtitle(" Search Paths ")
 BEGIN
 
   // Default search dept tab
@@ -69,7 +76,28 @@ BEGIN
 
 END
 
-DIALOG skipdirs, label("reproot - Manage settings file") tabtitle("Skip directories")
+//////////////////////////////
+// Search depth
+//////////////////////////////
+
+DIALOG searchdepth, tabtitle(" Default Search Depth ")
+BEGIN
+
+  // Default search dept tab
+  GROUPBOX gb_searchdepth_desc 10 10 450 70, label("Description:")
+    TEXT   tx_searchdepth_1 +10 +20 400 . , label("This sets the default number of subfolders to search in each search path.")
+    TEXT   tx_searchdepth_2 @  +20 400 . , label("This value is used for all search paths that does not has it own value.")
+
+  TEXT    tx_searchdepth_3  10 +40 200 . , label("Set the default search depth:")
+  SPINNER searchdepth_count @  +25 50  . , default(r(recdepth)) nomemory
+
+END
+
+//////////////////////////////
+// Skip directories
+//////////////////////////////
+
+DIALOG skipdirs, tabtitle(" Skip Directories ")
 BEGIN
 
   // Default search dept tab
