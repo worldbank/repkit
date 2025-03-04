@@ -2,8 +2,6 @@ clear all
 
 adopath ++ "C:\Users\WB462869\github\repkit\src\ado"
 
-
-
 cap program drop   reproot_parse_setup
     program define reproot_parse_setup, rclass
 
@@ -94,3 +92,13 @@ end
 
 reproot_setup2
 
+
+/* Ankriti todo
+
+  * Test file: Make sure it is PC/Mac agnostic
+  * Fix typos
+  * Post in Stata forum re mkaing behavior differnt in Mac
+  
+
+
+*/

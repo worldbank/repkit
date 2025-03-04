@@ -12,25 +12,23 @@ POSITION . . 550 500
 
 DIALOG overview, label("REPROOT - Settings File Setup") tabtitle(" Overview ")
 BEGIN
-  GROUPBOX gb_overview_1 10  20 500 210, label("REPROOT - settings file")
-    TEXT    tx_title1   +10 +30 450  ., label("This dialog box helps you to set up and manage the reproot settings file.")
-    TEXT    tx_title2    @  +40 450  ., label("reproot is a command that automates setting root folder paths across users collaborating")
-    TEXT    tx_title3    @  +20 450  ., label("on a project. reproot searches for root files across the users computer, but since an")
-    TEXT    tx_title4    @  +20 450  ., label("exhaustive search of all folders would be too slow, this settings file is used to indicate")
-    TEXT    tx_title5    @  +20 450  ., label("which high level folders to search for project root files.")
-    TEXT    tx_title6    @  +40 450  ., label("Read more how to use the command here: https://worldbank.github.io/repkit")
+  GROUPBOX gb_overview_1 10  20 530 210, label("REPROOT - settings file")
+    TEXT    tx_title1   +10 +30 490  ., label("This dialog box helps you to set up and manage the reproot settings file.")
+    TEXT    tx_title2    @  +40 @    ., label("reproot is a command that automates setting root folder paths across users collaborating on")
+    TEXT    tx_title3    @  +20 @    ., label("a project. reproot searches for root files across the users computer, but since an exhaustive ")
+    TEXT    tx_title4    @  +20 @    ., label("search of all folders would be too slow, this settings file is used to indicate which high-level")
+    TEXT    tx_title5    @  +20 @    ., label("folders to search for project root files.")
+    TEXT    tx_title6    @  +40 @    ., label("Read more how to use the command here: https://worldbank.github.io/repkit")
 
 
-  GROUPBOX gb_overview_2 10 +60 500 90, label("Three settings")
+  GROUPBOX gb_overview_2 10 +60 530 90, label("Three settings")
     TEXT    tx_body1    +10 +30 450  ., label("You find three tabs in this dialog box one for each setting.")
     TEXT    tx_body2     @  +20 450  ., label("Click through each tab to read more and manage each setting.")
 
 
-  GROUPBOX gb_overview_3 10 +60 500 90, label("Apply settings or abort")
+  GROUPBOX gb_overview_3 10 +60 530 90, label("Apply settings or abort")
     TEXT    tx_outro1   +10 +30 450  ., label("Click CANCEL to abort at any time. Click OK to write (or overwrite) the settings file.")
     TEXT    tx_outro2    @  +20 450  ., label("Click the ? below to read the helpfile explaining these inputs.")
-
-
 END
 
 
@@ -42,37 +40,39 @@ DIALOG searchpaths, tabtitle(" Search Paths ")
 BEGIN
 
   // Default search dept tab
-  GROUPBOX gb_sd_desc  10  10 450 50, label("Description:")
-    TEXT   tx_sp_1     +10 +20 400 . , label("This sets the paths reproot will search for root files.")
+  GROUPBOX gb_sd_desc  10  10 530 50, label("Description:")
+    TEXT   tx_sp_1     +10 +20 490 . , label("This sets the high-level folders in which reproot will search for project root files. In each of these folders ")
 
-  GROUPBOX gb_searchpath      10 +35 450 250, label("Select the search paths to be included:")
+  GROUPBOX gb_searchpath 10 +35 490 230, label("Select the search paths to be included:")
 
     CHECKBOX ck_path1 +10 +20 20 .
-    EDIT ed_path1 +20 @ 400 ., default(r(searchpath1_text)) nomemory
+    EDIT ed_path1 +20 @ 450 ., default(r(searchpath1_text)) nomemory
     CHECKBOX ck_path2 -20 +25 20 .
-    EDIT ed_path2 +20 @ 400 ., default(r(searchpath2_text)) nomemory
+    EDIT ed_path2 +20 @ 450 ., default(r(searchpath2_text)) nomemory
     CHECKBOX ck_path3 -20 +25 20 .
-    EDIT ed_path3 +20 @ 400 ., default(r(searchpath3_text)) nomemory
+    EDIT ed_path3 +20 @ 450 ., default(r(searchpath3_text)) nomemory
     CHECKBOX ck_path4 -20 +25 20 .
-    EDIT ed_path4 +20 @ 400 ., default(r(searchpath4_text)) nomemory
+    EDIT ed_path4 +20 @ 450 ., default(r(searchpath4_text)) nomemory
     CHECKBOX ck_path5 -20 +25 20 .
-    EDIT ed_path5 +20 @ 400 ., default(r(searchpath5_text)) nomemory
+    EDIT ed_path5 +20 @ 450 ., default(r(searchpath5_text)) nomemory
     CHECKBOX ck_path6 -20 +25 20 .
-    EDIT ed_path6 +20 @ 400 ., default(r(searchpath6_text)) nomemory
+    EDIT ed_path6 +20 @ 450 ., default(r(searchpath6_text)) nomemory
     CHECKBOX ck_path7 -20 +25 20 .
-    EDIT ed_path7 +20 @ 400 ., default(r(searchpath7_text)) nomemory
+    EDIT ed_path7 +20 @ 450 ., default(r(searchpath7_text)) nomemory
     CHECKBOX ck_path8 -20 +25 20 .
-    EDIT ed_path8 +20 @ 400 ., default(r(searchpath8_text)) nomemory
+    EDIT ed_path8 +20 @ 450 ., default(r(searchpath8_text)) nomemory
 
 
-  TEXT    tx_searchpath 10 +40 200 ., label("Add another search path:")
-  FILE    new_path      @  +20 400 ., directory label("Browse . . . ") nomemory
+  GROUPBOX gb_addpath 10 +50 490 110, label("Select another path to add:")
+  FILE    new_path    +10  +20 400 ., directory label("Browse . . . ") nomemory
 
-  TEXT     tx_sp_rd1     10 +20 200 ., label("Use specific search depth for this path:")
-  CHECKBOX use_serachdepth @ +25 20 .
-  SPINNER  serachdepth   @  +25 50  ., min(0) max(25) default(4) nomemory
+  CHECKBOX use_serachdepth   +2 +30  20  .
+  TEXT     tx_sp_rd1        +20 -1  205 20, label("Use specific search depth for this path:")
+  SPINNER  serachdepth     +210  @   50  ., min(0) max(25) default(4) nomemory
 
-  BUTTON  btn_searchpath   @  +25 200 ., label("Add path to possible options") onpush(program add_searchpath)
+  BUTTON  btn_searchpath   -232 +30 100  ., label("Add search path") onpush(program add_searchpath)
+
+
 
 END
 
@@ -141,12 +141,12 @@ PROGRAM POSTINIT_PROGRAM
         //Crate the new path in reproot format
         call create STRING newsearchpath
         if searchpaths.use_serachdepth {
-          call searchpaths.serachdepth.withvalue newsearchpath.setvalue "@"
+          call searchpaths.searchdepth.withvalue newsearchpath.setvalue "@"
           call newsearchpath.append ":"
           call searchpaths.new_path.withvalue newsearchpath.append "@"
         }
         else {
-          call searchpaths.new_path.withvalue newsearchpath.setvalue "@"
+          call searchpaths.new_path.withvalue newsearchpath.append "@"
         }
 
 
