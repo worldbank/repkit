@@ -28,7 +28,7 @@ BEGIN
 
   GROUPBOX gb_overview_3 10 +60 530 90, label("Apply settings or abort")
     TEXT    tx_outro1   +10 +30 450  ., label("Click CANCEL to abort at any time. Click OK to write (or overwrite) the settings file.")
-    TEXT    tx_outro2    @  +20 450  ., label("Click the ? below to read the helpfile explaining these inputs.")
+    TEXT    tx_outro2    @  +20 450  ., label("Click the ? below to read the help file explaining these inputs.")
 END
 
 
@@ -72,8 +72,6 @@ BEGIN
 
   BUTTON  btn_searchpath   -232 +30 100  ., label("Add search path") onpush(program add_searchpath)
 
-
-
 END
 
 //////////////////////////////
@@ -88,8 +86,8 @@ BEGIN
     TEXT   tx_searchdepth_1 +10 +20 400 . , label("This sets the default number of subfolders to search in each search path.")
     TEXT   tx_searchdepth_2 @  +20 400 . , label("This value is used for all search paths that does not has it own value.")
 
-  TEXT    tx_searchdepth_3  10 +40 200 . , label("Set the default search depth:")
-  SPINNER searchdepth_count @  +25 50  . , default(r(recdepth)) nomemory
+  GROUPBOX gb_addpath        10 +40 450 60, label("Set the default search depth:")
+  SPINNER searchdepth_count +10 +25 50  . , default(r(recdepth)) nomemory
 
 END
 
@@ -104,7 +102,7 @@ BEGIN
   GROUPBOX gb_skipdir_desc  10  10 450 50, label("Description:")
     TEXT   tx_skipdir_1      +10 +20 400 . , label("This sets the folder names that reproot always should skip.")
 
-  GROUPBOX   gb_skipdirs	 10 +35 450 150, label("Select paths that should never be searched by reproot:")
+  GROUPBOX   gb_skipdirs	 10 +35 450 180, label("Select paths that should never be searched by reproot:")
     CHECKBOX ck_skipdir1 +10 +20 20 .
     EDIT ed_skipdir1 +20 @ 400 ., default(r(skipdir1_text)) nomemory
     CHECKBOX ck_skipdir2 -20 +25 20 .
@@ -118,9 +116,9 @@ BEGIN
     CHECKBOX ck_skipdir6 -20 +25 20 .
     EDIT ed_skipdir6 +20 @ 400 ., default(r(skipdir6_text)) nomemory
 
-  TEXT    tx_skipdir  10 +40 200 ., label("Enter another folder name that should always be skipped:")
-  EDIT    newskipdir     @  +20 400 ., nomemory
-  BUTTON  btn_skipdir @  +25 200 ., label("Add skip folder") onpush(program add_skipdir)
+  GROUPBOX gb_addpath  10 +50 450 80, label("Enter another folder name that should always be skipped:")
+  EDIT    newskipdir  +10 +20 200 ., nomemory
+  BUTTON  btn_skipdir   @ +25 200 ., label("Add folder name to skip") onpush(program add_skipdir)
 
 END
 
