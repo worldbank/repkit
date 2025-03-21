@@ -69,8 +69,8 @@ cap program drop   reproot_setup2
     db reproot, debug
 end
 
-cap program drop   reproot_output_test
-    program define reproot_output_test
+cap program drop   reproot_dlg_output_parsing
+    program define reproot_dlg_output_parsing
 
     version 14.1
 
@@ -82,23 +82,23 @@ cap program drop   reproot_output_test
       skipdir1(string) skipdir2(string) skipdir3(string) ///
       skipdir4(string) skipdir5(string) skipdir6(string) ///
     ]
-
-    noi di "oi - reproot_output_test"
-    noi di "searchpath1 - `searchpath1'"
-    noi di "skipdir1 - `skipdir1'"
-    
+	
+	noi di "searchdepth: `searchdepth'"
+	
+	local searchpaths ""
+	forvalues i = 1/8 {
+		if !missing("`searchpath`i''") local searchpaths `"`searchpaths' "`searchpath`i''""'
+	}
+	
+	local skipdirs ""
+	forvalues i = 1/6 {
+		if !missing("`skipdir`i''") local skipdirs `"`skipdirs' "`skipdir`i''""'
+	}
+	
+	noi di `"searchpaths: `searchpaths'"'
+	noi di `"skipdirs: `skipdirs'"'
+	//create_env_file , searchpaths(string) recursedepth("`searchdepth'") skipdirs(string)
+	
 end
 
-
 reproot_setup2
-
-
-/* Ankriti todo
-
-  * Test file: Make sure it is PC/Mac agnostic
-  * Fix typos
-  * Post in Stata forum re mkaing behavior differnt in Mac
-  
-
-
-*/

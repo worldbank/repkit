@@ -466,7 +466,7 @@ HELP hlp1, view("help reproot")
 // --------------------------- define how to assemble u-action ---------
 PROGRAM command
   BEGIN
-    put "reproot_output_test "
+    put "reproot_dlg_output_parsing "
     beginoptions
 
       // Set default recurse depth
