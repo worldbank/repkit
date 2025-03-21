@@ -1,4 +1,4 @@
-searchpath*! version 3.1 20240926 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.1 20240926 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reproot_setup
     program define reproot_setup
@@ -62,7 +62,7 @@ qui {
       exit
     }
 
-    noi di as result _n `"{pstd}Reproot requries at least one search path. Read more {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' ///
+    noi di as result _n `"{pstd}Reproot requires at least one search path. Read more {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' ///
       _n `"{pstd}Do you want to add one now?{p_end}"'
 
     global path_to_add ""
@@ -92,7 +92,7 @@ qui {
 end
 
 
-* DISPLAY searchpath
+* Write the env file
 cap program drop   create_env_file
     program define create_env_file, rclass
 qui {
@@ -116,7 +116,7 @@ qui {
 
     copy `env_tmpfile' `"`env_file'"'
 
-    noi di as result _n "{pstd}Reproot environment file succsfully created!{p_end}"
+    noi di as result _n "{pstd}Reproot environment file successfully created!{p_end}"
 }
 end
 
