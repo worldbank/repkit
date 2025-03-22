@@ -138,6 +138,7 @@ PROGRAM POSTINIT_PROGRAM
 
         //Crate the new path in reproot format
         call create STRING newsearchpath
+        call newsearchpath.setvalue ""
         if searchpaths.use_serachdepth {
           call searchpaths.recursedepth.withvalue newsearchpath.setvalue "@"
           call newsearchpath.append ":"
@@ -147,15 +148,14 @@ PROGRAM POSTINIT_PROGRAM
           call searchpaths.new_path.withvalue newsearchpath.append "@"
         }
 
-
         // Find the first empty field and add it there - "if else" is not supported
         if searchpaths.ed_path1.iseq("") {
-          call newsearchpath.withvalue searchpaths.ed_path2.setvalue "@"
+          call newsearchpath.withvalue searchpaths.ed_path1.setvalue "@"
           call searchpaths.ck_path1.seton
         }
         else {
           if searchpaths.ed_path2.iseq("") {
-            call newsearchpath.withvalue searchpaths.ed_path3.setvalue "@"
+            call newsearchpath.withvalue searchpaths.ed_path2.setvalue "@"
             call searchpaths.ck_path2.seton
           }
           else {
@@ -198,6 +198,9 @@ PROGRAM POSTINIT_PROGRAM
             }
           }
         }
+
+        // Reset the new path field to missing
+        call searchpaths.new_path.setvalue ""
 
         // Disable empty fields
         call program disable_empty_fields
