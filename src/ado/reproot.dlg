@@ -469,11 +469,11 @@ HELP hlp1, view("help reproot")
 // --------------------------- define how to assemble u-action ---------
 PROGRAM command
   BEGIN
-    put "reproot_dlg_output_parsing "
+    put "reproot_setup_dlg_output "
     beginoptions
 
       // Set default recurse depth
-      put "searchdepth(" searchdepth.searchdepth_count ") "
+      put "recursedepth(" searchdepth.searchdepth_count ") "
 
       // Set searchpaths
       if searchpaths.ed_path1.isneq("") & searchpaths.ck_path1 {

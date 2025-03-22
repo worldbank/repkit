@@ -24,6 +24,7 @@ d
 d Distribution-Date: 20240926
 d
 *** adofiles
+f ado/reproot_setup_dlg_output.ado
 f ado/lint.ado
 f ado/reproot_setup.ado
 f ado/repadolog.ado
@@ -36,6 +37,7 @@ f ado/repado.ado
 f ado/repkit.ado
 
 *** helpfiles
+f sthlp/reproot_setup_dlg_output.sthlp
 f sthlp/lint.sthlp
 f sthlp/reproot_setup.sthlp
 f sthlp/repadolog.sthlp
