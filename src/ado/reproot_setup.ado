@@ -8,117 +8,208 @@ qui {
     version 14.1
 
     * Update the syntax. This is only a placeholder to make the command run
-    syntax, [searchpaths(string) debug_home_folder(string)]
+    syntax, [ ///
+      searchpaths(string) ///
+      recursedepth(numlist min=1 max=1) ///
+      skipdirs(string) ///
+      debug_home_location(string) ///
+    ]
 
+    ********************************************************
+    * Get the home folder where the environment file is located
 
-    * Get home folder using cd and then restore the orginal cd
+    * Get home folder using cd and then restore the original cd
     local preserve_pwd "`c(pwd)'"
     cd ~
     local home_fld "`c(pwd)'"
     cd "`preserve_pwd'"
 
-    * This is used for testing purpose during development only
-    if !missing("`debug_home_folder'") local home_fld  "`debug_home_folder'"
-
-    * Test that searchpath exists
-    foreach searchpath in `"`searchpaths'"' {
-      test_searchpath, searchpath(`"`searchpath'"') error
+    * Only update the global in the first run. If this is
+    * the second run after the dialog box, then keep the global
+    if missing("${reproot_setup_env_file}") {
+      * This is used for testing purpose during development only
+      if !missing("`debug_home_location'") local home_fld  "`debug_home_location'"
+      * Set the default location of the environment file
+      global reproot_setup_env_file `"`home_fld'/reproot-env.yaml"'
     }
 
-    * Hardcoded file names
-    local env_file  "`home_fld'/reproot-env.yaml"
-
-
     * Test if env file already exists
-    cap confirm file "`env_file'"
+    cap confirm file "${reproot_setup_env_file}"
     if (_rc)  local env_file_exists 0
     else      local env_file_exists 1
 
-    if (`env_file_exists') {
-        noi di as result _n `"{pstd}An environment file (reproot-env.yaml) already exists in your home folder: {browse "`home_fld'"}. To modify this file, use a text editor and follow the instructions in {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":this guide}.{p_end}"'
+    ********************************************************
+    * Run the dialog box if no search paths were provided
+
+    if missing(`"`searchpaths'"') {
+      * Read values in existing env file if it exists
+      reproot_dlg_input_parsing
+
+      * Open the dialog box
+      db reproot
+
+      * The output from the dialog box is parsed in reproot_dlg_input_parsing,
+      * which calls the reproot_setup command again with the input from the dialog box
     }
+
     else {
-      noi reproot_setup_envfile, env_file("`env_file'") searchpaths(`"`searchpaths'"') home_fld("`home_fld'")
-    }
-}
-end
+      ********************************************************
+      * Test the inputs
 
-cap program drop   reproot_setup_envfile
-    program define reproot_setup_envfile
-
-qui {
-
-    syntax, env_file(string) home_fld(string) [searchpaths(string)]
-
-    * Ask for confirmation
-    noi di as result _n `"{pstd}No environment file was found in your home folder: {browse "`home_fld'"}.{p_end}"' _n `"{pstd}Do you want to create one?{p_end}"'
-    global setup_confirmation ""
-    while (!inlist(upper("${setup_confirmation}"),"Y", "N")) {
-      noi di as txt `"{pstd}Enter "Y" to continue or "N" to exit to Stata."', _request(setup_confirmation)
-    }
-    if upper("${setup_confirmation}") == "N" {
-      noi di as txt "{pstd}Environment file creation aborted - nothing was created.{p_end}"
-      error 1
-      exit
-    }
-
-    noi di as result _n `"{pstd}Reproot requires at least one search path. Read more {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' ///
-      _n `"{pstd}Do you want to add one now?{p_end}"'
-
-    global path_to_add ""
-    while (!inlist(upper("${path_to_add}"),"BREAK","DONE")) {
-      noi display_searchpath, searchpaths(`"`searchpaths'"')
-      noi di as txt _n `"{pstd}Enter a new folder path or enter "DONE" to confirm those you have already entered.{p_end}"' ///
-                    _n `"{pstd}Type "BREAK" to discard changes."' ///
-        , _request(path_to_add)
-
-      * Do not test of add keywords
-      if (!inlist(upper("${path_to_add}"),"BREAK","DONE")) {
-        test_searchpath, searchpath(${path_to_add})
-        if (`r(path_exists)' == 0)  noi di as txt "{pstd}{red:Warning}:This path does not exist.{p_end}"
-        else local searchpaths `"`searchpaths' "${path_to_add}" "'
+      * Test that search path exists
+      foreach searchpath of local searchpaths {
+        test_searchpath, searchpath("`searchpath'") error
       }
-    }
 
-    * Abort if break was the key word
-    if upper("${path_to_add}") == "BREAK" {
-      noi di as txt "{pstd}Changes discarded - nothing was created.{p_end}"
-      error 1
-      exit
-    }
+      ********************************************************
+      * Modify the environment file
 
-    noi create_env_file, env_file("`env_file'") searchpaths(`"`searchpaths'"')
+      if (`env_file_exists') {
+        noi reproot_update_envfile, ///
+          searchpaths(`"`searchpaths'"') recursedepth("`recursedepth'") skipdirs(`"`skipdirs'"')
+        noi di as result _n "{pstd}Reproot environment file successfully updated!{p_end}"
+      }
+      else {
+        noi reproot_write_envfile, ///
+          searchpaths(`"`searchpaths'"') recursedepth("`recursedepth'") skipdirs(`"`skipdirs'"')
+        noi di as result _n "{pstd}Reproot environment file successfully created!{p_end}"
+      }
+
+      * Reset global
+      global reproot_setup_env_file ""
+    }
 }
 end
 
-
-* Write the env file
-cap program drop   create_env_file
-    program define create_env_file, rclass
+* Create the env file
+cap program drop   reproot_write_envfile
+    program define reproot_write_envfile, rclass
 qui {
-    syntax, env_file(string) [searchpaths(string)]
+    syntax, [ ///
+      searchpaths(string)  ///
+      recursedepth(string) ///
+      skipdirs(string)     ///
+    ]
 
     * Initiate the tempfile handlers and tempfiles needed
     tempname env_handle
     tempfile env_tmpfile
 
+    * Set default recurse depth if one is provided
+    if missing("`recursedepth'") local recursedepth 4
+
+    * Deduplicate the search paths and skip folders names
+    local searchpaths : list uniq searchpaths
+    local skipdirs    : list uniq skipdirs
+
     * Open template to read from and new tempfile to write to
     file open `env_handle' using `env_tmpfile' , write
 
-    * Write the smcl tag at top of file to
-    file write `env_handle' "recursedepth: 4" _n "paths:" _n
+    * Write the recurse 
+    file write `env_handle' "recursedepth: `recursedepth'" _n "paths:" _n
     foreach searchpath of local searchpaths {
-      file write `env_handle' `"    - `searchpath'"' _n
+      test_searchpath, searchpath(`"`searchpath'"')
+      file write `env_handle' `"    - "`searchpath'""' _n
     }
-    file write `env_handle' "skipdirs:" _n `"    - ".git""'
-
+    file write `env_handle' "skipdirs:" _n
+    foreach skipdir of local skipdirs {
+      file write `env_handle' `"    - "`skipdir'""' _n
+    }
     file close `env_handle'
 
-    copy `env_tmpfile' `"`env_file'"'
-
-    noi di as result _n "{pstd}Reproot environment file successfully created!{p_end}"
+    copy `env_tmpfile' "${reproot_setup_env_file}", replace
 }
 end
+
+* Create the env file
+cap program drop   reproot_update_envfile
+    program define reproot_update_envfile, rclass
+qui {
+    syntax, [ ///
+      searchpaths(string)  ///
+      recursedepth(string) ///
+      skipdirs(string)     ///
+    ]
+
+    * Parse the env file
+    reproot_parse env, file("${reproot_setup_env_file}") asis
+
+    * If recurse depth is missing in input, read it from file
+    if missing("`recursedepth'") local recursedepth `r(recdepth)'
+    
+    * Concatenate search paths and skip folders names in input with the ones in the file
+    local searchpaths `"`r(searchpaths)' `searchpaths'"'
+    local skipdirs    `"`r(skipdirs)' `skipdirs'"'
+   
+    * Create the env file - essentially overwrites the file with new input
+    reproot_write_envfile, ///
+      searchpaths(`"`searchpaths'"') recursedepth("`recursedepth'") skipdirs(`"`skipdirs'"')
+
+}
+end
+
+**********************************************************************
+* Dialog box utils
+
+* Parse the env file and prepare it for the dialog box
+cap program drop   reproot_dlg_input_parsing
+    program define reproot_dlg_input_parsing, rclass
+    
+    * Initiate locals
+    local env_i  = 1
+    local skip_i = 1
+    
+    * Test if env file already exists
+    cap confirm file "${reproot_setup_env_file}"
+    
+    * If env file does not exist, return default values
+    if _rc {
+        * Set search paths to default values
+        return local  searchpath1_text ""
+        return scalar searchpath1_default = 0
+        * Set default to 4
+        return scalar recdepth = 4 
+        * Set skip dirs to default values
+        return local  skipdir1_text ".git"
+        return scalar skipdir1_default = 0
+    } 
+    
+    * If env file exists, parse the file and get current values
+    else {
+      * Parse the env file
+      reproot_parse env, file("${reproot_setup_env_file}") asis
+      return scalar recdepth = `r(recdepth)'
+      
+      * Parse search paths
+      local searchpaths `"`r(searchpaths)'"'
+      foreach searchpath of local searchpaths {
+         return local  searchpath`env_i'_text `"`searchpath'"'
+         return scalar searchpath`env_i'_default = 1 //Checks the box for this path
+         local ++env_i
+      }
+      
+      * Parse skip dirs
+      local skipdirs `"`r(skipdirs)'"'
+      foreach skipdir of local skipdirs {
+         return local  skipdir`skip_i'_text `"`skipdir'"'
+         return scalar skipdir`skip_i'_default = 1 //Checks the box for this folder name
+         local ++skip_i
+      }
+    }
+    
+    * Make sure that checkboxes are are unchecked when there is no value
+    forvalues env_default_i = `env_i'/8 {
+        return scalar searchpath`env_default_i'_default = 0
+    }
+    forvalues skip_default_i = `skip_i'/6 {
+        return scalar skipdir`skip_default_i'_default = 0
+    }
+
+end
+
+
+**********************************************************************
+* General utils
 
 * TEST searchpath
 cap program drop   test_searchpath
@@ -126,7 +217,7 @@ cap program drop   test_searchpath
 qui {
     syntax, [searchpath(string) error]
 
-    if !missing("`searchpath'") {
+    if !missing(`"`searchpath'"') {
       * Parse the searchpath that can be on either of these formats:
       *  - "4:C:\Users\user1234\github"
       *  - "C:\Users\user1234\github"
@@ -156,23 +247,6 @@ qui {
           exit
         }
       }
-    }
-}
-end
-
-
-* DISPLAY searchpath
-cap program drop   display_searchpath
-    program define display_searchpath, rclass
-qui {
-    syntax, [searchpaths(string)]
-    if !missing(`"`searchpaths'"') {
-      local di_paths ""
-      * Test that searchpath exists
-      foreach searchpath of local searchpaths {
-        local di_paths "`di_paths'{break}- `searchpath'"
-      }
-      noi di as result _n `"{pstd}This is the list of paths that will be added:`di_paths'{p_end}"' _n
     }
 }
 end
