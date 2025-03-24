@@ -5,7 +5,7 @@ cap program drop   reproot_setup_dlg_output
     program define reproot_setup_dlg_output
 
     syntax , [ ///
-      recursedepth(string)                                                            ///
+      searchdepth(string)                                                            ///
       searchpath1(string) searchpath2(string) searchpath3(string) searchpath4(string) ///
       searchpath5(string) searchpath6(string) searchpath7(string) searchpath8(string) ///
       skipdir1(string) skipdir2(string) skipdir3(string)                              ///
@@ -32,7 +32,7 @@ cap program drop   reproot_setup_dlg_output
         
     * Call the reproot_setup command again with the input from the dialog box
     reproot_setup, searchpaths(`"`searchpaths'"') ///
-                   recursedepth("`recursedepth'") ///
+                   searchdepth("`searchdepth'") ///
                    skipdirs(`"`skipdirs'"' ) 
 
 end

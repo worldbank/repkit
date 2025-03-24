@@ -70,7 +70,7 @@ BEGIN
 
     CHECKBOX use_serachdepth   +2 +30  20  ., nomemory
     TEXT     tx_sp_rd1        +20 -1  205 20, label("Use specific search depth for this path:")
-    SPINNER  recursedepth     +210  @   50  ., min(0) max(25) default(4) nomemory
+    SPINNER  searchdepth     +210  @   50  ., min(0) max(25) default(4) nomemory
 
     BUTTON  btn_searchpath   -232 +30 100  ., label("Add search path") onpush(program add_searchpath)
 
@@ -143,7 +143,7 @@ PROGRAM POSTINIT_PROGRAM
         call create STRING newsearchpath
         call newsearchpath.setvalue ""
         if searchpaths.use_serachdepth {
-          call searchpaths.recursedepth.withvalue newsearchpath.setvalue "@"
+          call searchpaths.searchdepth.withvalue newsearchpath.setvalue "@"
           call newsearchpath.append ":"
           call searchpaths.new_path.withvalue newsearchpath.append "@"
         }
@@ -476,7 +476,7 @@ PROGRAM command
     beginoptions
 
       // Set default recurse depth
-      put "recursedepth(" searchdepth.searchdepth_count ") "
+      put "searchdepth(" searchdepth.searchdepth_count ") "
 
       // Set searchpaths
       if searchpaths.ed_path1.isneq("") & searchpaths.ck_path1 {

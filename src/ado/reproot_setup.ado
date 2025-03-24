@@ -10,7 +10,7 @@ qui {
     * Update the syntax. This is only a placeholder to make the command run
     syntax, [ ///
       searchpaths(string) ///
-      recursedepth(numlist min=1 max=1) ///
+      searchdepth(numlist min=1 max=1) ///
       skipdirs(string) ///
       debug_home_location(string) ///
     ]
@@ -68,12 +68,12 @@ qui {
 
       if (`env_file_exists') {
         noi reproot_update_envfile, ///
-          searchpaths(`"`searchpaths'"') recursedepth("`recursedepth'") skipdirs(`"`skipdirs'"')
+          searchpaths(`"`searchpaths'"') searchdepth("`searchdepth'") skipdirs(`"`skipdirs'"')
         noi di as result _n `"{pstd}The {bf:reproot} environment file was successfully updated! `path_output'{p_end}"'
       }
       else {
         noi reproot_write_envfile, ///
-          searchpaths(`"`searchpaths'"') recursedepth("`recursedepth'") skipdirs(`"`skipdirs'"')
+          searchpaths(`"`searchpaths'"') searchdepth("`searchdepth'") skipdirs(`"`skipdirs'"')
         noi di as result _n `"{pstd}The {bf:reproot} environment file was successfully created! `path_output'{p_end}"'
       }
 
@@ -89,7 +89,7 @@ cap program drop   reproot_write_envfile
 qui {
     syntax, [ ///
       searchpaths(string)  ///
-      recursedepth(string) ///
+      searchdepth(string) ///
       skipdirs(string)     ///
     ]
 
@@ -98,7 +98,7 @@ qui {
     tempfile env_tmpfile
 
     * Set default recurse depth if one is provided
-    if missing("`recursedepth'") local recursedepth 4
+    if missing("`searchdepth'") local searchdepth 4
 
     * Deduplicate the search paths and skip folders names
     local searchpaths : list uniq searchpaths
@@ -108,7 +108,7 @@ qui {
     file open `env_handle' using `env_tmpfile' , write
 
     * Write the recurse 
-    file write `env_handle' "recursedepth: `recursedepth'" _n "paths:" _n
+    file write `env_handle' "searchdepth: `searchdepth'" _n "paths:" _n
     foreach searchpath of local searchpaths {
       test_searchpath, searchpath(`"`searchpath'"')
       file write `env_handle' `"    - "`searchpath'""' _n
@@ -129,7 +129,7 @@ cap program drop   reproot_update_envfile
 qui {
     syntax, [ ///
       searchpaths(string)  ///
-      recursedepth(string) ///
+      searchdepth(string) ///
       skipdirs(string)     ///
     ]
 
@@ -137,7 +137,7 @@ qui {
     reproot_parse env, file("${reproot_setup_env_file}") asis
 
     * If recurse depth is missing in input, read it from file
-    if missing("`recursedepth'") local recursedepth `r(recdepth)'
+    if missing("`searchdepth'") local searchdepth `r(recdepth)'
     
     * Concatenate search paths and skip folders names in input with the ones in the file
     local searchpaths `"`r(searchpaths)' `searchpaths'"'
@@ -145,7 +145,7 @@ qui {
    
     * Create the env file - essentially overwrites the file with new input
     reproot_write_envfile, ///
-      searchpaths(`"`searchpaths'"') recursedepth("`recursedepth'") skipdirs(`"`skipdirs'"')
+      searchpaths(`"`searchpaths'"') searchdepth("`searchdepth'") skipdirs(`"`skipdirs'"')
 
 }
 end
