@@ -1,8 +1,10 @@
-*! version XX XXXXXXXXX ADAUTHORNAME ADCONTACTINFO
+*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 * Parse the output from the reproot_setup dialog box and send it back to reproot_setup
 cap program drop   reproot_setup_dlg_output
     program define reproot_setup_dlg_output
+
+    version 14.1
 
     syntax , [ ///
       searchdepth(string)                                                            ///
