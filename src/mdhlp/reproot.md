@@ -15,87 +15,39 @@ __reproot__ , __**p**roject__(_string_) __**r**oots__(_string_) [ __**optr**oots
 | __clear__ | Always search for roots even if already loaded |
 | __verbose__ | More verbose output about roots found |
 
-`reproot` is a framework for automatically handling file paths across
-teams without requiring project-specific setup from individual users.
-Each user needs to set up `reproot` once on their computer (see the next paragraph).
-Afterward, users can automatically load root paths with
-no manual setup in all projects using `reproot` on that computer.
+`reproot` is a framework designed to streamline file path management across teams, eliminating the need for project-specific setup by individual users. Once `reproot` is configured on a user's computer (see instructions below), root paths can be automatically loaded for all projects using `reproot` on that machine.
 
-`reproot` works by having the team save a root file in root folders required in the project.
-Such root folders could be the root of a Git clone folder,
-the root of a OneDrive/DropBox folder where data is shared,
-or the root of a project folder on a network drive where files are shared, etc.
-As long as the folder is accessible from the file system,
-a root can be placed in that folder.
-File paths to specific files can then be expressed in the code as
-relative paths from any of those roots.
+The framework operates by requiring the team to save a root file in each root folder essential to the project. These root folders could include the root of a Git repository, a shared folder on OneDrive/Dropbox, or a network drive where project files are stored. As long as the folder is accessible via the file system, a root file can be placed there. File paths to specific files can then be referenced in the code as relative paths from these roots.
 
-To avoid searching the entire file system for roots (which would take too much time),
-each user needs to configure a `reproot-env` file.
-This file lists which folders and how many sub-folders of those folders
-`reproot` should search for root files.
-This setup should make the search take less than a second.
+To ensure efficient root file searches, users must configure a `reproot-env` file. This file specifies the directories and subdirectories that `reproot` should scan for root files, optimizing the search process to take less than a second.
 
-The `reproot-env` file should be created in the folder that
-Stata outputs when running the code `cd ~`.
-This location can be accessed by all users without having to set any root paths first.
+The `reproot-env` file can be set up using the utility command `reproot_setup`. Simply run this command in the Stata command window without any options and follow the instructions in the dialog box.
 
-Read more about setting up this file in
-this [article](https://worldbank.github.io/repkit/articles/reproot-files.html).
-The rest of this help file will focus on how to use this command once those files are set up.
+While manual configuration of the `reproot-env` file is possible, it is strongly recommended to use the utility command to ensure the file is correctly formatted and saved in the expected location. The file must be saved in the directory returned by the Stata command `cd ~`. This ensures accessibility for all users without requiring additional root path setup.
+
+For detailed instructions on setting up the `reproot-env` file, refer to this [article](https://worldbank.github.io/repkit/articles/reproot-files.html). The remainder of this help file focuses on using the `reproot` command after the setup is complete.
 
 # Options
 
-__project__(_string_) indicates the name of the current project. When searching for root files, only root files for this project will be considered. Use a project name that will remain unique across all team members' computers.
+__**p**roject__(_string_) specifies the name of the current project. When searching for root files, only root files associated with this project will be considered. Use a project name that is unique across all team members' computers.
 
-__roots__(_string_) indicates which roots are expected to be found for this project.
-The command creates a global based on the root name of that root
-if that root folder is found.
-The content of the global will be the file path to the location of the root file.
-This command does not set globals for roots not listed in this option
-(or in `optroots()` - see below),
-even if such roots for this project were found.
-Unless the __clear__ option is used,
-the command does not overwrite any global that
-already had content before running the command.
-Finally, the command tests that there is a global named after each root and
-that all of them are non-empty.
+__**r**oots__(_string_) defines the required roots for the project. For each root found, a global variable is created based on the root name, containing the file path to the root file's location. Roots not listed in this option (or in `optroots()`) will not have globals set, even if they are found. Unless the __clear__ option is used, existing globals are not overwritten. The command also verifies that a global exists for each specified root and that it is non-empty.
 
-__optroots__(_string_) allows the users to set optional roots.
-They will be treated the same way as the roots in `roots()` with
-the one exception that no error is thrown if this root is not found.
+__**optr**oots__(_string_) allows specifying optional roots. These are treated like the roots in `roots()` but do not trigger an error if they are not found.
 
-__prefix__(_string_) allows the user to set a project-specific global prefix.
-This is strongly recommended to ensure that a global from another project
-is not mistaken as a global for the current project.
-Unless the __clear__ option is used,
-a global already set with a common name, such as `data` or `code`,
-will be interpreted as a root global with that name for the current project.
-The __prefix()__ option allows a project-specific prefix that is set to all globals.
-So, if __prefix("abc_")__ is used, then the globals `data` and `code`
-will be set to `abc_data` and `abc_code`.
+__**pre**fix__(_string_) enables setting a project-specific prefix for global variables. This is recommended to avoid conflicts with globals from other projects. For example, using __prefix("abc_")__ will create globals like `abc_data` and `abc_code` instead of `data` and `code`.
 
-__clear__ overwrites globals that already exist with the name that `reproot` would create.
-This is all the roots listed in __roots()__ with
-the __prefix()__ prepended if that option is used.
-The default behavior is to not search for roots that are already set up.
-If all globals are already set, then the command does not execute the search for roots.
+__clear__ forces the command to overwrite existing globals that match the names of the roots specified in __roots()__, with the __prefix()__ applied if used. By default, the command skips searching for roots that are already set.
 
-__verbose__ makes the command output more information about what roots were found.
-This option is helpful for debugging when trying to figure out what roots are found and not found.
+__verbose__ provides detailed output about the roots found during execution. This is useful for debugging and understanding which roots were successfully located.
 
 # Examples
 
-These examples demonstrate how to include `reproot` in the do-file.
-See this [article](https://worldbank.github.io/repkit/articles/reproot-files.html)
-for information on how to set up the `.yaml` files this command needs to run.
+Below are examples of how to use the `reproot` command in a do-file. To set up the required `.yaml` files, use the utility command `reproot_setup`.
 
-## Example 1.
+## Example 1
 
-In this example, the command searches the search paths indicated in
-the `reproot-env.yaml` file for root files for the project `my_proj`.
-Then it sets the globals `data` and `clone` to the file location where
-root files with those names for this project are found.
+This example searches the paths specified in the `reproot-env.yaml` file for root files associated with the project `my_proj`. If found, it sets the globals `data` and `clone` to the file paths of the corresponding root files.
 
 ```
 reproot , project("my_proj") roots("data clone")
@@ -107,5 +59,5 @@ Read more about these commands on [this repo](https://github.com/worldbank/repki
 
 # Authors
 
-LSMS Team, The World Bank lsms@worldbank.org
+LSMS Team, The World Bank lsms@worldbank.org  
 DIME Analytics, The World Bank dimeanalytics@worldbank.org

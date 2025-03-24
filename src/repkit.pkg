@@ -29,6 +29,7 @@ f ado/reproot_setup.ado
 f ado/repadolog.ado
 f ado/reproot_search.ado
 f ado/reproot_parse.ado
+f ado/reproot_setup_dlg_output.ado
 f ado/reproot.ado
 f ado/reprun_dataline.ado
 f ado/reprun.ado
@@ -48,6 +49,7 @@ f sthlp/repkit.sthlp
 f ado/stata_linter_detect.py
 f ado/stata_linter_correct.py
 f ado/stata_linter_utils.py
+F ado/reproot.dlg
 
 *** end
 e
