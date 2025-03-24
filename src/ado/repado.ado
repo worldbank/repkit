@@ -1,4 +1,4 @@
-*! version 3.1 20240926 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   repado
     program define repado, rclass
@@ -145,7 +145,7 @@ cap program drop   print_output
       if ("`mode'" == "strict") {
         noi di as text `"{phang}- Only Stata's built-in commands in BASE and user-written commands installed in the new PLUS folder {inp:`adopath'} are available to scripts run in this session.{p_end}"'
         noi di as text `"{phang}- If a script runs without error in this session, it indicates that all user-written commands required by that script are in the new PLUS folder {inp:`adopath'}.{p_end}"'
-        noi di as text `"{phang}- Any other user who has access to the same folder {inp:`adopath'} (shared over Git, a syncing service, etc.) will use the exact same version of the commands installed at that location if they also use {inp:repado} to point to that folder..{p_end}"'
+        noi di as text `"{phang}- Any other user who has access to the same folder {inp:`adopath'} (shared over Git, a syncing service, etc.) will use the exact same version of the commands installed at that location if they also use {inp:repado} to point to that folder.{p_end}"'
         noi di as text `"{phang}- In this session, both {help ssc install} and {help net install} will install new commands in the new PLUS folder {inp:`adopath'} instead of the previous location where PLUS was pointing.{p_end}"'
       }
 

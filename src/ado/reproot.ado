@@ -1,4 +1,4 @@
-*! version 3.1 20240926 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reproot
     program define reproot, rclass
@@ -126,11 +126,11 @@ qui {
 
       * Get reprootpaths and skipdirs from env file
       reproot_parse env , file("`env_file'")
-      local envpaths `"`r(envpaths)'"'
+      local searchpaths `"`r(searchpaths)'"'
       local skipdirs `"`r(skipdirs)'"'
 
       * Test that the environment file has at least one search path
-      if missing(`"`envpaths'"') {
+      if missing(`"`searchpaths'"') {
         noi di as error `"{phang}The file {inp:reproot-env.yaml} found in home directory {browse "`homedir'"} has no paths and will therefore not find any roots. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.{p_end}"' _n
         error 99
         exit
@@ -140,12 +140,12 @@ qui {
         Search each reprootpaths
       ***************************************************/
 
-      foreach envpath of local envpaths {
+      foreach searchpath of local searchpaths {
 
         noi di as smcl  `"{hline}"' _n
 
         * Parse max recursion and search path from reprootpath
-        gettoken maxrecs search_path : envpath, parse(":")
+        gettoken maxrecs search_path : searchpath, parse(":")
         local search_path = substr("`search_path'",2,.)
 
         * Search next folder

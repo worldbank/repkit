@@ -1,46 +1,72 @@
 {smcl}
-{* *! version 3.1 20240926}{...}
+{* *! version 3.2 20250324}{...}
 {hline}
 {pstd}help file for {hi:reproot_setup}{p_end}
 {hline}
 
 {title:Title}
 
-{phang}{bf:reproot_setup} - This command is used for short description.
+{phang}{bf:reproot_setup} - This command sets up and modifies the settings file used in {inp:reproot} 
 {p_end}
 
 {title:Syntax}
 
-{phang}{bf:reproot_setup} , {bf:{ul:envp}aths}({it:string})
+{dlgtab:Normal usage:}
+
+{phang}This mode opens the setup settings in a dialog box.  
+It is not intended to be included in code used by others.  
+This command is designed to be run interactively in Stata{c 39}s command window.
 {p_end}
 
-{synoptset 16}{...}
+{phang}{bf:reproot_setup}
+{p_end}
+
+{dlgtab:Advanced usage:}
+
+{phang}This mode bypasses the dialog box and allows the user to set up and modify the settings file programmatically.  
+It is intended only for advanced use cases.
+{p_end}
+
+{phang}{bf:reproot_setup} , {bf:searchpaths}({it:string}) {bf:searchdepth}({it:integer}) {bf:skipdirs}({it:string})
+{p_end}
+
+{synoptset 20}{...}
 {p2coldent:{it:options}}Description{p_end}
 {synoptline}
-{synopt: {bf:{ul:envp}aths}({it:string})}Root paths to be added to the environment file{p_end}
+{synopt: {bf:searchpaths}({it:string})}Root paths to be added to the settings file{p_end}
+{synopt: {bf:searchdepth}({it:integer})}New depth of sub-folders to search{p_end}
+{synopt: {bf:skipdirs}({it:string})}Folder names to ignore to be added to the settings file{p_end}
 {synoptline}
 
 {title:Description}
 
-{pstd}This command helps setting up the environment file used in the command
-{browse "https://worldbank.github.io/repkit/reference/reproot.html":reproot}.
-Read more about the environment file
-{browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}.
+{pstd}This command helps set up the settings file used in the command {browse "https://worldbank.github.io/repkit/reference/reproot.html":reproot}.
+{p_end}
+
+{pstd}The settings file needs to be configured once per computer, specifying the locations on the file system where project folders are stored. This command simplifies that process.
+{p_end}
+
+{pstd}Additionally, this command can modify an existing settings file.
 {p_end}
 
 {title:Options}
 
-{pstd}{bf:{ul:envp}aths}({it:string}) is used for list files to be added to the environment file.
-Paths can also be added interactively when running the command.
+{pstd}{bf:searchpaths}({it:string}) adds search paths to the settings file. If adding multiple paths, enclose each path in quotes and then enclose the full list as a compound string. Paths may include a path-specific search depth for each path.
 {p_end}
 
-{title:Feedback, bug reports and contributions}
+{pstd}{bf:searchdepth}({it:integer}) sets a general search depth for paths that do not have a path-specific search depth.
+{p_end}
 
-{pstd}Read more about these commands on {browse "https://github.com/worldbank/repkit":this repo} where this package is developed. Please provide any feedback by {browse "https://github.com/worldbank/repkit/issues":opening an issue}. PRs with suggestions for improvements are also greatly appreciated.
+{pstd}{bf:skipdirs}({it:string}) lists folder names that {inp:reproot} should ignore. Sub-folders within ignored folders will also be excluded. 
+{p_end}
+
+{title:Feedback, Bug Reports, and Contributions}
+
+{pstd}Learn more about these commands on {browse "https://github.com/worldbank/repkit":this repository}, where this package is developed. Please provide feedback by {browse "https://github.com/worldbank/repkit/issues":opening an issue}. Pull requests with suggestions for improvements are also welcome.
 {p_end}
 
 {title:Authors}
 
-{pstd}LSMS Team, The World Bank lsms@worldbank.org
+{pstd}LSMS Team, The World Bank lsms@worldbank.org,
 DIME Analytics, The World Bank dimeanalytics@worldbank.org
 {p_end}

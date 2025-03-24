@@ -1,0 +1,527 @@
+// https://www.stata.com/manuals13/pdialogprogramming.pdf#pdialogprogramming
+// ----------------- set version number and define size of box ---------
+VERSION 14
+POSITION . . 510 500
+
+// ------------------------------------------- define a dialog ---------
+
+//////////////////////////////
+// Overview
+//////////////////////////////
+
+DIALOG overview, label("REPROOT - Settings File Setup") tabtitle(" Overview ")
+BEGIN
+  GROUPBOX gb_overview_1 10  20 490 230, label("REPROOT - settings file")
+    TEXT    tx_title1   +10 +30 470  ., label("This dialog box helps you to set up and manage the reproot settings file.")
+    TEXT    tx_title2    @  +40 @    ., label("reproot is a command automating root folder paths management across users in a")
+    TEXT    tx_title3    @  +20 @    ., label("project. reproot searches for root files across the user's computer. An exhaustive ")
+    TEXT    tx_title4    @  +20 @    ., label("search across all folders would be too slow, and the purpose of this reproot settings")
+    TEXT    tx_title5    @  +20 @    ., label("file is to limit the search to the relevant folders on each user's computer.")
+    TEXT    tx_title6    @  +40 @    ., label("Read more how to use the reproot command at https://worldbank.github.io/repkit or")
+    TEXT    tx_title7    @  +20 @    ., label(`"by clicking the '?' at the bottom left corner of this box."')
+
+
+  GROUPBOX gb_overview_2 10 +60 530 90, label("Three settings")
+    TEXT    tx_body1    +10 +30 450  ., label("You find three tabs in this dialog box one for each setting.")
+    TEXT    tx_body2     @  +20 450  ., label("Click through each tab to read more and manage each setting.")
+
+
+  GROUPBOX gb_overview_3 10 +60 530 90, label("Apply settings or abort")
+    TEXT    tx_outro1   +10 +30 450  ., label("Click CANCEL to abort at any time. Click OK to write (or overwrite) the settings file.")
+    TEXT    tx_outro2    @  +20 450  ., label("Click the ? below to read the help file explaining these inputs.")
+END
+
+
+//////////////////////////////
+// Search paths
+//////////////////////////////
+
+DIALOG searchpaths, tabtitle(" Search Paths ")
+BEGIN
+
+  // Default search dept tab
+  GROUPBOX gb_sd_desc  10  10 490 90, label("Description:")
+    TEXT   tx_sp_1    +10 +20 470 . , label("This sets the high-level folders where reproot will search for project root files.")
+    TEXT   tx_sp_2     @  +20 470 . , label("reproot will search the listed folders and the number of sub-folders corresponding")
+    TEXT   tx_sp_3     @  +20 470 . , label("to the default search depth or the path-specific search depth in each of them.")
+
+  GROUPBOX gb_searchpath 10 +50 490 230, label("Select the search paths to be included:")
+
+    CHECKBOX ck_path1 +10 +20 20 ., nomemory
+    EDIT ed_path1 +20 @ 450 ., default(r(searchpath1_text)) nomemory
+    CHECKBOX ck_path2 -20 +25 20 ., nomemory
+    EDIT ed_path2 +20 @ 450 ., default(r(searchpath2_text)) nomemory
+    CHECKBOX ck_path3 -20 +25 20 ., nomemory
+    EDIT ed_path3 +20 @ 450 ., default(r(searchpath3_text)) nomemory
+    CHECKBOX ck_path4 -20 +25 20 ., nomemory
+    EDIT ed_path4 +20 @ 450 ., default(r(searchpath4_text)) nomemory
+    CHECKBOX ck_path5 -20 +25 20 ., nomemory
+    EDIT ed_path5 +20 @ 450 ., default(r(searchpath5_text)) nomemory
+    CHECKBOX ck_path6 -20 +25 20 ., nomemory
+    EDIT ed_path6 +20 @ 450 ., default(r(searchpath6_text)) nomemory
+    CHECKBOX ck_path7 -20 +25 20 ., nomemory
+    EDIT ed_path7 +20 @ 450 ., default(r(searchpath7_text)) nomemory
+    CHECKBOX ck_path8 -20 +25 20 ., nomemory
+    EDIT ed_path8 +20 @ 450 ., default(r(searchpath8_text)) nomemory
+
+
+  GROUPBOX gb_addpath 10 +50 490 110, label("Select another path to add:")
+    FILE    new_path    +10  +20 400 ., directory label("Browse . . . ") nomemory
+
+    CHECKBOX use_serachdepth   +2 +30  20  ., nomemory
+    TEXT     tx_sp_rd1        +20 -1  205 20, label("Use specific search depth for this path:")
+    SPINNER  searchdepth     +210  @   50  ., min(0) max(25) default(4) nomemory
+
+    BUTTON  btn_searchpath   -232 +30 100  ., label("Add search path") onpush(program add_searchpath)
+
+END
+
+//////////////////////////////
+// Search depth
+//////////////////////////////
+
+DIALOG searchdepth, tabtitle(" Default Search Depth ")
+BEGIN
+
+  // Default search dept tab
+  GROUPBOX gb_searchdepth_desc 10 10 450 70, label("Description:")
+    TEXT   tx_searchdepth_1 +10 +20 400 . , label("This sets the default number of sub-folders to search within each search path.")
+    TEXT   tx_searchdepth_2   @ +20 400 . , label("This value is applied to all search paths that do not have their own specific value.")
+
+  GROUPBOX gb_addpath        10 +50 450 60, label("Set the default search depth:")
+    SPINNER searchdepth_count +10 +25 50  . , default(r(recdepth)) nomemory
+
+END
+
+//////////////////////////////
+// Skip directories
+//////////////////////////////
+
+DIALOG skipdirs, tabtitle(" Skip Directories ")
+BEGIN
+
+  // Default search dept tab
+  GROUPBOX gb_skipdir_desc  10  10 450 70, label("Description:")
+    TEXT   tx_skipdir_1    +10 +20 400 . , label("This sets the folder names that reproot always should ignore when found.")
+    TEXT   tx_skipdir_2      @ +20 400 . , label("reproot will not search folders with these names nor their sub-folders.")
+
+  GROUPBOX   gb_skipdirs	 10 +50 450 180, label("Select folder names that should be ignored by reproot:")
+    CHECKBOX ck_skipdir1 +10 +20 20 ., nomemory
+    EDIT ed_skipdir1 +20 @ 400 ., default(r(skipdir1_text)) nomemory
+    CHECKBOX ck_skipdir2 -20 +25 20 ., nomemory
+    EDIT ed_skipdir2 +20 @ 400 ., default(r(skipdir2_text)) nomemory
+    CHECKBOX ck_skipdir3 -20 +25 20 ., nomemory
+    EDIT ed_skipdir3 +20 @ 400 ., default(r(skipdir3_text)) nomemory
+    CHECKBOX ck_skipdir4 -20 +25 20 ., nomemory
+    EDIT ed_skipdir4 +20 @ 400 ., default(r(skipdir4_text)) nomemory
+    CHECKBOX ck_skipdir5 -20 +25 20 ., nomemory
+    EDIT ed_skipdir5 +20 @ 400 ., default(r(skipdir5_text)) nomemory
+    CHECKBOX ck_skipdir6 -20 +25 20 ., nomemory
+    EDIT ed_skipdir6 +20 @ 400 ., default(r(skipdir6_text)) nomemory
+
+  GROUPBOX gb_addpath  10 +50 450 80, label("Enter another folder name that should be ignored:")
+    EDIT    newskipdir  +10 +20 200 ., nomemory
+    BUTTON  btn_skipdir   @ +25 200 ., label("Add folder name to skip") onpush(program add_skipdir)
+
+END
+
+// -------------------- define the scripts used in this dialog box ---------
+
+PROGRAM POSTINIT_PROGRAM
+  BEGIN
+    call program disable_empty_fields
+    call program initial_checking
+  END
+
+  PROGRAM add_searchpath
+    BEGIN
+
+        // Enable all fields so they can be modified
+        call program enable_all_fields
+
+        //Crate the new path in reproot format
+        call create STRING newsearchpath
+        call newsearchpath.setvalue ""
+        if searchpaths.use_serachdepth {
+          call searchpaths.searchdepth.withvalue newsearchpath.setvalue "@"
+          call newsearchpath.append ":"
+          call searchpaths.new_path.withvalue newsearchpath.append "@"
+        }
+        else {
+          call searchpaths.new_path.withvalue newsearchpath.append "@"
+        }
+
+        // Find the first empty field and add it there - "if else" is not supported
+        if searchpaths.ed_path1.iseq("") {
+          call newsearchpath.withvalue searchpaths.ed_path1.setvalue "@"
+          call searchpaths.ck_path1.seton
+        }
+        else {
+          if searchpaths.ed_path2.iseq("") {
+            call newsearchpath.withvalue searchpaths.ed_path2.setvalue "@"
+            call searchpaths.ck_path2.seton
+          }
+          else {
+            if searchpaths.ed_path3.iseq("") {
+              call newsearchpath.withvalue searchpaths.ed_path3.setvalue "@"
+              call searchpaths.ck_path3.seton
+            }
+            else {
+              if searchpaths.ed_path4.iseq("") {
+                call newsearchpath.withvalue searchpaths.ed_path4.setvalue "@"
+                call searchpaths.ck_path4.seton
+              }
+              else {
+                if searchpaths.ed_path5.iseq("") {
+                  call newsearchpath.withvalue searchpaths.ed_path5.setvalue "@"
+                  call searchpaths.ck_path5.seton
+                }
+                else {
+                  if searchpaths.ed_path6.iseq("") {
+                    call newsearchpath.withvalue searchpaths.ed_path6.setvalue "@"
+                    call searchpaths.ck_path6.seton
+                  }
+                  else {
+                    if searchpaths.ed_path7.iseq("") {
+                      call newsearchpath.withvalue searchpaths.ed_path7.setvalue "@"
+                      call searchpaths.ck_path7.seton
+                    }
+                    else {
+                      if searchpaths.ed_path8.iseq("") {
+                        call newsearchpath.withvalue searchpaths.ed_path8.setvalue "@"
+                        call searchpaths.ck_path8.seton
+                      }
+                      else {
+                        // do nothing
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+        // Reset the new path field to missing
+        call searchpaths.new_path.setvalue ""
+
+        // Disable empty fields
+        call program disable_empty_fields
+    END
+
+    PROGRAM add_skipdir
+      BEGIN
+          // Enable all fields so they can be modified
+          call program enable_all_fields
+
+          // Find the first empty field and add it there - "if else" is not supported
+          if skipdirs.ed_skipdir1.iseq("") {
+            call skipdirs.newskipdir.withvalue skipdirs.ed_skipdir1.setvalue "@"
+          }
+          else {
+            if skipdirs.ed_skipdir2.iseq("") {
+              call skipdirs.newskipdir.withvalue skipdirs.ed_skipdir2.setvalue "@"
+            }
+            else {
+              if skipdirs.ed_skipdir3.iseq("") {
+                call skipdirs.newskipdir.withvalue skipdirs.ed_skipdir3.setvalue "@"
+              }
+              else {
+                if skipdirs.ed_skipdir4.iseq("") {
+                  call skipdirs.newskipdir.withvalue skipdirs.ed_skipdir4.setvalue "@"
+                }
+                else {
+                  if skipdirs.ed_skipdir5.iseq("") {
+                    call skipdirs.newskipdir.withvalue skipdirs.ed_skipdir5.setvalue "@"
+                  }
+                  else {
+                    if skipdirs.ed_skipdir6.iseq("") {
+                      call skipdirs.newskipdir.withvalue skipdirs.ed_skipdir6.setvalue "@"
+                    }
+                    else {
+                      // do nothing
+                    }
+                  }
+                }
+              }
+            }
+          }
+
+          // Disable empty fields
+          call program disable_empty_fields
+      END
+
+PROGRAM initial_checking
+  BEGIN
+      // For search paths populated from existing settings file - check the checkboxes
+      if searchpaths.ed_path1.isneq("") {
+        call searchpaths.ck_path1.seton
+      }
+      if searchpaths.ed_path2.isneq("") {
+        call searchpaths.ck_path2.seton
+      }
+      if searchpaths.ed_path3.isneq("") {
+        call searchpaths.ck_path3.seton
+      }
+      if searchpaths.ed_path4.isneq("") {
+        call searchpaths.ck_path4.seton
+      }
+      if searchpaths.ed_path5.isneq("") {
+        call searchpaths.ck_path5.seton
+      }
+      if searchpaths.ed_path6.isneq("") {
+        call searchpaths.ck_path6.seton
+      }
+      if searchpaths.ed_path7.isneq("") {
+        call searchpaths.ck_path7.seton
+      }
+      if searchpaths.ed_path8.isneq("") {
+        call searchpaths.ck_path8.seton
+      }
+
+      // For skip dirs populated from existing settings file - check the checkboxes
+      if skipdirs.ed_skipdir1.isneq("") {
+        call skipdirs.ck_skipdir1.seton
+      }
+      if skipdirs.ed_skipdir2.isneq("") {
+        call skipdirs.ck_skipdir2.seton
+      }
+      if skipdirs.ed_skipdir3.isneq("") {
+        call skipdirs.ck_skipdir3.seton
+      }
+      if skipdirs.ed_skipdir4.isneq("") {
+        call skipdirs.ck_skipdir4.seton
+      }
+      if skipdirs.ed_skipdir5.isneq("") {
+        call skipdirs.ck_skipdir5.seton
+      }
+      if skipdirs.ed_skipdir6.isneq("") {
+        call skipdirs.ck_skipdir6.seton
+      }
+  END
+
+PROGRAM disable_empty_fields
+  BEGIN
+    call program disable_emptysearch_fields
+    call program disable_emptyskip_fields
+  END
+
+PROGRAM disable_emptysearch_fields
+  BEGIN
+    // Enable checkbox if path exists, otherwise disable
+
+    if searchpaths.ed_path1.isneq("") {
+      call searchpaths.ck_path1.enable
+      call searchpaths.ed_path1.enable
+    }
+    else {
+      call searchpaths.ed_path1.disable
+      call searchpaths.ck_path1.disable
+    }
+
+    if searchpaths.ed_path2.isneq("") {
+      call searchpaths.ck_path2.enable
+      call searchpaths.ed_path2.enable
+    }
+    else {
+      call searchpaths.ed_path2.disable
+      call searchpaths.ck_path2.disable
+    }
+
+    if searchpaths.ed_path3.isneq("") {
+      call searchpaths.ck_path3.enable
+      call searchpaths.ed_path3.enable
+    }
+    else {
+      call searchpaths.ed_path3.disable
+      call searchpaths.ck_path3.disable
+    }
+
+    if searchpaths.ed_path4.isneq("") {
+      call searchpaths.ck_path4.enable
+      call searchpaths.ed_path4.enable
+    }
+    else {
+      call searchpaths.ed_path4.disable
+      call searchpaths.ck_path4.disable
+    }
+
+    if searchpaths.ed_path5.isneq("") {
+      call searchpaths.ck_path5.enable
+      call searchpaths.ed_path5.enable
+    }
+    else {
+      call searchpaths.ed_path5.disable
+      call searchpaths.ck_path5.disable
+    }
+
+    if searchpaths.ed_path6.isneq("") {
+      call searchpaths.ck_path6.enable
+      call searchpaths.ed_path6.enable
+    }
+    else {
+      call searchpaths.ed_path6.disable
+      call searchpaths.ck_path6.disable
+    }
+
+    if searchpaths.ed_path7.isneq("") {
+      call searchpaths.ck_path7.enable
+      call searchpaths.ed_path7.enable
+    }
+    else {
+      call searchpaths.ed_path7.disable
+      call searchpaths.ck_path7.disable
+    }
+
+    if searchpaths.ed_path8.isneq("") {
+      call searchpaths.ck_path8.enable
+      call searchpaths.ed_path8.enable
+    }
+    else {
+      call searchpaths.ed_path8.disable
+      call searchpaths.ck_path8.disable
+    }
+  END
+
+  PROGRAM disable_emptyskip_fields
+    BEGIN
+      // Enable checkbox if path exists, otherwise disable
+
+      if skipdirs.ed_skipdir1.isneq("") {
+        call skipdirs.ck_skipdir1.enable
+        call skipdirs.ed_skipdir1.enable
+      }
+      else {
+        call skipdirs.ed_skipdir1.disable
+        call skipdirs.ck_skipdir1.disable
+      }
+
+      if skipdirs.ed_skipdir2.isneq("") {
+        call skipdirs.ck_skipdir2.enable
+        call skipdirs.ed_skipdir2.enable
+      }
+      else {
+        call skipdirs.ed_skipdir2.disable
+        call skipdirs.ck_skipdir2.disable
+      }
+
+      if skipdirs.ed_skipdir3.isneq("") {
+        call skipdirs.ck_skipdir3.enable
+        call skipdirs.ed_skipdir3.enable
+      }
+      else {
+        call skipdirs.ed_skipdir3.disable
+        call skipdirs.ck_skipdir3.disable
+      }
+
+      if skipdirs.ed_skipdir4.isneq("") {
+        call skipdirs.ck_skipdir4.enable
+        call skipdirs.ed_skipdir4.enable
+      }
+      else {
+        call skipdirs.ed_skipdir4.disable
+        call skipdirs.ck_skipdir4.disable
+      }
+
+      if skipdirs.ed_skipdir5.isneq("") {
+        call skipdirs.ck_skipdir5.enable
+        call skipdirs.ed_skipdir5.enable
+      }
+      else {
+        call skipdirs.ed_skipdir5.disable
+        call skipdirs.ck_skipdir5.disable
+      }
+
+      if skipdirs.ed_skipdir6.isneq("") {
+        call skipdirs.ck_skipdir6.enable
+        call skipdirs.ed_skipdir6.enable
+      }
+      else {
+        call skipdirs.ed_skipdir6.disable
+        call skipdirs.ck_skipdir6.disable
+      }
+
+    END
+
+  PROGRAM enable_all_fields
+    BEGIN
+      // Enable all edit fields while they are modified
+      call searchpaths.ed_path1.enable
+      call searchpaths.ed_path2.enable
+      call searchpaths.ed_path3.enable
+      call searchpaths.ed_path4.enable
+      call searchpaths.ed_path5.enable
+      call searchpaths.ed_path6.enable
+      call searchpaths.ed_path7.enable
+      call searchpaths.ed_path8.enable
+
+      call skipdirs.ck_skipdir1.enable
+      call skipdirs.ck_skipdir2.enable
+      call skipdirs.ck_skipdir3.enable
+      call skipdirs.ck_skipdir4.enable
+      call skipdirs.ck_skipdir5.enable
+      call skipdirs.ck_skipdir6.enable
+    END
+
+
+// -------------------- define the u-action and helper buttons ---------
+OK ok1, label("OK")
+CANCEL can1, label("Cancel")
+HELP hlp1, view("help reproot")
+
+// --------------------------- define how to assemble u-action ---------
+PROGRAM command
+  BEGIN
+    put "reproot_setup_dlg_output "
+    beginoptions
+
+      // Set default recurse depth
+      put "searchdepth(" searchdepth.searchdepth_count ") "
+
+      // Set searchpaths
+      if searchpaths.ed_path1.isneq("") & searchpaths.ck_path1 {
+        put "searchpath1(" searchpaths.ed_path1 ") "
+      }
+      if searchpaths.ed_path2.isneq("") & searchpaths.ck_path2 {
+        put "searchpath2(" searchpaths.ed_path2 ") "
+      }
+      if searchpaths.ed_path3.isneq("") & searchpaths.ck_path3 {
+        put "searchpath3(" searchpaths.ed_path3 ") "
+      }
+      if searchpaths.ed_path4.isneq("") & searchpaths.ck_path4 {
+        put "searchpath4(" searchpaths.ed_path4 ") "
+      }
+      if searchpaths.ed_path5.isneq("") & searchpaths.ck_path5 {
+        put "searchpath5(" searchpaths.ed_path5 ") "
+      }
+      if searchpaths.ed_path6.isneq("") & searchpaths.ck_path6 {
+        put "searchpath6(" searchpaths.ed_path6 ") "
+      }
+      if searchpaths.ed_path7.isneq("") & searchpaths.ck_path7 {
+        put "searchpath7(" searchpaths.ed_path7 ") "
+      }
+      if searchpaths.ed_path8.isneq("") & searchpaths.ck_path8 {
+        put "searchpath8(" searchpaths.ed_path8 ") "
+      }
+
+      // Set skipdirs
+      if skipdirs.ed_skipdir1.isneq("") & skipdirs.ck_skipdir1  {
+        put "skipdir1(" skipdirs.ed_skipdir1 ") "
+      }
+      if skipdirs.ed_skipdir2.isneq("") & skipdirs.ck_skipdir2  {
+        put "skipdir2(" skipdirs.ed_skipdir2 ") "
+      }
+      if skipdirs.ed_skipdir3.isneq("") & skipdirs.ck_skipdir3  {
+        put "skipdir3(" skipdirs.ed_skipdir3 ") "
+      }
+      if skipdirs.ed_skipdir4.isneq("") & skipdirs.ck_skipdir4  {
+        put "skipdir4(" skipdirs.ed_skipdir4 ") "
+      }
+      if skipdirs.ed_skipdir5.isneq("") & skipdirs.ck_skipdir5  {
+        put "skipdir5(" skipdirs.ed_skipdir5 ") "
+      }
+      if skipdirs.ed_skipdir6.isneq("") & skipdirs.ck_skipdir6  {
+        put "skipdir6(" skipdirs.ed_skipdir6 ") "
+      }
+    endoptions
+  END

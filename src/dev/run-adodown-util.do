@@ -17,8 +17,10 @@
   
   local rk "${clone}/repkit"
   
-  //ad_sthlp , adfolder("`rk'") commands(repadolog)
+  //ad_sthlp , adfolder("`rk'") // commands(repadolog)
   
-  //ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline") //ssczip
+  //ad_update, adfolder("`rk'") pkgname("repkit") newpkg(major)  
   
-  ad_command create reproot_setup, adf("`rk'") pkg(repkit)
+  ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline") ssczip
+  
+
