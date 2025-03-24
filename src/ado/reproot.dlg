@@ -1,7 +1,7 @@
 // https://www.stata.com/manuals13/pdialogprogramming.pdf#pdialogprogramming
 // ----------------- set version number and define size of box ---------
 VERSION 14
-POSITION . . 550 500
+POSITION . . 510 500
 
 // ------------------------------------------- define a dialog ---------
 
@@ -12,13 +12,14 @@ POSITION . . 550 500
 
 DIALOG overview, label("REPROOT - Settings File Setup") tabtitle(" Overview ")
 BEGIN
-  GROUPBOX gb_overview_1 10  20 530 210, label("REPROOT - settings file")
-    TEXT    tx_title1   +10 +30 490  ., label("This dialog box helps you to set up and manage the reproot settings file.")
-    TEXT    tx_title2    @  +40 @    ., label("reproot is a command that automates setting root folder paths across users collaborating on")
-    TEXT    tx_title3    @  +20 @    ., label("a project. reproot searches for root files across the users computer, but since an exhaustive ")
-    TEXT    tx_title4    @  +20 @    ., label("search of all folders would be too slow, this settings file is used to indicate which high-level")
-    TEXT    tx_title5    @  +20 @    ., label("folders to search for project root files.")
-    TEXT    tx_title6    @  +40 @    ., label("Read more how to use the command here: https://worldbank.github.io/repkit")
+  GROUPBOX gb_overview_1 10  20 490 230, label("REPROOT - settings file")
+    TEXT    tx_title1   +10 +30 470  ., label("This dialog box helps you to set up and manage the reproot settings file.")
+    TEXT    tx_title2    @  +40 @    ., label("reproot is a command automating root folder paths management across users in a")
+    TEXT    tx_title3    @  +20 @    ., label("project. reproot searches for root files across the user's computer. An exhaustive ")
+    TEXT    tx_title4    @  +20 @    ., label("search across all folders would be too slow, and the purpose of this reproot settings")
+    TEXT    tx_title5    @  +20 @    ., label("file is to limit the search to the relevant folders on each user's computer.")
+    TEXT    tx_title6    @  +40 @    ., label("Read more how to use the reproot command at https://worldbank.github.io/repkit or")
+    TEXT    tx_title7    @  +20 @    ., label(`"by clicking the '?' at the bottom left corner of this box."')
 
 
   GROUPBOX gb_overview_2 10 +60 530 90, label("Three settings")
@@ -40,10 +41,12 @@ DIALOG searchpaths, tabtitle(" Search Paths ")
 BEGIN
 
   // Default search dept tab
-  GROUPBOX gb_sd_desc  10  10 530 50, label("Description:")
-    TEXT   tx_sp_1     +10 +20 490 . , label("This sets the high-level folders in which reproot will search for project root files. In each of these folders ")
+  GROUPBOX gb_sd_desc  10  10 490 90, label("Description:")
+    TEXT   tx_sp_1    +10 +20 470 . , label("This sets the high-level folders where reproot will search for project root files.")
+    TEXT   tx_sp_2     @  +20 470 . , label("reproot will search the listed folders and the number of sub-folders corresponding")
+    TEXT   tx_sp_3     @  +20 470 . , label("to the default search depth or the path-specific search depth in each of them.")
 
-  GROUPBOX gb_searchpath 10 +35 490 230, label("Select the search paths to be included:")
+  GROUPBOX gb_searchpath 10 +50 490 230, label("Select the search paths to be included:")
 
     CHECKBOX ck_path1 +10 +20 20 ., nomemory
     EDIT ed_path1 +20 @ 450 ., default(r(searchpath1_text)) nomemory
@@ -64,13 +67,13 @@ BEGIN
 
 
   GROUPBOX gb_addpath 10 +50 490 110, label("Select another path to add:")
-  FILE    new_path    +10  +20 400 ., directory label("Browse . . . ") nomemory
+    FILE    new_path    +10  +20 400 ., directory label("Browse . . . ") nomemory
 
-  CHECKBOX use_serachdepth   +2 +30  20  ., nomemory
-  TEXT     tx_sp_rd1        +20 -1  205 20, label("Use specific search depth for this path:")
-  SPINNER  recursedepth     +210  @   50  ., min(0) max(25) default(4) nomemory
+    CHECKBOX use_serachdepth   +2 +30  20  ., nomemory
+    TEXT     tx_sp_rd1        +20 -1  205 20, label("Use specific search depth for this path:")
+    SPINNER  recursedepth     +210  @   50  ., min(0) max(25) default(4) nomemory
 
-  BUTTON  btn_searchpath   -232 +30 100  ., label("Add search path") onpush(program add_searchpath)
+    BUTTON  btn_searchpath   -232 +30 100  ., label("Add search path") onpush(program add_searchpath)
 
 END
 
@@ -83,11 +86,11 @@ BEGIN
 
   // Default search dept tab
   GROUPBOX gb_searchdepth_desc 10 10 450 70, label("Description:")
-    TEXT   tx_searchdepth_1 +10 +20 400 . , label("This sets the default number of subfolders to search in each search path.")
-    TEXT   tx_searchdepth_2 @  +20 400 . , label("This value is used for all search paths that does not has it own value.")
+    TEXT   tx_searchdepth_1 +10 +20 400 . , label("This sets the default number of sub-folders to search within each search path.")
+    TEXT   tx_searchdepth_2   @ +20 400 . , label("This value is applied to all search paths that do not have their own specific value.")
 
-  GROUPBOX gb_addpath        10 +40 450 60, label("Set the default search depth:")
-  SPINNER searchdepth_count +10 +25 50  . , default(r(recdepth)) nomemory
+  GROUPBOX gb_addpath        10 +50 450 60, label("Set the default search depth:")
+    SPINNER searchdepth_count +10 +25 50  . , default(r(recdepth)) nomemory
 
 END
 
@@ -99,10 +102,11 @@ DIALOG skipdirs, tabtitle(" Skip Directories ")
 BEGIN
 
   // Default search dept tab
-  GROUPBOX gb_skipdir_desc  10  10 450 50, label("Description:")
-    TEXT   tx_skipdir_1      +10 +20 400 . , label("This sets the folder names that reproot always should skip.")
+  GROUPBOX gb_skipdir_desc  10  10 450 70, label("Description:")
+    TEXT   tx_skipdir_1    +10 +20 400 . , label("This sets the folder names that reproot always should ignore when found.")
+    TEXT   tx_skipdir_2      @ +20 400 . , label("reproot will not search folders with these names nor their sub-folders.")
 
-  GROUPBOX   gb_skipdirs	 10 +35 450 180, label("Select paths that should never be searched by reproot:")
+  GROUPBOX   gb_skipdirs	 10 +50 450 180, label("Select folder names that should be ignored by reproot:")
     CHECKBOX ck_skipdir1 +10 +20 20 ., nomemory
     EDIT ed_skipdir1 +20 @ 400 ., default(r(skipdir1_text)) nomemory
     CHECKBOX ck_skipdir2 -20 +25 20 ., nomemory
@@ -116,9 +120,9 @@ BEGIN
     CHECKBOX ck_skipdir6 -20 +25 20 ., nomemory
     EDIT ed_skipdir6 +20 @ 400 ., default(r(skipdir6_text)) nomemory
 
-  GROUPBOX gb_addpath  10 +50 450 80, label("Enter another folder name that should always be skipped:")
-  EDIT    newskipdir  +10 +20 200 ., nomemory
-  BUTTON  btn_skipdir   @ +25 200 ., label("Add folder name to skip") onpush(program add_skipdir)
+  GROUPBOX gb_addpath  10 +50 450 80, label("Enter another folder name that should be ignored:")
+    EDIT    newskipdir  +10 +20 200 ., nomemory
+    BUTTON  btn_skipdir   @ +25 200 ., label("Add folder name to skip") onpush(program add_skipdir)
 
 END
 
