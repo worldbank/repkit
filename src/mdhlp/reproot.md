@@ -43,7 +43,7 @@ __verbose__ provides detailed output about the roots found during execution. Thi
 
 # Examples
 
-Below are examples of how to use the `reproot` command in a do-file. For details on setting up the required `.yaml` files, refer to this [article](https://worldbank.github.io/repkit/articles/reproot-files.html).
+Below are examples of how to use the `reproot` command in a do-file. To set up the required `.yaml` files, use the utility command `reproot_setup`.
 
 ## Example 1
 
