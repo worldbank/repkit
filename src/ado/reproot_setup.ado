@@ -64,15 +64,17 @@ qui {
       ********************************************************
       * Modify the environment file
 
+      local path_output `"The file was saved in {browse "${reproot_setup_env_file}"}. You may update it manually if you require an advanced specific setup, but for most users, we recommend only updating the content of this file using {help reproot_setup}."'
+
       if (`env_file_exists') {
         noi reproot_update_envfile, ///
           searchpaths(`"`searchpaths'"') recursedepth("`recursedepth'") skipdirs(`"`skipdirs'"')
-        noi di as result _n "{pstd}Reproot environment file successfully updated!{p_end}"
+        noi di as result _n `"{pstd}The {bf:reproot} environment file was successfully updated! `path_output'{p_end}"'
       }
       else {
         noi reproot_write_envfile, ///
           searchpaths(`"`searchpaths'"') recursedepth("`recursedepth'") skipdirs(`"`skipdirs'"')
-        noi di as result _n "{pstd}Reproot environment file successfully created!{p_end}"
+        noi di as result _n `"{pstd}The {bf:reproot} environment file was successfully created! `path_output'{p_end}"'
       }
 
       * Reset global
