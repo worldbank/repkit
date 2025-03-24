@@ -108,7 +108,7 @@ qui {
     file open `env_handle' using `env_tmpfile' , write
 
     * Write the recurse 
-    file write `env_handle' "searchdepth: `searchdepth'" _n "paths:" _n
+    file write `env_handle' "recursedepth: `searchdepth'" _n "paths:" _n
     foreach searchpath of local searchpaths {
       test_searchpath, searchpath(`"`searchpath'"')
       file write `env_handle' `"    - "`searchpath'""' _n
