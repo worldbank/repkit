@@ -25,99 +25,52 @@
 {synopt: {bf:verbose}}More verbose output about roots found{p_end}
 {synoptline}
 
-{phang}{inp:reproot} is a framework for automatically handling file paths across 
-teams without requiring project-specific setup from individual users.
-Each user needs to set up {inp:reproot} once on their computer (see the next paragraph). 
-Afterward, users can automatically load root paths with
-no manual setup in all projects using {inp:reproot} on that computer. 
+{phang}{inp:reproot} is a framework designed to streamline file path management across teams, eliminating the need for project-specific setup by individual users. Once {inp:reproot} is configured on a user{c 39}s computer (see instructions below), root paths can be automatically loaded for all projects using {inp:reproot} on that machine. 
 {p_end}
 
-{phang}{inp:reproot} works by having the team save a root file in root folders required in the project. 
-Such root folders could be the root of a Git clone folder,
-the root of a OneDrive/DropBox folder where data is shared,
-or the root of a project folder on a network drive where files are shared, etc.
-As long as the folder is accessible from the file system,
-a root can be placed in that folder.
-File paths to specific files can then be expressed in the code as
-relative paths from any of those roots.
+{phang}The framework operates by requiring the team to save a root file in each root folder essential to the project. These root folders could include the root of a Git repository, a shared folder on OneDrive/Dropbox, or a network drive where project files are stored. As long as the folder is accessible via the file system, a root file can be placed there. File paths to specific files can then be referenced in the code as relative paths from these roots.
 {p_end}
 
-{phang}To avoid searching the entire file system for roots (which would take too much time),
-each user needs to configure a {inp:reproot-env} file. 
-This file lists which folders and how many sub-folders of those folders
-{inp:reproot} should search for root files. 
-This setup should make the search take less than a second.
+{phang}To ensure efficient root file searches, users must configure a {inp:reproot-env} file. This file specifies the directories and subdirectories that {inp:reproot} should scan for root files, optimizing the search process to take less than a second. 
 {p_end}
 
-{phang}The {inp:reproot-env} file should be created in the folder that 
-Stata outputs when running the code {inp:cd ~}. 
-This location can be accessed by all users without having to set any root paths first.
+{phang}The {inp:reproot-env} file can be set up using the utility command {inp:reproot_setup}. Simply run this command in the Stata command window without any options and follow the instructions in the dialog box. 
 {p_end}
 
-{phang}Read more about setting up this file in
-this {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":article}.
-The rest of this help file will focus on how to use this command once those files are set up.
+{phang}While manual configuration of the {inp:reproot-env} file is possible, it is strongly recommended to use the utility command to ensure the file is correctly formatted and saved in the expected location. The file must be saved in the directory returned by the Stata command {inp:cd ~}. This ensures accessibility for all users without requiring additional root path setup. 
+{p_end}
+
+{phang}For detailed instructions on setting up the {inp:reproot-env} file, refer to this {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":article}. The remainder of this help file focuses on using the {inp:reproot} command after the setup is complete. 
 {p_end}
 
 {title:Options}
 
-{pstd}{bf:project}({it:string}) indicates the name of the current project. When searching for root files, only root files for this project will be considered. Use a project name that will remain unique across all team members{c 39} computers.
+{pstd}{bf:{ul:p}roject}({it:string}) specifies the name of the current project. When searching for root files, only root files associated with this project will be considered. Use a project name that is unique across all team members{c 39} computers.
 {p_end}
 
-{pstd}{bf:roots}({it:string}) indicates which roots are expected to be found for this project.
-The command creates a global based on the root name of that root
-if that root folder is found.
-The content of the global will be the file path to the location of the root file.
-This command does not set globals for roots not listed in this option
-(or in {inp:optroots()} - see below), 
-even if such roots for this project were found.
-Unless the {bf:clear} option is used,
-the command does not overwrite any global that
-already had content before running the command.
-Finally, the command tests that there is a global named after each root and
-that all of them are non-empty.
+{pstd}{bf:{ul:r}oots}({it:string}) defines the required roots for the project. For each root found, a global variable is created based on the root name, containing the file path to the root file{c 39}s location. Roots not listed in this option (or in {inp:optroots()}) will not have globals set, even if they are found. Unless the {bf:clear} option is used, existing globals are not overwritten. The command also verifies that a global exists for each specified root and that it is non-empty. 
 {p_end}
 
-{pstd}{bf:optroots}({it:string}) allows the users to set optional roots.
-They will be treated the same way as the roots in {inp:roots()} with 
-the one exception that no error is thrown if this root is not found.
+{pstd}{bf:{ul:optr}oots}({it:string}) allows specifying optional roots. These are treated like the roots in {inp:roots()} but do not trigger an error if they are not found. 
 {p_end}
 
-{pstd}{bf:prefix}({it:string}) allows the user to set a project-specific global prefix.
-This is strongly recommended to ensure that a global from another project
-is not mistaken as a global for the current project.
-Unless the {bf:clear} option is used,
-a global already set with a common name, such as {inp:data} or {inp:code}, 
-will be interpreted as a root global with that name for the current project.
-The {bf:prefix()} option allows a project-specific prefix that is set to all globals.
-So, if {bf:prefix({c 34}abc_{c 34})} is used, then the globals {inp:data} and {inp:code} 
-will be set to {inp:abc_data} and {inp:abc_code}. 
+{pstd}{bf:{ul:pre}fix}({it:string}) enables setting a project-specific prefix for global variables. This is recommended to avoid conflicts with globals from other projects. For example, using {bf:prefix({c 34}abc_{c 34})} will create globals like {inp:abc_data} and {inp:abc_code} instead of {inp:data} and {inp:code}. 
 {p_end}
 
-{pstd}{bf:clear} overwrites globals that already exist with the name that {inp:reproot} would create. 
-This is all the roots listed in {bf:roots()} with
-the {bf:prefix()} prepended if that option is used.
-The default behavior is to not search for roots that are already set up.
-If all globals are already set, then the command does not execute the search for roots.
+{pstd}{bf:clear} forces the command to overwrite existing globals that match the names of the roots specified in {bf:roots()}, with the {bf:prefix()} applied if used. By default, the command skips searching for roots that are already set.
 {p_end}
 
-{pstd}{bf:verbose} makes the command output more information about what roots were found.
-This option is helpful for debugging when trying to figure out what roots are found and not found.
+{pstd}{bf:verbose} provides detailed output about the roots found during execution. This is useful for debugging and understanding which roots were successfully located.
 {p_end}
 
 {title:Examples}
 
-{pstd}These examples demonstrate how to include {inp:reproot} in the do-file. 
-See this {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":article}
-for information on how to set up the {inp:.yaml} files this command needs to run. 
+{pstd}Below are examples of how to use the {inp:reproot} command in a do-file. To set up the required {inp:.yaml} files, use the utility command {inp:reproot_setup}. 
 {p_end}
 
-{dlgtab:Example 1.}
+{dlgtab:Example 1}
 
-{pstd}In this example, the command searches the search paths indicated in
-the {inp:reproot-env.yaml} file for root files for the project {inp:my_proj}. 
-Then it sets the globals {inp:data} and {inp:clone} to the file location where 
-root files with those names for this project are found.
+{pstd}This example searches the paths specified in the {inp:reproot-env.yaml} file for root files associated with the project {inp:my_proj}. If found, it sets the globals {inp:data} and {inp:clone} to the file paths of the corresponding root files. 
 {p_end}
 
 {input}{space 8}reproot , project("my_proj") roots("data clone")
@@ -129,6 +82,6 @@ root files with those names for this project are found.
 
 {title:Authors}
 
-{pstd}LSMS Team, The World Bank lsms@worldbank.org
+{pstd}LSMS Team, The World Bank lsms@worldbank.org  
 DIME Analytics, The World Bank dimeanalytics@worldbank.org
 {p_end}

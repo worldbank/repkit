@@ -4,7 +4,7 @@ __reproot_setup__ - This command sets up and modifies the settings file used in 
 
 # Syntax
 
-**Normal usage:**
+## Normal usage:
 
 This mode opens the setup settings in a dialog box.  
 It is not intended to be included in code used by others.  
@@ -12,7 +12,7 @@ This command is designed to be run interactively in Stata's command window.
 
 __reproot_setup__
 
-**Advanced usage:**
+## Advanced usage:
 
 This mode bypasses the dialog box and allows the user to set up and modify the settings file programmatically.  
 It is intended only for advanced use cases.
@@ -35,11 +35,11 @@ Additionally, this command can modify an existing settings file.
 
 # Options
 
-- **searchpaths**(_string_): Adds search paths to the settings file. If adding multiple paths, enclose each path in quotes and then enclose the full list as a compound string. Paths may include a path-specific search depth for each path.
+__searchpaths__(_string_) adds search paths to the settings file. If adding multiple paths, enclose each path in quotes and then enclose the full list as a compound string. Paths may include a path-specific search depth for each path.
 
-- **searchdepth**(_integer_): Sets a general search depth for paths that do not have a path-specific search depth.
+__searchdepth__(_integer_) sets a general search depth for paths that do not have a path-specific search depth.
 
-- **skipdirs**(_string_): Lists folder names that `reproot` should ignore. Sub-folders within ignored folders will also be excluded.
+__skipdirs__(_string_) lists folder names that `reproot` should ignore. Sub-folders within ignored folders will also be excluded.
 
 # Feedback, Bug Reports, and Contributions
 
@@ -47,5 +47,5 @@ Learn more about these commands on [this repository](https://github.com/worldban
 
 # Authors
 
-LSMS Team, The World Bank lsms@worldbank.org
+LSMS Team, The World Bank lsms@worldbank.org,
 DIME Analytics, The World Bank dimeanalytics@worldbank.org
