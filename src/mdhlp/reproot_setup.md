@@ -4,19 +4,18 @@ __reproot_setup__ - This command sets up and modifies the settings file used in 
 
 # Syntax
 
-_Normal usage:_
+**Normal usage:**
 
-This mode opens the setup settings in a dialog box.
-Do not include this command in code used by other.
-This intended to be run interractively in Stata's command window.
+This mode opens the setup settings in a dialog box.  
+It is not intended to be included in code used by others.  
+This command is designed to be run interactively in Stata's command window.
 
-__reproot_setup__ 
+__reproot_setup__
 
-_Advanced usage:_
+**Advanced usage:**
 
-This mode bypasses the dialog box and allows the user to 
-setup and modify the settings file programmatically.
-This is only intended for advanced use cases.
+This mode bypasses the dialog box and allows the user to set up and modify the settings file programmatically.  
+It is intended only for advanced use cases.
 
 __reproot_setup__ , __searchpaths__(_string_) __searchdepth__(_integer_) __skipdirs__(_string_)
 
@@ -28,26 +27,23 @@ __reproot_setup__ , __searchpaths__(_string_) __searchdepth__(_integer_) __skipd
 
 # Description
 
-This command helps setting up the settings file used in the command
-[reproot](https://worldbank.github.io/repkit/reference/reproot.html).
+This command helps set up the settings file used in the command [reproot](https://worldbank.github.io/repkit/reference/reproot.html).
 
-The settings file needs to be set up once per computer, listing the location on the file system where project folders are located. This command simplifies that process.
+The settings file needs to be configured once per computer, specifying the locations on the file system where project folders are stored. This command simplifies that process.
 
-This command can also modify an existing settings file.
+Additionally, this command can modify an existing settings file.
 
 # Options
 
-__searchpaths__(_string_) is used to add search paths to the settings file.
-If adding multiple paths, then enclose each path in quotes and then enclose the full list as a compounded link.
-The paths may include a path specific search depth for this path.
+- **searchpaths**(_string_): Adds search paths to the settings file. If adding multiple paths, enclose each path in quotes and then enclose the full list as a compound string. Paths may include a path-specific search depth for each path.
 
-__searchdepth__(_integer_) is used to set a general search depth for paths that does not have a path specific search depth.
+- **searchdepth**(_integer_): Sets a general search depth for paths that do not have a path-specific search depth.
 
-__skipdirs__(_string_) is used to list folder names for folders that `reproot` should ignore when found. Sub-folders in ignored folders will also be ignored.
+- **skipdirs**(_string_): Lists folder names that `reproot` should ignore. Sub-folders within ignored folders will also be excluded.
 
-# Feedback, bug reports and contributions
+# Feedback, Bug Reports, and Contributions
 
-Read more about these commands on [this repo](https://github.com/worldbank/repkit) where this package is developed. Please provide any feedback by [opening an issue](https://github.com/worldbank/repkit/issues). PRs with suggestions for improvements are also greatly appreciated.
+Learn more about these commands on [this repository](https://github.com/worldbank/repkit), where this package is developed. Please provide feedback by [opening an issue](https://github.com/worldbank/repkit/issues). Pull requests with suggestions for improvements are also welcome.
 
 # Authors
 
