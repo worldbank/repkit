@@ -36,7 +36,13 @@ This file lists which folders and how many sub-folders of those folders
 `reproot` should search for root files.
 This setup should make the search take less than a second.
 
-The `reproot-env` file should be created in the folder that
+The `reproot-env` file should be set up by running the utility command `reproot_setup`.
+Just run this command without any options in your Stata command window and follow instructions
+in the dialog box.
+
+While possible to set up the `reproot-env` file manually, 
+we strongly recommend using the utility command to make sure the file has the expected format
+and is saved in the expected location. The file is expected to be saved in the folder that
 Stata outputs when running the code `cd ~`.
 This location can be accessed by all users without having to set any root paths first.
 
