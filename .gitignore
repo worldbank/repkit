@@ -58,6 +58,7 @@
 !/**/*.sthlp
 !src/stata.toc
 !src/*.pkg
+!/**/*.dlg
 
 # Python
 !/**/*.py

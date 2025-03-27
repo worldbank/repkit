@@ -30,15 +30,46 @@
     net install repkit, from("${repkit_clone}/src") replace
 
     ************************
+    ************************
     * Run tests
-    local test_homefolder "`testfldr'/reproot_setup"
+	************************
+	************************
+	
+	pause on
+
+	************************
+	************************
+	* Test 1
+	
+    ************************
+    * 1.1 Test dialog box when no file exists
+
+    local test_homefolder "`testfldr'/reproot_setup/dialog_box"
+	cap mkdir "`test_homefolder'"
 
     * Test basic case of the command reproot_setup
     cap rm "`test_homefolder'/reproot-env.yaml"
-    reproot_setup, envpath(`"${repkit_clone}"') debug_home_folder("`test_homefolder'")
+    reproot_setup, debug_home_location("`test_homefolder'")
+	
+	* Pause is needed as the dialog box does not halt the execution of this command
+	pause
+	
+    ************************
+    * 1.2 add a path that exists on all windows computers
+	
+    if c(os) == "Windows" {
+        reproot_setup, searchpaths("C:\Users") debug_home_location("`test_homefolder'")
+    }
     
-    * Test basic case of the command reproot_setup
-    cap rm "`test_homefolder'/reproot-env.yaml"
-    reproot_setup, debug_home_folder("`test_homefolder'")
+    ************************
+    * 1.3 Test dialog box when file exists
 
-    // Add more tests here...
+    * Test basic case of the command reproot_setup
+    reproot_setup, debug_home_location("`test_homefolder'")
+	
+	* Pause is needed as the dialog box does not halt the execution of this command
+	pause
+
+.	************************
+	************************
+	* Test 2 - TODO

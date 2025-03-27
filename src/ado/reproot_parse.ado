@@ -1,4 +1,4 @@
-*! version 3.1 20240926 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 cap program drop   reproot_parse
     program define reproot_parse, rclass
@@ -8,12 +8,13 @@ qui {
     version 14.1
 
     * Update the syntax. This is only a placeholder to make the command run
-    syntax anything, file(string)
+    syntax anything, file(string) [asis]
 
     if ("`anything'" == "env")       {
-      noi reproot_parse_env , file("`file'")
-      return local envpaths = `"`r(envpaths)'"'
+      noi reproot_parse_env , file("`file'") `asis'
+      return local searchpaths = `"`r(searchpaths)'"'
       return local skipdirs = `"`r(skipdirs)'"'
+      return scalar recdepth = `r(recdepth)'
     }
     else if ("`anything'" == "root") {
       noi reproot_parse_root, file("`file'")
@@ -31,7 +32,7 @@ end
 cap program drop   reproot_parse_env
     program define reproot_parse_env, rclass
 qui {
-    syntax, file(string)
+    syntax, file(string) [asis]
 
     local paths    ""
     local skipdirs ""
@@ -138,12 +139,16 @@ qui {
     * Add default recurse depth if path does not have custom depth
     local formatted_paths ""
     foreach path of local paths {
-      noi prepend_recdepth , path(`path') recursedepth(`recursedepth')
-      local formatted_paths `"`formatted_paths' "`r(path)'" "'
+      if missing("`asis'") {
+        noi prepend_recdepth , path(`path') recursedepth(`recursedepth')
+        local path "`r(path)'" "'
+      }
+      local formatted_paths `"`formatted_paths' "`path'" "'
     }
 
-    return local envpaths = trim(`"`formatted_paths'"')
+    return local searchpaths = trim(`"`formatted_paths'"')
     return local skipdirs `"`skipdirs'"'
+    return scalar recdepth = `recursedepth'
 }
 end
 
