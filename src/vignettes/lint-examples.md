@@ -198,7 +198,7 @@ You can use the following options with the `lint` command:
 - Options for **both** features:
   - `indent()`: specify the number of whitespaces used for indentation (default is 4).
   - `linemax()`: maximum number of characters in a line (default: 80)
-  - `tab_space()`: number of whitespaces used instead of hard tabs (default is 4).
+  - `space()`: number of whitespaces used instead of hard tabs (default is 4).
 
 ## Recommended use
 
