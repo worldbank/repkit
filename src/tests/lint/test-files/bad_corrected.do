@@ -13,7 +13,8 @@
 
     * delimit is corrected and three forward slashes will be used instead
 
-    foreach something in something something something something something something /// 
+    foreach something in something something something something something ///
+        something /// 
         something something {  // some comment
         do something  
     }  
@@ -27,9 +28,9 @@
     }
   
     foreach ii in potato potato cassava maize potato ///
-        cassava maize potato cassava maize potato cassava maize ///
-        potato cassava maize potato cassava maize potato cassava maize ///
-        potato cassava maize {
+        cassava maize potato cassava maize potato cassava maize potato ///
+        cassava maize potato cassava maize potato cassava maize potato ///
+        cassava maize {
         if something ~= 1 & something != . {
             do something // some very very very very very very very very very very very very very very very very very very very very very very long comment
         } 
@@ -37,8 +38,8 @@
 
     * Split a long line into multiple lines
     * (for now, too long comments are not corrected)
-    foreach ii in potato potato cassava maize potato cassava maize ///
-        potato cassava maize potato cassava maize potato cassava maize potato ///
+    foreach ii in potato potato cassava maize potato cassava maize potato ///
+        cassava maize potato cassava maize potato cassava maize potato ///
         cassava maize potato cassava maize potato cassava maize {
         if something ~= 1 & something != . {
             do something // some very very very very very very very very very very very very very very very very very very very very very very long comment
@@ -79,4 +80,3 @@
         replace b_min = `lower' if group == `i'
         replace b_max = `upper' if group == `i'
     }  
-
