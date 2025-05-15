@@ -141,7 +141,7 @@ qui {
     foreach path of local paths {
       if missing("`asis'") {
         noi prepend_recdepth , path(`path') recursedepth(`recursedepth')
-        local path "`r(path)'" "'
+        local path `"`r(path)'"'
       }
       local formatted_paths `"`formatted_paths' "`path'" "'
     }

@@ -125,7 +125,7 @@ qui {
       }
 
       * Get reprootpaths and skipdirs from env file
-      reproot_parse env , file("`env_file'")
+      noi reproot_parse env , file("`env_file'")
       local searchpaths `"`r(searchpaths)'"'
       local skipdirs `"`r(skipdirs)'"'
 
