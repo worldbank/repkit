@@ -119,9 +119,9 @@ qui {
       * Test if this location has a root file
       cap confirm file "`env_file'"
       if (_rc) {
-        noi di as error `"{phang}No file {inp:reproot-env.yaml} found in home directory {browse "`homedir'"}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}. Starting {stata reproot_setup:setup wizard}....{p_end}"' _n
+        noi di as error `"{phang}No file {inp:reproot-env.yaml} found in home directory {browse "`homedir'"}. This file is required to set up once per computer to use {cmd:reproot}. The {inp:reproot} settings file setup wizard will be opened, if it does not open click {stata reproot_setup}. See guidelines for how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}. The current code execution was interrupted. Once you have set up the settings file, run this code again. {p_end}"' _n
         noi reproot_setup
-        exit
+        exit 1
       }
 
       * Get reprootpaths and skipdirs from env file
