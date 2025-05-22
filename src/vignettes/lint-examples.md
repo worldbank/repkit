@@ -7,9 +7,9 @@ This section presents examples for the `lint` command. For more information on t
 1. Stata version 16 or higher.
 2. Python 3 or higher
 
-For setting up Stata to use Python, refer to [this web page](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/).
+For setting up Stata to use Python, refer to [Stata's official documentation on Stata-Python integration](https://www.stata.com/python/) or [this article from the Stata blog](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/) on how to set up the Stata-Python integration.
 `lint` also requires the Python package `pandas` and `openpyxl`.
-Refer to [this web page](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/) to know more about installing Python packages.
+Refer to [this blog post](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/) from the Stata blog to know more about installing Python packages.
 
 ## Installation
 
@@ -212,3 +212,46 @@ This also avoids potential crashes by the `correction` feature.
 If there are many bad practices detected, you can use the `correction` feature first to correct some of the flagged lines, and then you can `detect` again and `correct` the remaining bad practices manually.
 We strongly recommend not overwriting the original input do-file so it can remain as a backup in case `correct` introduces unintended changes in the code.
 Additionally, we recommend checking that the results of the do-file are not changed by the correction feature.
+
+## Troubleshooting the Stata-Python integration for users with IT restrictions
+
+In our experience working in Windows computers with IT and admin-access restrictions, the most common problem when executing Python code from Stata is not finding a Python package that is installed in the system.
+The reason for this problem is usually that there is more than one Python environment installed in the computer, and Stata is integrated with one of them but the installation of packages from the command line (usually executed with `pip install package-name`) is installing the package for the other environment.
+This can be solved with the following steps:
+
+### 1. Check which Python environment is referenced from Stata
+
+Type in the Stata command line `python query` and take note of the Python executable listed next to `set python_exec`. For example:
+
+```
+. python query
+-----------------------------------------------------------------------------------------------------
+    Python Settings
+      set python_exec      C:\wbg\Anaconda3\python.exe
+      set python_userpath  
+
+    Python system information
+      initialized          no
+      version              3.9.7
+      architecture         64-bit
+      library path         C:\wbg\Anaconda3\python39.dll
+
+```
+
+The Python executable for this case is located in `C:\wbg\Anaconda3\python.exe`.
+
+### 2. Point to your Python executable referenced from Stata when using `pip`
+
+Open the Windows command prompt and install any Python libraries with the following command:
+
+```
+"path" -m pip install package-name
+```
+
+Where `"path"` is the complete file path to the Python executable referenced from Stata, which you know from step 1.
+This will tell Windows to use that Python executable for the installation of libraries.
+For instance, to install pandas in the example mentioned above, the command would be:
+
+```
+C:\wbg\Anaconda3\python.exe -m pip install pandas
+```
