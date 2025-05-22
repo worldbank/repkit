@@ -248,10 +248,10 @@ Open the Windows command prompt and install any Python libraries with the follow
 "path" -m pip install package-name
 ```
 
-Where `"path"` is the complete file path to the Python executable referenced from Stata, which you know from step 1.
+Where `path` is the complete file path to the Python executable referenced from Stata, which you know from step 1.
 This will tell Windows to use that Python executable for the installation of libraries.
 For instance, to install pandas in the example mentioned above, the command would be:
 
 ```
-C:\wbg\Anaconda3\python.exe -m pip install pandas
+"C:\wbg\Anaconda3\python.exe" -m pip install pandas
 ```
