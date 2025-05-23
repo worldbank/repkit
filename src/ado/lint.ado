@@ -408,7 +408,7 @@ capture program drop	_detect
 				display as result 	`"{phang}File {browse "`excel'":`excel'} created.{p_end}"'
 			}
 
-				display as result 	`"{phang}For more information about coding guidelines visit the {browse "https://dimewiki.worldbank.org/Stata_Linter":Stata linter wiki.}{p_end}"'
+				display as result 	`"{phang}For more information about coding guidelines visit the {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":DIME Analytics Stata Style Guide.}{p_end}"'
 		}
 
 
