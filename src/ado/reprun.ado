@@ -27,7 +27,7 @@ qui {
 
     if missing(`"`clear'"') {
       clear          // Data matches, zeroed out by default
-      set seed 12345 // Use Stata default setting when starting routine
+      set seed 123456789 // Use Stata default setting when starting routine
     }
 
     /*************************************************************************
@@ -907,7 +907,7 @@ end
 
         // Ignore RNG if seed is still on default seed
         if ("`state'" == "rng") {
-          set seed 12345
+          set seed 123456789
           if ("`l1_`state''" == "`c(rngstate)'") {
             local `state'_c1 = ""
             local `state'_c2 = ""
