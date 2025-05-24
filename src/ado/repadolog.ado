@@ -1,8 +1,6 @@
 *! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-cap program drop   repadolog
-    program define repadolog
-
+program define repadolog
 qui {
 
     version 14.1
@@ -218,8 +216,8 @@ qui {
 }
 end
 
-cap program drop   parse_command
-    program define parse_command, rclass
+
+program define parse_command, rclass
 
 qui {
     syntax anything, trkfolder(string)

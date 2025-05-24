@@ -1,8 +1,7 @@
 *! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-cap program drop   reproot_parse
-    program define reproot_parse, rclass
 
+program define reproot_parse, rclass
 qui {
 
     version 14.1
@@ -29,8 +28,7 @@ qui {
 }
 end
 
-cap program drop   reproot_parse_env
-    program define reproot_parse_env, rclass
+program define reproot_parse_env, rclass
 qui {
     syntax, file(string) [asis]
 
@@ -152,8 +150,7 @@ qui {
 }
 end
 
-cap program drop   reproot_parse_root
-    program define reproot_parse_root, rclass
+program define reproot_parse_root, rclass
 
 qui {
     * Update the syntax. This is only a placeholder to make the command run
@@ -236,8 +233,7 @@ end
 
 
 * Parse out keyword from top level item
-cap program drop   parse_keyword
-    program define parse_keyword, rclass
+program define parse_keyword, rclass
 
     syntax, line(string) [allowed_keys(string)]
 
@@ -260,8 +256,8 @@ cap program drop   parse_keyword
     }
 end
 
-cap program drop   parse_value
-    program define parse_value, rclass
+
+program define parse_value, rclass
 
     syntax, value(string) allowed_values(string)
 
@@ -295,8 +291,8 @@ cap program drop   parse_value
 
 end
 
-cap program drop   parse_listitem
-    program define parse_listitem, rclass
+
+program define parse_listitem, rclass
 
     syntax, line(string) allowed_value(string)
 
@@ -316,8 +312,8 @@ cap program drop   parse_listitem
 
 end
 
-cap program drop   prepend_recdepth
-    program define prepend_recdepth, rclass
+
+program define prepend_recdepth, rclass
 
     syntax , path(string) recursedepth(numlist)
 
@@ -333,8 +329,8 @@ cap program drop   prepend_recdepth
 end
 
 * Count indents, throws error if any non-standard single space is used.
-cap program drop   count_indent
-    program define count_indent, rclass
+
+program define count_indent, rclass
 
     syntax, line(string)
 

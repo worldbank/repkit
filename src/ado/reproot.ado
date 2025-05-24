@@ -1,7 +1,6 @@
 *! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-cap program drop   reproot
-    program define reproot, rclass
+program define reproot, rclass
 
 qui {
 
@@ -242,8 +241,7 @@ qui {
 }
 end
 
-cap program drop   di_search_results
-    program define di_search_results
+program define di_search_results
 
   syntax, time(numlist) dcount(numlist) [rootdirs(string) total verbose]
 
@@ -269,8 +267,7 @@ cap program drop   di_search_results
 end
 
 
-cap program drop   validate_global_name
-    program define validate_global_name, rclass
+program define validate_global_name, rclass
 
     syntax, rootname(string) [prefix(string)]
 

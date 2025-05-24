@@ -1,8 +1,7 @@
 *! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-cap program drop   reproot_search
-    program define reproot_search, rclass
 
+program define reproot_search, rclass
 qui {
 
     version 14.1

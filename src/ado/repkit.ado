@@ -1,9 +1,8 @@
 *! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-cap program drop   repkit
-    program define repkit, rclass
-
-    version 14.1
+program define repkit, rclass
+qui {
+  version 14.1
 
     * UPDATE THESE LOCALS FOR EACH NEW VERSION PUBLISHED
     local version "3.2" 
