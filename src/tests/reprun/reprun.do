@@ -1,23 +1,18 @@
+    // Restart test file fresh
+    clear all
+    reproot, project("repkit") roots("clone") prefix("repkit_") 
+    global testfldr "${repkit_clone}/src/tests"
 
+    * Use the /dev-env folder as a dev environment
+    cap mkdir    "${testfldr}/dev-env"
+    repado using "${testfldr}/dev-env"
 
-    * Do not use reproot when testing commands in repkit
-    * Kristoffer's root path
-    if "`c(username)'" == "wb462869" {
-        global repkit_clone "C:\Users\wb462869\github\repkit"
-    }
-    * Fill in your root path here
-    if "`c(username)'" == "bbdaniels" {
-        global repkit_clone "/Users/bbdaniels/GitHub/repkit"
-    }
-
-    if "`c(username)'" == "wb558768" {
-        global repkit_clone "C:/Users/wb558768/Documents/GitHub/repkit"
-    }
+    * Make sure the version of repkit in the dev environment us up to date with all edits.
+    cap net uninstall repkit
+    net install repkit, from("${repkit_clone}/src") replace
 
     * Set global to ado_fldr
-    global src_fldr  "${repkit_clone}/src"
-    global test_fldr "${src_fldr}/tests"
-    global run_fldr  "${test_fldr}/reprun"
+    global run_fldr  "${testfldr}/reprun"
     global tf        "${run_fldr}/targets"
     global sf        "${run_fldr}/single-file"
     global mf        "${run_fldr}/multi-file"
@@ -25,14 +20,6 @@
     global wca       "${run_fldr}/with-clear-all"
     global waf       "${run_fldr}/with-ado-folder"
     global swu		 "${run_fldr}/stable-with-unstable"
-
-    * Install the version of this package in
-    * the plus-ado folder in the test folder
-
-    cap mkdir    "${test_fldr}/dev-env/"
-    repado using "${test_fldr}/dev-env/"
-    cap net uninstall repkit
-    net       install repkit, from("${src_fldr}") replace
 
     file close _all
 
