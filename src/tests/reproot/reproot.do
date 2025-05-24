@@ -1,39 +1,15 @@
+    // Restart test file fresh
+    clear all
+    reproot, project("repkit") roots("clone") prefix("repkit_") 
+    local testfldr "${repkit_clone}/src/tests"
 
-    cap which repkit
-    if _rc == 111 {
-        di as error `"{pstd}This test file use features from the package {browse "https://worldbank.github.io/repkit/":repkit}. Click {stata ssc install repkit} to install it and run this file again.{p_end}"'
-    }
+    * Use the /dev-env folder as a dev environment
+    cap mkdir    "`testfldr'/dev-env"
+    repado using "`testfldr'/dev-env"
 
-    *************************************
-    * Set root path
-    * This is the only test file that cannot 
-    * use reproot as it is testing reproot
-
-    di "Your username: `c(username)'"
-    * Set each user's root path
-    if "`c(username)'" == "`c(username)'" {
-        global root "C:/Users/wb462869/github/repkit"
-    }
-    * Set all other user's root paths on this format
-    if "`c(username)'" == "" {
-        global root ""
-    }
-
-    * Set global to the test folder
-    global src   "${root}/src"
-    global tests "${src}/tests"
-
-    * Set up a dev environement for testing locally
-    cap mkdir    "${tests}/dev-env"
-    repado using "${tests}/dev-env"
-
-    * If not already installed in dev-env, add repkit to the dev environment
-    cap which repkit
-    if _rc == 111 ssc install repkit
-
-    * Install the latest version of repkit to the dev environment
-    net uninstall repkit
-    net install repkit, from("${src}") replace
+    * Make sure the version of repkit in the dev environment us up to date with all edits.
+    cap net uninstall repkit
+    net install repkit, from("${repkit_clone}/src") replace
 
     * Test 1 - this should all work without error
     local prj1 "reproot-test-1"

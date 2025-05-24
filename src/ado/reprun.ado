@@ -1,8 +1,6 @@
-*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.3 20250524 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-cap program drop   reprun
-    program define reprun, rclass
-
+program define reprun, rclass
 qui {
 
     version 14.1
@@ -29,7 +27,7 @@ qui {
 
     if missing(`"`clear'"') {
       clear          // Data matches, zeroed out by default
-      set seed 12345 // Use Stata default setting when starting routine
+      set seed 123456789 // Use Stata default setting when starting routine
     }
 
     /*************************************************************************
@@ -193,11 +191,6 @@ qui {
 		noi di as res `"{phang}Total run time: `seconds' seconds{p_end}"'
 	}
 
-
-
-  // Remove tmahen command is no longer in beta
-  noi repkit "beta reprun"
-
 end
 
   /***************************************************************************
@@ -210,7 +203,6 @@ end
 
   * Go over the do-file to create run 1 and run 2 do-files.
   * Run 1 and 2 are identical to each other.
-  cap program drop reprun_recurse
   program define   reprun_recurse, rclass
   qui {
 
@@ -524,8 +516,7 @@ end
 
   end
 
-  cap program drop org_line_parse
-  	program define org_line_parse , rclass
+  program define org_line_parse , rclass
 
     syntax, line(string)
 
@@ -613,8 +604,7 @@ end
   * This program see if the string passed in word() is a match
   * (full word or abbreviation) to a command that toggles some
   * special beavior when writing the write and check files
-  cap program drop   get_command
-      program define get_command, rclass
+  program define get_command, rclass
 
       syntax, [word(string)]
 
@@ -671,7 +661,6 @@ end
   ******************************************************************************
   *****************************************************************************/
 
-  cap program drop recurse_comp_lines
   program define   recurse_comp_lines, rclass
   qui {
     syntax, dirout(string) stub(string) orgfile(string) ///
@@ -849,7 +838,6 @@ end
   }
   end
 
-  cap program drop compare_data_lines
   program define   compare_data_lines, rclass
 
       syntax, l1(string) l2(string) [pl1(string) pl2(string) suppress(string)]
@@ -919,7 +907,7 @@ end
 
         // Ignore RNG if seed is still on default seed
         if ("`state'" == "rng") {
-          set seed 12345
+          set seed 123456789
           if ("`l1_`state''" == "`c(rngstate)'") {
             local `state'_c1 = ""
             local `state'_c2 = ""
@@ -979,7 +967,6 @@ end
   * This sub-program prints output to file and screen.
   * It can print up to 6 lines at the same time l1-l6
   * It has a shorthand to print the intro output
-  cap program drop write_and_print_output
   program define   write_and_print_output, rclass
 
     syntax , h_smcl(string) [intro_output ///
@@ -1004,8 +991,7 @@ end
     }
   end
 
-  cap program drop output_writerow
-  	program define output_writerow, rclass
+ 	program define output_writerow, rclass
 
     syntax , outputcolumns(numlist) lnum(string) ///
       [rng1(string)  rng2(string)  rngm(string) ///
@@ -1049,8 +1035,7 @@ end
 
   end
 
-  cap program drop output_writetitle
-  	program define output_writetitle, rclass
+  program define output_writetitle, rclass
 
     syntax , outputcolumns(string)
 
@@ -1103,7 +1088,6 @@ end
   end
 
   * Print file tree
-  cap program drop print_filetree_and_verbose_title
   program define   print_filetree_and_verbose_title, rclass
     syntax , files(string) h_smcl(string) [verbose] [compact]
     local file_count = 0

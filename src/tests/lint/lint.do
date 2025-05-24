@@ -1,12 +1,6 @@
-    * Always important to version control built-in Stata functions
-    version 16.0
-    
-    * Do not use reproot when testing commands in repkit
-    
-	* Fill in your root path here
-    global repkit_clone "C:/WBG/repos/repkit"
-    
-    * Use locals for all non-root paths
+    // Restart test file fresh
+    clear all
+    reproot, project("repkit") roots("clone") prefix("repkit_") 
     local testfldr "${repkit_clone}/src/tests"
 
     * Use the /dev-env folder as a dev environment

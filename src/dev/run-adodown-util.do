@@ -1,26 +1,14 @@
-  * Kristoffer's root path
-  if lower("`c(username)'") == "wb462869" {
-      global clone "C:/Users/wb462869/github/"
-  }
-  * Fill in your root path here
-  if "`c(username)'" == "bbdaniels" {
-      global clone "/Users/bbdaniels/GitHub/"
-  }
+  // Restart test file fresh
+  clear all
+  reproot, project("repkit") roots("clone") prefix("repkit_") 
   
-   if "`c(username)'" == "ankritisingh" {
-      global clone "/Users/ankritisingh/GitHub/"
-  }
+
+  local rk "${repkit_clone}/repkit"
   
-   if "`c(username)'" == "wb558768" {
-      global clone "C:/Users/wb558768/Documents/GitHub/"
-  }
+  //ad_sthlp , adfolder("${repkit_clone}") // commands(repadolog)
   
-  local rk "${clone}/repkit"
+  //ad_update, adfolder("${repkit_clone}") pkgname("repkit") newpkg(minor)  
   
-  //ad_sthlp , adfolder("`rk'") // commands(repadolog)
-  
-  //ad_update, adfolder("`rk'") pkgname("repkit") newpkg(major)  
-  
-  ad_publish, adf("`rk'") undoc("reproot_parse reproot_search reprun_dataline") ssczip
+  ad_publish, adf("${repkit_clone}") undoc("reproot_parse reproot_search reprun_dataline reproot_setup_dlg_output") ssczip
   
 

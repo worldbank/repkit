@@ -1,7 +1,6 @@
-*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.3 20250524 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-capture program drop lint
-		program 	 lint
+program 	 lint
 
     version 14.1
 
@@ -409,7 +408,7 @@ capture program drop	_detect
 				display as result 	`"{phang}File {browse "`excel'":`excel'} created.{p_end}"'
 			}
 
-				display as result 	`"{phang}For more information about coding guidelines visit the {browse "https://dimewiki.worldbank.org/Stata_Linter":Stata linter wiki.}{p_end}"'
+				display as result 	`"{phang}For more information about coding guidelines visit the {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":DIME Analytics Stata Style Guide.}{p_end}"'
 		}
 
 
@@ -418,8 +417,7 @@ end
 
 // File Paths ------------------------------------------------------------------
 
-cap program drop _testpath
-	program		 _testpath, rclass
+program		 _testpath, rclass
 
 	syntax anything, argument(string) ext(string) [details(string) debug exists]
 
@@ -452,8 +450,7 @@ end
 
 // Test file format ------------------------------------------------------------
 
-cap program drop _testfile
-	program		 _testfile, rclass
+program		 _testfile, rclass
 
 	syntax anything, ext(string) argument(string) [debug exists]
 
@@ -479,8 +476,7 @@ end
 
 // Check if folder exists ------------------------------------------------------
 
-cap program drop _testdirectory
-    program      _testdirectory
+program      _testdirectory
 
 	syntax anything, argument(string) [details(string) debug]
 
@@ -498,8 +494,7 @@ end
 
 // Error checks ----------------------------------------------------------------
 
-capture program drop  	_checkpyinstall
-		program 		_checkpyinstall
+program 		_checkpyinstall
 
 	* Check if python is installed
 	cap python search

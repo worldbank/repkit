@@ -1,7 +1,6 @@
-*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.3 20250524 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-cap program drop   reproot
-    program define reproot, rclass
+program define reproot, rclass
 
 qui {
 
@@ -119,13 +118,13 @@ qui {
       * Test if this location has a root file
       cap confirm file "`env_file'"
       if (_rc) {
-        noi di as error `"{phang}No file {inp:reproot-env.yaml} found in home directory {browse "`homedir'"}. This file is required to set up once per computer to use {cmd:reproot}. See instructions on how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}. Starting {stata reproot_setup:setup wizard}....{p_end}"' _n
+        noi di as error `"{phang}No file {inp:reproot-env.yaml} found in home directory {browse "`homedir'"}. This file is required to set up once per computer to use {cmd:reproot}. The {inp:reproot} settings file setup wizard will be opened, if it does not open click {stata reproot_setup}. See guidelines for how to set up this file {browse "https://worldbank.github.io/repkit/articles/reproot-files.html":here}. The current code execution was interrupted. Once you have set up the settings file, run this code again. {p_end}"' _n
         noi reproot_setup
-        exit
+        exit 1
       }
 
       * Get reprootpaths and skipdirs from env file
-      reproot_parse env , file("`env_file'")
+      noi reproot_parse env , file("`env_file'")
       local searchpaths `"`r(searchpaths)'"'
       local skipdirs `"`r(skipdirs)'"'
 
@@ -239,14 +238,10 @@ qui {
     * Return all root dires found regardless if they were for this project
     return local rootdirs "`rootdirs'"
 
-    // Remove then command is no longer in beta
-    noi repkit "beta reproot"
-
 }
 end
 
-cap program drop   di_search_results
-    program define di_search_results
+program define di_search_results
 
   syntax, time(numlist) dcount(numlist) [rootdirs(string) total verbose]
 
@@ -272,8 +267,7 @@ cap program drop   di_search_results
 end
 
 
-cap program drop   validate_global_name
-    program define validate_global_name, rclass
+program define validate_global_name, rclass
 
     syntax, rootname(string) [prefix(string)]
 
