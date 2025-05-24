@@ -1,12 +1,12 @@
-*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.3 20250524 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 program define repkit, rclass
 qui {
-  version 14.1
+    version 14.1
 
   * UPDATE THESE LOCALS FOR EACH NEW VERSION PUBLISHED
-  local version "3.2" 
-  local versionDate "20250324" 
+    local version "3.3" 
+    local versionDate "20250524" 
   local cmd    "repkit"
 
   syntax [anything]
