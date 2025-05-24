@@ -191,11 +191,6 @@ qui {
 		noi di as res `"{phang}Total run time: `seconds' seconds{p_end}"'
 	}
 
-
-
-  // Remove tmahen command is no longer in beta
-  noi repkit "beta reprun"
-
 end
 
   /***************************************************************************
