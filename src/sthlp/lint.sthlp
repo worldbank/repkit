@@ -6,16 +6,7 @@
 
 {title:Title}
 
-{phang}{bf:lint} -  detects and corrects bad coding practices in Stata do-files following the {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":DIME Analytics Stata Style Guide}.
-{p_end}
-
-{phang}For this command to run, you will need Stata version 16 or greater, Python, and the Python package {browse "https://pandas.pydata.org":Pandas} installed.
-{p_end}
-
-{phang}To install Python and integrate it with Stata, refer to {browse "https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/":this page}.
-{p_end}
-
-{phang}To install Python packages, refer to {browse "https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages/":this page}.
+{phang}{bf:lint} - detects and corrects bad coding practices in Stata do-files.
 {p_end}
 
 {title:Syntax}
@@ -35,6 +26,9 @@
 {phang}If an {it:output_file} is specified with {bf:using}, then the linter will apply the {bf:Correction} functionality and will write a new file with corrections. If not, the command will only apply the {bf:Detection} functionality, returning a report of suggested corrections and potential issues of the do-file in Stata{c 39}s Results window. Users should note that not all the bad practices identified in {bf:Detection} can be amended by {bf:Correction}.
 {p_end}
 
+{phang}For this command to run, you will need Stata version 16 or greater, Python, and the Python package {browse "https://pandas.pydata.org":Pandas} installed. To install Python and integrate it with Stata, refer to {browse "https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/":this page}. To install Python packages, refer to {browse "https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages":this page}.
+{p_end}
+
 {synoptset 16}{...}
 {p2coldent:{it:options}}Description{p_end}
 {synoptline}
@@ -50,6 +44,9 @@
 {synoptline}
 
 {title:Description}
+
+{pstd}This package is based on the DIME Analytics {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":Stata Style Guide}.
+{p_end}
 
 {dlgtab:Detect functionality}
 
