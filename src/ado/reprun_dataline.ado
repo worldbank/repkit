@@ -1,10 +1,8 @@
-*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.3 20250524 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 * Command intended to exclusively be run from the run files
 * that the command iedorep is generating
-
-cap program drop   reprun_dataline
-    program define reprun_dataline, rclass
+program define reprun_dataline, rclass
 
     version 14.1
 

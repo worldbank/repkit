@@ -1,8 +1,6 @@
-*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.3 20250524 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-cap program drop   repado
-    program define repado, rclass
-
+program define repado, rclass
 qui {
 
     version 14.1
@@ -117,8 +115,7 @@ qui {
 end
 
 
-cap program drop   print_output
-    program define print_output
+program define print_output
 
     syntax , adopath(string) mode(string) [lessverbose]
 

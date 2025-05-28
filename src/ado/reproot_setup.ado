@@ -1,7 +1,5 @@
-*! version 3.2 20250324 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
-
-cap program drop   reproot_setup
-    program define reproot_setup
+*! version 3.3 20250524 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+program define reproot_setup
 
 qui {
 
@@ -124,8 +122,7 @@ qui {
 end
 
 * Create the env file
-cap program drop   reproot_update_envfile
-    program define reproot_update_envfile, rclass
+program define reproot_update_envfile, rclass
 qui {
     syntax, [ ///
       searchpaths(string)  ///
@@ -154,8 +151,7 @@ end
 * Dialog box utils
 
 * Parse the env file and prepare it for the dialog box
-cap program drop   reproot_dlg_input_parsing
-    program define reproot_dlg_input_parsing, rclass
+program define reproot_dlg_input_parsing, rclass
     
     * Initiate locals
     local env_i  = 1
@@ -214,8 +210,7 @@ end
 * General utils
 
 * TEST searchpath
-cap program drop   test_searchpath
-    program define test_searchpath, rclass
+program define test_searchpath, rclass
 qui {
     syntax, [searchpath(string) error]
 
