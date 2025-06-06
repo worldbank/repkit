@@ -23,7 +23,6 @@ Instead, looping commands should name the index local descriptively:
   foreach crop of varlist cassava maize wheat { }
 ```
 
-
 ### Use proper indentations
 
 After declaring for-loop statements or if-else statements, add indentation with whitespaces (usually 2 or 4) in the lines inside the loop.
@@ -86,7 +85,7 @@ If you are using tildes `~` are used for negations, replace them with bangs `!)`
 
 Users should note that the Correct feature does not correct all the bad practices detected.  It only corrects the following:
 
-- Replaces the use of `#delimit` with three forward slashes `(///)` in each line affected by `#delimit`
+- Replaces the use of `#delimit` with three forward slashes `///` in each line affected by `#delimit`
 - Replaces hard tabs with soft spaces (4 by default). The amount of spaces can be set with the `tab_space()` option
 - Indents lines inside curly brackets with 4 spaces by default. The amount of spaces can be set with the `indent()` option
 - Breaks long lines into multiple lines. Long lines are considered to have more than 80 characters by default, but this setting can be changed with the option `linemax()`.  Note that lines can only be split in whitespaces that are not inside parentheses, curly brackets, or double quotes. If a line does not have any whitespaces, the linter will not be able to break a long line.
