@@ -23,65 +23,62 @@ For installing Python packages, refer to [this guide](https://blog.stata.com/202
 
 | _options_ | Description |
 |-----------|-------------|
-| __**v**erbose__ | Show a report of all bad practices and issues flagged by the command. |
-| __**nosum**mary__ | Suppress summary table with counts of bad practices and potential issues. |
-| __**e**xcel__(_filename_) | Save the verbose output in an Excel file. |
+| __**v**erbose__ | Shows a report of all bad practices and issues flagged by the command. |
+| __**nosum**mary__ | Suppresses the summary table with counts of bad practices and potential issues. |
+| __**e**xcel__(_filename_) | Saves the verbose output in an Excel file. |
 | __**i**ndent__(_integer_) | Number of whitespaces used when checking indentation (default: 4). |
-| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when checking indentation practices (default: 4).  |
+| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when checking indentation practices (default: 4). |
 | __**l**inemax__(_integer_) | Maximum number of characters in a line (default: 80). |
 
 ## Options specific to the correction mode
 
 | _options_ | Description |
 |-----------|-------------|
-| __**auto**matic__ | suppresses the prompt asking users which correction to apply.  |
+| __**auto**matic__ | Suppresses the prompt asking users which correction to apply. |
 | __replace__ | Allows the command to overwrite any existing _output_ file. |
 | __force__ | Allows the _input_file_ to be the same as _output_file_. Not recommended, see below. |
 
 # Description
 
-This command is a linting tool for Stata code that helps standardize code formatting and identify bad practices. 
-For a further discussion of linting tools, see [here](https://en.wikipedia.org/wiki/Lint_(software)). 
+This command is a linting tool for Stata code that helps standardize code formatting and identify bad practices.  
+For further discussion of linting tools, see [here](https://en.wikipedia.org/wiki/Lint_(software)). 
 
-This linting rules used in this command are based on the DIME Analytics [Stata Style Guide](https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide).
-All style guides are inherently subjective, and differences in preferences exists.
-An exact list of the rules used by this command can be found in [this article](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/linting-rules.md) on the `repkit` web documentation. 
+The linting rules used in this command are based on the DIME Analytics [Stata Style Guide](https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide).  
+All style guides are inherently subjective, and differences in preferences exist.  
+An exact list of the rules used by this command can be found in [this article](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/linting-rules.md) on the `repkit` web documentation.  
 See the list of rules and the DIME Analytics Stata Style Guide for a discussion on the motivations for these rules.
 
 # Options
 
-__**v**erbose__ shows in the result window a report of all bad practices and issues flagged by the command. The default is to show only a summary table with counts for occurrences flagged for each linting rule.
+__**v**erbose__ displays a detailed report of all bad practices and issues flagged by the command in the Results window. By default, only a summary table with counts for each linting rule is shown.
 
-__**nosum**mary__ suppress the default behavior of displaying of the summary table of flagged occurrences.
+__**nosum**mary__ suppresses the summary table of flagged occurrences.
 
-__**e**xcel__(_filename_) exports the verbose output to an Excel file saved at the provided file location.
+__**e**xcel__(_filename_) exports the verbose output to an Excel file at the specified location.
 
-__**i**ndent__(_integer_) sets the number of whitespaces used when checking indentation coding practices. The default is 4.
+__**i**ndent__(_integer_) sets the number of whitespaces used when checking indentation. Default: 4.
 
-__**s**pace__(_integer_) sets the number of whitespaces used instead of hard tabs when checking indentation practices. The default is 4.
+__**s**pace__(_integer_) sets the number of whitespaces used instead of hard tabs for indentation. Default: 4.
 
-__**l**inemax__(_integer_) sets the maximum number of characters allowed in a single line of code. The default is 80.
+__**l**inemax__(_integer_) sets the maximum number of characters allowed in a single line. Default: 80.
 
-## Options specific to the correction feature:
+## Options specific to the correction feature
 
-__**auto**matic__ suppresses the prompt done before applying changes. By default, the command will ask the user about each correction interactively after producing the summary report.
+__**auto**matic__ suppresses the interactive prompt before applying corrections. By default, the command asks for confirmation before applying identified corrections.
 
-__replace__ allows the command to overwrite any existing _output_ file.
+__replace__ allows overwriting an existing _output_ file.
 
-__force__ allows the output file name to be the same as the name of the input file; overwriting the original do-file. __The use of this option is not recommended__ because it is slightly possible that the corrected do-file created by the command will break something in your code and you should always keep a backup of it.
+__force__ allows the output file name to be the same as the input file, overwriting the original do-file. __This is not recommended__; see details in the section below.
 
-## Recommended usage of these options
+## Recommended workflow for correction mode
 
-To minimize the risk of crashing a do-file, the `correction` feature works based on fewer rules than the `detection` feature.
-That is, it can flag more bad coding practices with `lint "input_file"` than the practices corrected with `lint "input_file" using "output_file"`.
-Therefore, after writing a do-file, you can first `detect` bad practices to check how many bad coding practices are contained in the do-file and later decide whether you would like to use the correction feature.
+The **correction** mode applies fewer rules than identified in **detection** mode. 
+You may find that `lint "input_file"` flags more issues than can be automatically corrected with `lint "input_file" using "output_file"`.
 
-If there are not too many bad practices, you can go through the lines flagged by the `detection` feature and manually correct them.
-This also avoids potential crashes by the `correction` feature.
+A recommended workflow is to first use detection to identify bad practices, then manually correct them if there are only a few. This minimizes the risk of unintended changes.If many issues are detected, use the correction mode to address as many as possible, then review and manually fix any remaining issues. 
 
-If there are many bad practices detected, you can use the `correction` feature first to correct some of the flagged lines, and then you can `detect` again and `correct` the remaining bad practices manually.
-We strongly recommend not overwriting the original input do-file so it can remain as a backup in case `correct` introduces unintended changes in the code.
-Additionally, we recommend checking that the results of the do-file are not changed by the correction feature.
+Avoid using the `force` option to overwrite the original input file. 
+Instead, keep the original file as a backup to safeguard against unintended changes. Always verify that the corrected do-file produces the expected results before replacing the original file.
 
 # Examples
 
