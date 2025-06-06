@@ -81,7 +81,10 @@ Instead, keep the original file as a backup to safeguard against unintended chan
 
 # Examples
 
-The following examples illustrate basic usages of lint. Additional examples can be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
+The following examples illustrate basic usages of lint. 
+The example file `bad.do` referred to below can be downloaded [here](https://github.com/worldbank/repkit/blob/lint-helpfile-update/src/tests/lint/test-files/bad.do).
+
+Additional examples with more verbose explanation be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
 
 ## Detecting bad coding practices
 
