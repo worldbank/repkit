@@ -40,16 +40,16 @@ For installing Python packages, refer to {browse "https://blog.stata.com/2020/09
 {synopt: {bf:{ul:nosum}mary}}Suppresses the summary table with counts of bad practices and potential issues.{p_end}
 {synopt: {bf:{ul:e}xcel}({it:filename})}Saves the verbose output in an Excel file.{p_end}
 {synopt: {bf:{ul:i}ndent}({it:integer})}Number of whitespaces used when checking indentation (default: 4).{p_end}
-{synopt: {bf:{ul:s}pace}({it:integer})}Number of whitespaces used instead of hard tabs when checking indentation practices (default: 4).{p_end}
 {synopt: {bf:{ul:l}inemax}({it:integer})}Maximum number of characters in a line (default: 80).{p_end}
 {synoptline}
 
 {dlgtab:Options specific to the correction mode}
 
-{synoptset 9}{...}
+{synoptset 14}{...}
 {p2coldent:{it:options}}Description{p_end}
 {synoptline}
 {synopt: {bf:{ul:auto}matic}}Suppresses the prompt asking users which correction to apply.{p_end}
+{synopt: {bf:{ul:s}pace}({it:integer})}Number of whitespaces used instead of hard tabs when replacing hard tabs with spaces for indentation (default: same value used for the option {bf:indent()}, 4 when no value is defined).{p_end}
 {synopt: {bf:replace}}Allows the command to overwrite any existing {it:output} file.{p_end}
 {synopt: {bf:force}}Allows the {it:input_file} to be the same as {it:output_file}. Not recommended, see below.{p_end}
 {synoptline}
@@ -57,7 +57,7 @@ For installing Python packages, refer to {browse "https://blog.stata.com/2020/09
 {title:Description}
 
 {pstd}This command is a linting tool for Stata code that helps standardize code formatting and identify bad practices.  
-For further discussion of linting tools, see {inp:https://en.wikipedia.org/wiki/Lint_(software)}.  
+For further discussion of linting tools, see {inp:https://en.wikipedia.org/wiki/Lint_(software)}. 
 {p_end}
 
 {pstd}The linting rules used in this command are based on the DIME Analytics {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":Stata Style Guide}.  
@@ -80,15 +80,15 @@ See the list of rules and the DIME Analytics Stata Style Guide for a discussion 
 {pstd}{bf:{ul:i}ndent}({it:integer}) sets the number of whitespaces used when checking indentation. Default: 4.
 {p_end}
 
-{pstd}{bf:{ul:s}pace}({it:integer}) sets the number of whitespaces used instead of hard tabs for indentation. Default: 4.
-{p_end}
-
 {pstd}{bf:{ul:l}inemax}({it:integer}) sets the maximum number of characters allowed in a single line. Default: 80.
 {p_end}
 
 {dlgtab:Options specific to the correction feature}
 
 {pstd}{bf:{ul:auto}matic} suppresses the interactive prompt before applying corrections. By default, the command asks for confirmation before applying identified corrections.
+{p_end}
+
+{pstd}{bf:{ul:s}pace}({it:integer}) sets the number of whitespaces to replace instead of hard tabs for indentation. Default: same value used for the option {bf:indent()}, 4 when no value is defined.
 {p_end}
 
 {pstd}{bf:replace} allows overwriting an existing {it:output} file.
@@ -99,20 +99,20 @@ See the list of rules and the DIME Analytics Stata Style Guide for a discussion 
 
 {dlgtab:Recommended workflow for correction mode}
 
-{pstd}The {it:correction} mode applies fewer rules than identified in {it:detection} mode. 
+{pstd}The {it:correction} mode applies fewer rules than identified in {it:detection} mode.
 You may find that {inp:lint {c 34}input_file{c 34}} flags more issues than can be automatically corrected with {inp:lint {c 34}input_file{c 34} using {c 34}output_file{c 34}}. 
 {p_end}
 
-{pstd}A recommended workflow is to first use detection to identify bad practices, then manually correct them if there are only a few. This minimizes the risk of unintended changes.If many issues are detected, use the correction mode to address as many as possible, then review and manually fix any remaining issues. 
+{pstd}A recommended workflow is to first use detection to identify bad practices, then manually correct them if there are only a few. This minimizes the risk of unintended changes.If many issues are detected, use the correction mode to address as many as possible, then review and manually fix any remaining issues.
 {p_end}
 
-{pstd}Avoid using the {inp:force} option to overwrite the original input file.  
+{pstd}Avoid using the {inp:force} option to overwrite the original input file. 
 Instead, keep the original file as a backup to safeguard against unintended changes. Always verify that the corrected do-file produces the expected results before replacing the original file.
 {p_end}
 
 {title:Examples}
 
-{pstd}The following examples illustrate basic usages of lint. 
+{pstd}The following examples illustrate basic usages of lint.
 The example file {inp:bad.do} referred to below can be downloaded {browse "https://github.com/worldbank/repkit/blob/lint-helpfile-update/src/tests/lint/test-files/bad.do":here}. 
 {p_end}
 
@@ -141,22 +141,17 @@ The example file {inp:bad.do} referred to below can be downloaded {browse "https
 
 {input}{space 8}lint "test/bad.do", indent(2)
 {text}
-{pstd}5. Specify the number of whitespaces used instead of hard tabs for detecting indentation practices (default: same value used in indent):
-{p_end}
-
-{input}{space 8}lint "test/bad.do", tab_space(6)
-{text}
-{pstd}6. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
+{pstd}5. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
 {p_end}
 
 {input}{space 8}lint "test/bad.do", linemax(100)
 {text}
-{pstd}7. Export to Excel the results of the line by line analysis
+{pstd}6. Export to Excel the results of the line by line analysis
 {p_end}
 
 {input}{space 8}lint "test/bad.do", excel("test_dir/detect_output.xlsx")
 {text}
-{pstd}8. You can also use this command to test all the do-files in a folder:
+{pstd}7. You can also use this command to test all the do-files in a folder:
 {p_end}
 
 {input}{space 8}lint "test/"
@@ -171,17 +166,22 @@ The example file {inp:bad.do} referred to below can be downloaded {browse "https
 
 {input}{space 8}lint "test/bad.do" using "test/bad_corrected.do"
 {text}
-{pstd}2. Automatic use (Stata will correct the file automatically):
+{pstd}2. Correction while defining the number of spaces to replace hard tabs with:
+{p_end}
+
+{input}{space 8}lint "test/bad.do" using "test/bad_corrected.do", space(2)
+{text}
+{pstd}3. Automatic use (Stata will correct the file automatically):
 {p_end}
 
 {input}{space 8}lint "test/bad.do" using "test/bad_corrected.do", automatic
 {text}
-{pstd}3. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
+{pstd}4. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
 {p_end}
 
 {input}{space 8}lint "test/bad.do" using "test/bad.do", automatic force
 {text}
-{pstd}4. Replace the output file if it already exists
+{pstd}5. Replace the output file if it already exists
 {p_end}
 
 {input}{space 8}lint "test/bad.do" using "test/bad_corrected.do", automatic replace

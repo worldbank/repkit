@@ -26,7 +26,6 @@ For installing Python packages, refer to [this guide](https://blog.stata.com/202
 | __**nosum**mary__ | Suppresses the summary table with counts of bad practices and potential issues. |
 | __**e**xcel__(_filename_) | Saves the verbose output in an Excel file. |
 | __**i**ndent__(_integer_) | Number of whitespaces used when checking indentation (default: 4). |
-| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when checking indentation practices (default: 4). |
 | __**l**inemax__(_integer_) | Maximum number of characters in a line (default: 80). |
 
 ## Options specific to the correction mode
@@ -34,13 +33,14 @@ For installing Python packages, refer to [this guide](https://blog.stata.com/202
 | _options_ | Description |
 |-----------|-------------|
 | __**auto**matic__ | Suppresses the prompt asking users which correction to apply. |
+| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when replacing hard tabs with spaces for indentation (default: same value used for the option __indent()__, 4 when no value is defined). |
 | __replace__ | Allows the command to overwrite any existing _output_ file. |
 | __force__ | Allows the _input_file_ to be the same as _output_file_. Not recommended, see below. |
 
 # Description
 
 This command is a linting tool for Stata code that helps standardize code formatting and identify bad practices.  
-For further discussion of linting tools, see `https://en.wikipedia.org/wiki/Lint_(software)`. 
+For further discussion of linting tools, see `https://en.wikipedia.org/wiki/Lint_(software)`.
 
 The linting rules used in this command are based on the DIME Analytics [Stata Style Guide](https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide).  
 All style guides are inherently subjective, and differences in preferences exist.  
@@ -57,13 +57,13 @@ __**e**xcel__(_filename_) exports the verbose output to an Excel file at the spe
 
 __**i**ndent__(_integer_) sets the number of whitespaces used when checking indentation. Default: 4.
 
-__**s**pace__(_integer_) sets the number of whitespaces used instead of hard tabs for indentation. Default: 4.
-
 __**l**inemax__(_integer_) sets the maximum number of characters allowed in a single line. Default: 80.
 
 ## Options specific to the correction feature
 
 __**auto**matic__ suppresses the interactive prompt before applying corrections. By default, the command asks for confirmation before applying identified corrections.
+
+__**s**pace__(_integer_) sets the number of whitespaces to replace instead of hard tabs for indentation. Default: same value used for the option __indent()__, 4 when no value is defined.
 
 __replace__ allows overwriting an existing _output_ file.
 
@@ -71,17 +71,17 @@ __force__ allows the output file name to be the same as the input file, overwrit
 
 ## Recommended workflow for correction mode
 
-The _correction_ mode applies fewer rules than identified in _detection_ mode. 
+The _correction_ mode applies fewer rules than identified in _detection_ mode.
 You may find that `lint "input_file"` flags more issues than can be automatically corrected with `lint "input_file" using "output_file"`.
 
-A recommended workflow is to first use detection to identify bad practices, then manually correct them if there are only a few. This minimizes the risk of unintended changes.If many issues are detected, use the correction mode to address as many as possible, then review and manually fix any remaining issues. 
+A recommended workflow is to first use detection to identify bad practices, then manually correct them if there are only a few. This minimizes the risk of unintended changes.If many issues are detected, use the correction mode to address as many as possible, then review and manually fix any remaining issues.
 
-Avoid using the `force` option to overwrite the original input file. 
+Avoid using the `force` option to overwrite the original input file.
 Instead, keep the original file as a backup to safeguard against unintended changes. Always verify that the corrected do-file produces the expected results before replacing the original file.
 
 # Examples
 
-The following examples illustrate basic usages of lint. 
+The following examples illustrate basic usages of lint.
 The example file `bad.do` referred to below can be downloaded [here](https://github.com/worldbank/repkit/blob/lint-helpfile-update/src/tests/lint/test-files/bad.do).
 
 Additional examples with more verbose explanation be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
@@ -112,25 +112,19 @@ lint "test/bad.do", nosummary
 lint "test/bad.do", indent(2)
 ```
 
-5. Specify the number of whitespaces used instead of hard tabs for detecting indentation practices (default: same value used in indent):
-
-```
-lint "test/bad.do", tab_space(6)
-```
-
-6. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
+5. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
 
 ```
 lint "test/bad.do", linemax(100)
 ```
 
-7. Export to Excel the results of the line by line analysis
+6. Export to Excel the results of the line by line analysis
 
 ```
 lint "test/bad.do", excel("test_dir/detect_output.xlsx")
 ```
 
-8. You can also use this command to test all the do-files in a folder:
+7. You can also use this command to test all the do-files in a folder:
 
 ```
 lint "test/"
@@ -146,19 +140,25 @@ The basic usage of the correction feature requires to specify the input do-file 
 lint "test/bad.do" using "test/bad_corrected.do"
 ```
 
-2. Automatic use (Stata will correct the file automatically):
+2. Correction while defining the number of spaces to replace hard tabs with:
+
+```
+lint "test/bad.do" using "test/bad_corrected.do", space(2)
+```
+
+3. Automatic use (Stata will correct the file automatically):
 
 ```
 lint "test/bad.do" using "test/bad_corrected.do", automatic
 ```
 
-3. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
+4. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
 
 ```
 lint "test/bad.do" using "test/bad.do", automatic force
 ```
 
-4. Replace the output file if it already exists
+5. Replace the output file if it already exists
 
 ```
 lint "test/bad.do" using "test/bad_corrected.do", automatic replace
