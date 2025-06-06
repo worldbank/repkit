@@ -1,20 +1,26 @@
 # Title
 
-__lint__ - detects and corrects bad coding practices in Stata do-files.
+
+__lint__ – Detects and corrects bad coding practices in Stata do-files.
 
 # Syntax
 
-__lint__ "_input_file_" [using "_output_file_"] , [_options_]
+__lint__ "_input_file_" [using "_output_file_"], [_options_]
 
-The lint command can be broken into two functionalities:
+The `lint` command operates in two modes:
 
-1. __Detection__ identifies bad coding practices in a Stata do-files
+1. __Detection__ mode identifies bad coding practices in Stata do-files and reports them.
+2. __Correction__ mode applies corrections to a Stata do-file based on the issues detected.
 
-2. __Correction__ corrects bad coding practices in a Stata do-file.
+In __detection__ mode, the command displays suggested corrections and potential issues in Stata's Results window.  
+__Correction__ mode is activated when an _output_file_ is specified with __using__; the command then writes a new file with the applied corrections to _output_file_.  
+Note that not all issues flagged in __detection__ mode can be automatically corrected.
 
-If an _output_file_ is specified with __using__, then the linter will apply the __Correction__ functionality and will write a new file with corrections. If not, the command will only apply the __Detection__ functionality, returning a report of suggested corrections and potential issues of the do-file in Stata's Results window. Users should note that not all the bad practices identified in __Detection__ can be amended by __Correction__.
+To use this command, you need Stata version 16 or higher, Python, and the [Pandas](https://pandas.pydata.org) Python package installed.
 
-For this command to run, you will need Stata version 16 or greater, Python, and the Python package [Pandas](https://pandas.pydata.org) installed. To install Python and integrate it with Stata, refer to [this page](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/). To install Python packages, refer to [this page](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages).
+For instructions on installing Python and integrating it with Stata, see [this guide](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/).
+
+For installing Python packages, refer to [this guide](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages).
 
 | _options_ | Description |
 |-----------|-------------|
