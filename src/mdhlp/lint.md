@@ -9,6 +9,7 @@ __lint__ "_input_file_" [using "_output_file_"], [_options_]
 The `lint` command operates in two modes:
 
 1. __Detection__ mode identifies bad coding practices in Stata do-files and reports them.
+
 2. __Correction__ mode applies corrections to a Stata do-file based on the issues detected.
 
 In __detection__ mode, the command displays suggested corrections and potential issues in Stata's Results window.  
@@ -16,9 +17,7 @@ __Correction__ mode is activated when an _output_file_ is specified with __using
 Note that not all issues flagged in __detection__ mode can be automatically corrected.
 
 To use this command, you need Stata version 16 or higher, Python, and the [Pandas](https://pandas.pydata.org) Python package installed.
-
 For instructions on installing Python and integrating it with Stata, see [this guide](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/).
-
 For installing Python packages, refer to [this guide](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages).
 
 | _options_ | Description |
@@ -41,7 +40,7 @@ For installing Python packages, refer to [this guide](https://blog.stata.com/202
 # Description
 
 This command is a linting tool for Stata code that helps standardize code formatting and identify bad practices.  
-For further discussion of linting tools, see [here](https://en.wikipedia.org/wiki/Lint_(software)). 
+For further discussion of linting tools, see `https://en.wikipedia.org/wiki/Lint_(software)`. 
 
 The linting rules used in this command are based on the DIME Analytics [Stata Style Guide](https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide).  
 All style guides are inherently subjective, and differences in preferences exist.  
@@ -72,7 +71,7 @@ __force__ allows the output file name to be the same as the input file, overwrit
 
 ## Recommended workflow for correction mode
 
-The **correction** mode applies fewer rules than identified in **detection** mode. 
+The _correction_ mode applies fewer rules than identified in _detection_ mode. 
 You may find that `lint "input_file"` flags more issues than can be automatically corrected with `lint "input_file" using "output_file"`.
 
 A recommended workflow is to first use detection to identify bad practices, then manually correct them if there are only a few. This minimizes the risk of unintended changes.If many issues are detected, use the correction mode to address as many as possible, then review and manually fix any remaining issues. 
