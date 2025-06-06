@@ -67,7 +67,7 @@ Make sure to explicitly take missing values into account by using `missing(var)`
 
 ### Check that backslashes (`\`) are not used in file paths
 
-- Check that backslashes `\` are not used in file paths. If you are using them, replace them with forward slashes `/`. 
+Check that backslashes `\` are not used in file paths. If you are using them, replace them with forward slashes `/`. 
 Users should note that the linter might not perfectly distinguish which uses of a backslash are file paths. 
 In general, this flag will come up every time a backslash is used in the same line as a local, global, or the cd command.
 
