@@ -85,60 +85,53 @@ Additionally, we recommend checking that the results of the do-file are not chan
 
 # Examples
 
-The following examples illustrate the basic usage of lint. Additional examples can be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
+The following examples illustrate basic usages of lint. Additional examples can be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
 
 ## Detecting bad coding practices
 
-The basic usage is to point to a do-file that requires revision as follows:
+1. The basic usage is to point to a do-file that requires revision as follows:
 
 ```
 lint "test/bad.do"
 ```
 
-For the detection feature you can use all the options but _automatic_, _force_, and _replace_, which are part of the correction functionality.
-
-__**Options:**__
-
-1. Show bad coding practices line-by-line
+2. Show bad coding practices line-by-line
 
 ```
 lint "test/bad.do", verbose
 ```
 
- 2. Remove the summary of bad practices
+3. Remove the summary of bad practices
 
 ```
 lint "test/bad.do", nosummary
 ```
 
-3. Specify the number of whitespaces used for detecting indentation practices (default: 4):
+4. Specify the number of whitespaces used for detecting indentation practices (default: 4):
 
 ```
 lint "test/bad.do", indent(2)
 ```
 
-
-4. Specify the number of whitespaces used instead of hard tabs for detecting indentation practices (default: same value used in indent):
+5. Specify the number of whitespaces used instead of hard tabs for detecting indentation practices (default: same value used in indent):
 
 ```
 lint "test/bad.do", tab_space(6)
 ```
 
-
-5. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
+6. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
 
 ```
 lint "test/bad.do", linemax(100)
 ```
 
-
-6. Export to Excel the results of the line by line analysis
+7. Export to Excel the results of the line by line analysis
 
 ```
 lint "test/bad.do", excel("test_dir/detect_output.xlsx")
 ```
 
-7. You can also use this command to test all the do-files in a folder:
+8. You can also use this command to test all the do-files in a folder:
 
 ```
 lint "test/"
@@ -154,13 +147,11 @@ The basic usage of the correction feature requires to specify the input do-file 
 lint "test/bad.do" using "test/bad_corrected.do"
 ```
 
-
 2. Automatic use (Stata will correct the file automatically):
 
 ```
 lint "test/bad.do" using "test/bad_corrected.do", automatic
 ```
-
 
 3. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
 
@@ -168,13 +159,11 @@ lint "test/bad.do" using "test/bad_corrected.do", automatic
 lint "test/bad.do" using "test/bad.do", automatic force
 ```
 
-
 4. Replace the output file if it already exists
 
 ```
 lint "test/bad.do" using "test/bad_corrected.do", automatic replace
 ```
-
 
 # Feedback, bug reports and contributions
 
