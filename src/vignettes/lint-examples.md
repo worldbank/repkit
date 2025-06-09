@@ -181,38 +181,6 @@ if something ~= 1 & something != . {
 }
 ```
 
-### Other options
-
-You can use the following options with the `lint` command:
-
-- Options related to the **detection** feature:
-  - `verbose`: show all the lines where bad practices appear.
-  - `nosummary`: suppress the summary of bad practices.
-  - `excel()`: export detection results to Excel.
-
-- Options exclusive to the **correction** feature:
-  - `automatic`: correct all bad coding practices without asking if you want each bad coding practice detected to be corrected or not.
-  - `replace`: replace the existing output file.
-  - `force`: allow the output file name to be the same as the name of the input file (not recommended).
-
-- Options for **both** features:
-  - `indent()`: specify the number of whitespaces used for indentation (default is 4).
-  - `linemax()`: maximum number of characters in a line (default: 80)
-  - `space()`: number of whitespaces used instead of hard tabs (default is 4).
-
-## Recommended use
-
-To minimize the risk of crashing a do-file, the `correction` feature works based on fewer rules than the `detection` feature.
-That is, it can flag more bad coding practices with `lint "input_file"` than the practices corrected with `lint "input_file" using "output_file"`.
-Therefore, after writing a do-file, you can first `detect` bad practices to check how many bad coding practices are contained in the do-file and later decide whether you would like to use the correction feature.
-
-If there are not too many bad practices, you can go through the lines flagged by the `detection` feature and manually correct them.
-This also avoids potential crashes by the `correction` feature.
-
-If there are many bad practices detected, you can use the `correction` feature first to correct some of the flagged lines, and then you can `detect` again and `correct` the remaining bad practices manually.
-We strongly recommend not overwriting the original input do-file so it can remain as a backup in case `correct` introduces unintended changes in the code.
-Additionally, we recommend checking that the results of the do-file are not changed by the correction feature.
-
 ## Troubleshooting the Stata-Python integration for users with IT restrictions
 
 In our experience working in Windows computers with IT and admin-access restrictions, the most common problem when executing Python code from Stata is not finding a Python package that is installed in the system.

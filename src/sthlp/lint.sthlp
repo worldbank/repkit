@@ -6,213 +6,140 @@
 
 {title:Title}
 
-{phang}{bf:lint} - detects and corrects bad coding practices in Stata do-files.
+{phang}{bf:lint} – Detects and corrects bad coding practices in Stata do-files.
 {p_end}
 
 {title:Syntax}
 
-{phang}{bf:lint} {c 34}{it:input_file}{c 34} [using {c 34}{it:output_file}{c 34}] , [{it:options}]
+{phang}{bf:lint} {c 34}{it:input_file}{c 34} [using {c 34}{it:output_file}{c 34}], [{it:options}]
 {p_end}
 
-{phang}The lint command can be broken into two functionalities:
+{phang}The {inp:lint} command operates in two modes: 
 {p_end}
 
-{phang}1. {bf:Detection} identifies bad coding practices in a Stata do-files
+{phang}1. {bf:Detection} mode identifies bad coding practices in Stata do-files and reports them.
 {p_end}
 
-{phang}2. {bf:Correction} corrects bad coding practices in a Stata do-file.
+{phang}2. {bf:Correction} mode applies corrections to a Stata do-file based on the issues detected.
 {p_end}
 
-{phang}If an {it:output_file} is specified with {bf:using}, then the linter will apply the {bf:Correction} functionality and will write a new file with corrections. If not, the command will only apply the {bf:Detection} functionality, returning a report of suggested corrections and potential issues of the do-file in Stata{c 39}s Results window. Users should note that not all the bad practices identified in {bf:Detection} can be amended by {bf:Correction}.
+{phang}In {bf:detection} mode, the command displays suggested corrections and potential issues in Stata{c 39}s Results window.  
+{bf:Correction} mode is activated when an {it:output_file} is specified with {bf:using}; the command then writes a new file with the applied corrections to {it:output_file}.  
+Note that not all issues flagged in {bf:detection} mode can be automatically corrected.
 {p_end}
 
-{phang}For this command to run, you will need Stata version 16 or greater, Python, and the Python package {browse "https://pandas.pydata.org":Pandas} installed. To install Python and integrate it with Stata, refer to {browse "https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/":this page}. To install Python packages, refer to {browse "https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages":this page}.
+{phang}To use this command, you need Stata version 16 or higher, Python, and the {browse "https://pandas.pydata.org":Pandas} Python package installed.
+For instructions on installing Python and integrating it with Stata, see {browse "https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/":this guide}.
+For installing Python packages, refer to {browse "https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages":this guide}.
 {p_end}
 
 {synoptset 16}{...}
 {p2coldent:{it:options}}Description{p_end}
 {synoptline}
-{synopt: {bf:{ul:v}erbose}}Report bad practices and issues found on each line of the do-file.{p_end}
-{synopt: {bf:{ul:nosum}mary}}Suppress summary table of bad practices and potential issues.{p_end}
-{synopt: {bf:{ul:i}ndent}({it:integer})}Number of whitespaces used when checking indentation coding practices (default: 4).{p_end}
-{synopt: {bf:{ul:s}pace}({it:integer})}Number of whitespaces used instead of hard tabs when checking indentation practices (default: same as indent).{p_end}
-{synopt: {bf:{ul:l}inemax}({it:integer})}Maximum number of characters in a line when checking line extension practices (default: 80).{p_end}
-{synopt: {bf:{ul:e}xcel}({it:filename})}Save an Excel file of line-by-line results.{p_end}
-{synopt: {bf:force}}Allow the output file name to be the same as the name of the input file; overwriting the original do-file. {bf:The use of this option is not recommended} because it is slightly possible that the corrected do-file created by the command will break something in your code and you should always keep a backup of it.{p_end}
-{synopt: {bf:{ul:auto}matic}}Correct all bad coding practices without asking if you want each bad coding practice to be corrected or not.  By default, the command will ask the user about each correction interactively after producing the summary report.{p_end}
-{synopt: {bf:replace}}Overwrite any existing {it:output} file.{p_end}
+{synopt: {bf:{ul:v}erbose}}Shows a report of all bad practices and issues flagged by the command.{p_end}
+{synopt: {bf:{ul:nosum}mary}}Suppresses the summary table with counts of bad practices and potential issues.{p_end}
+{synopt: {bf:{ul:e}xcel}({it:filename})}Saves the verbose output in an Excel file.{p_end}
+{synopt: {bf:{ul:i}ndent}({it:integer})}Number of whitespaces used when checking indentation (default: 4).{p_end}
+{synopt: {bf:{ul:l}inemax}({it:integer})}Maximum number of characters in a line (default: 80).{p_end}
+{synoptline}
+
+{dlgtab:Options specific to the correction mode}
+
+{synoptset 14}{...}
+{p2coldent:{it:options}}Description{p_end}
+{synoptline}
+{synopt: {bf:{ul:auto}matic}}Suppresses the prompt asking users which correction to apply.{p_end}
+{synopt: {bf:{ul:s}pace}({it:integer})}Number of whitespaces used instead of hard tabs when replacing hard tabs with spaces for indentation (default: same value used for the option {bf:indent()}, 4 when no value is defined).{p_end}
+{synopt: {bf:replace}}Allows the command to overwrite any existing {it:output} file.{p_end}
+{synopt: {bf:force}}Allows the {it:input_file} to be the same as {it:output_file}. Not recommended, see below.{p_end}
 {synoptline}
 
 {title:Description}
 
-{pstd}This package is based on the DIME Analytics {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":Stata Style Guide}.
+{pstd}This command is a linting tool for Stata code that helps standardize code formatting and identify bad practices.  
+For further discussion of linting tools, see {inp:https://en.wikipedia.org/wiki/Lint_(software)}. 
 {p_end}
 
-{dlgtab:Detect functionality}
-
-{pstd}{bf:Bad style practices and potential issues detected:}
+{pstd}The linting rules used in this command are based on the DIME Analytics {browse "https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide":Stata Style Guide}.  
+All style guides are inherently subjective, and differences in preferences exist.  
+An exact list of the rules used by this command can be found in {browse "https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/linting-rules.md":this article} on the {inp:repkit} web documentation.   
+See the list of rules and the DIME Analytics Stata Style Guide for a discussion on the motivations for these rules.
 {p_end}
 
-{pstd}{bf:Use whitespaces instead of hard tabs}
+{title:Options}
+
+{pstd}{bf:{ul:v}erbose} displays a detailed report of all bad practices and issues flagged by the command in the Results window. By default, only a summary table with counts for each linting rule is shown.
 {p_end}
 
-{pstd}- Use whitespaces (usually 2 or 4) instead of hard tabs.
+{pstd}{bf:{ul:nosum}mary} suppresses the summary table of flagged occurrences.
 {p_end}
 
-{pstd}{bf:Avoid abstract index names}
+{pstd}{bf:{ul:e}xcel}({it:filename}) exports the verbose output to an Excel file at the specified location.
 {p_end}
 
-{pstd}- In for-loop statements, index names should describe what the code is looping over. For example, avoid writing code like this:
+{pstd}{bf:{ul:i}ndent}({it:integer}) sets the number of whitespaces used when checking indentation. Default: 4.
 {p_end}
 
-{input}{space 8}  foreach i of varlist cassava maize wheat { }
-{text}
-{pstd}- Instead, looping commands should name the index local descriptively:
+{pstd}{bf:{ul:l}inemax}({it:integer}) sets the maximum number of characters allowed in a single line. Default: 80.
 {p_end}
 
-{input}{space 8}  foreach crop of varlist cassava maize wheat { }
-{text}
-{pstd}{bf:Use proper indentations}
+{dlgtab:Options specific to the correction feature}
+
+{pstd}{bf:{ul:auto}matic} suppresses the interactive prompt before applying corrections. By default, the command asks for confirmation before applying identified corrections.
 {p_end}
 
-{pstd}- After declaring for-loop statements or if-else statements, add indentation with whitespaces (usually 2 or 4) in the lines inside the loop.
+{pstd}{bf:{ul:s}pace}({it:integer}) sets the number of whitespaces to replace instead of hard tabs for indentation. Default: same value used for the option {bf:indent()}, 4 when no value is defined.
 {p_end}
 
-{pstd}{bf:Use indentations after declaring newline symbols (///)}
+{pstd}{bf:replace} allows overwriting an existing {it:output} file.
 {p_end}
 
-{pstd}- After a new line statement (///), add indentation (usually 2 or 4 whitespaces).
+{pstd}{bf:force} allows the output file name to be the same as the input file, overwriting the original do-file. {bf:This is not recommended}; see details in the section below.
 {p_end}
 
-{pstd}{bf:Use the {c 34}!missing(){c 34} function for conditions with missing values}
+{dlgtab:Recommended workflow for correction mode}
+
+{pstd}The {it:correction} mode applies fewer rules than identified in {it:detection} mode.
+You may find that {inp:lint {c 34}input_file{c 34}} flags more issues than can be automatically corrected with {inp:lint {c 34}input_file{c 34} using {c 34}output_file{c 34}}. 
 {p_end}
 
-{pstd}- For clarity, use {inp:!missing(var)} instead of {inp:var < .} or {inp:var != .} 
+{pstd}A recommended workflow is to first use detection to identify bad practices, then manually correct them if there are only a few. This minimizes the risk of unintended changes.If many issues are detected, use the correction mode to address as many as possible, then review and manually fix any remaining issues.
 {p_end}
 
-{pstd}{bf:Add whitespaces around math symbols (+, =, <, >)}
-{p_end}
-
-{pstd}- For better readability, add whitespaces around math symbols.  For example, do {inp:gen a = b + c if d == e} instead of {inp:gen a=b+c if d==e}. 
-{p_end}
-
-{pstd}{bf:Specify the condition in an {c 34}if{c 34} statement}
-{p_end}
-
-{pstd}- Always explicitly specify the condition in the if statement.  For example, declare {inp:if var == 1} instead of just using {inp:if var}. 
-{p_end}
-
-{pstd}{bf:Do not use {c 34}#delimit{c 34}, instead use {c 34}///{c 34} for line breaks}
-{p_end}
-
-{pstd}- More information about the use of line breaks {browse "https://worldbank.github.io/dime-data-handbook/coding.html#line-breaks":here}.
-{p_end}
-
-{pstd}{bf:Do not use cd to change current folder}
-{p_end}
-
-{pstd}- Use absolute and dynamic file paths. More about this {browse "https://worldbank.github.io/dime-data-handbook/coding.html#writing-file-paths":here}.
-{p_end}
-
-{pstd}{bf:Use line breaks in long lines}
-{p_end}
-
-{pstd}- For lines that are too long, use {inp:///} to divide them into multiple lines.  It is recommended to restrict the number of characters in a line to 80 or less. 
-{p_end}
-
-{pstd}{bf:Use curly brackets for global macros}
-{p_end}
-
-{pstd}- Always use {inp:} for global macros.  For example, use {inp:} instead of {inp:}. 
-{p_end}
-
-{pstd}{bf:Include missing values in condition expressions}
-{p_end}
-
-{pstd}- Condition expressions like {inp:var != 0} or {inp:var > 0} are evaluated to true for missing values. Make sure to explicitly take missing values into account by using {inp:missing(var)} in expressions. 
-{p_end}
-
-{pstd}{bf:Check if backslashes are not used in file paths}
-{p_end}
-
-{pstd}- Check if backslashes {inp:(%} are not used in file paths. If you are using them, then replace them with forward slashes {inp:(/)}. Users should note that the linter might not distinguish perfectly which uses of a backslash are file paths. In general, this flag will come up every time a backslash is used in the same line as a local, glocal, or the cd command. 
-{p_end}
-
-{pstd}{bf:Check if tildes (~) are not used for negations}
-{p_end}
-
-{pstd}- If you are using tildes {inp:(~)} are used for negations, replace them with bangs {inp:(!)}. 
-{p_end}
-
-{dlgtab:Correct functionality}
-
-{pstd}{bf:Coding practices to be corrected:}
-{p_end}
-
-{pstd}Users should note that the Correct feature does not correct all the bad practices detected.  It only corrects the following:
-{p_end}
-
-{pstd}- Replaces the use of {inp:#delimit} with three forward slashes {inp:(///)} in each line affected by {inp:#delimit} 
-{p_end}
-
-{pstd}- Replaces hard tabs with soft spaces (4 by default). The amount of spaces can be set with the {inp:tab_space()} option 
-{p_end}
-
-{pstd}- Indents lines inside curly brackets with 4 spaces by default. The amount of spaces can be set with the {inp:indent()} option 
-{p_end}
-
-{pstd}- Breaks long lines into multiple lines. Long lines are considered to have more than 80 characters by default, but this setting can be changed with the option {inp:linemax()}.  Note that lines can only be split in whitespaces that are not inside parentheses, curly brackets, or double quotes. If a line does not have any whitespaces, the linter will not be able to break a long line. 
-{p_end}
-
-{pstd}- Adds a whitespace before opening curly brackets, except for globals
-{p_end}
-
-{pstd}- Removes redundant blank lines after closing curly brackets
-{p_end}
-
-{pstd}- Removes duplicated blank lines
-{p_end}
-
-{pstd}If the option {inp:automatic} is omitted, Stata will prompt the user to confirm that they want to correct each of these bad practices only in case they are detected.  If none of these are detected, it will show a message saying that none of the bad practices it can correct were detected. 
+{pstd}Avoid using the {inp:force} option to overwrite the original input file. 
+Instead, keep the original file as a backup to safeguard against unintended changes. Always verify that the corrected do-file produces the expected results before replacing the original file.
 {p_end}
 
 {title:Examples}
 
-{pstd}The following examples illustrate the basic usage of lint. Additional examples can be found {browse "https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md":here}
+{pstd}The following examples illustrate basic usages of lint.
+The example file {inp:bad.do} referred to below can be downloaded {browse "https://github.com/worldbank/repkit/blob/lint-helpfile-update/src/tests/lint/test-files/bad.do":here}. 
+{p_end}
+
+{pstd}Additional examples with more verbose explanation be found {browse "https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md":here}
 {p_end}
 
 {dlgtab:Detecting bad coding practices}
 
-{pstd}The basic usage is to point to a do-file that requires revision as follows:
+{pstd}1. The basic usage is to point to a do-file that requires revision as follows:
 {p_end}
 
 {input}{space 8}lint "test/bad.do"
 {text}
-{pstd}For the detection feature you can use all the options but {it:automatic}, {it:force}, and {it:replace}, which are part of the correction functionality.
-{p_end}
-
-{pstd}{bf:{ul:Options:}}
-{p_end}
-
-{pstd}1. Show bad coding practices line-by-line
+{pstd}2. Show bad coding practices line-by-line
 {p_end}
 
 {input}{space 8}lint "test/bad.do", verbose
 {text}
-{pstd} 2. Remove the summary of bad practices
+{pstd}3. Remove the summary of bad practices
 {p_end}
 
 {input}{space 8}lint "test/bad.do", nosummary
 {text}
-{pstd}3. Specify the number of whitespaces used for detecting indentation practices (default: 4):
+{pstd}4. Specify the number of whitespaces used for detecting indentation practices (default: 4):
 {p_end}
 
 {input}{space 8}lint "test/bad.do", indent(2)
-{text}
-{pstd}4. Specify the number of whitespaces used instead of hard tabs for detecting indentation practices (default: same value used in indent):
-{p_end}
-
-{input}{space 8}lint "test/bad.do", tab_space(6)
 {text}
 {pstd}5. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
 {p_end}
@@ -239,17 +166,22 @@
 
 {input}{space 8}lint "test/bad.do" using "test/bad_corrected.do"
 {text}
-{pstd}2. Automatic use (Stata will correct the file automatically):
+{pstd}2. Correction while defining the number of spaces to replace hard tabs with:
+{p_end}
+
+{input}{space 8}lint "test/bad.do" using "test/bad_corrected.do", space(2)
+{text}
+{pstd}3. Automatic use (Stata will correct the file automatically):
 {p_end}
 
 {input}{space 8}lint "test/bad.do" using "test/bad_corrected.do", automatic
 {text}
-{pstd}3. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
+{pstd}4. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
 {p_end}
 
 {input}{space 8}lint "test/bad.do" using "test/bad.do", automatic force
 {text}
-{pstd}4. Replace the output file if it already exists
+{pstd}5. Replace the output file if it already exists
 {p_end}
 
 {input}{space 8}lint "test/bad.do" using "test/bad_corrected.do", automatic replace
