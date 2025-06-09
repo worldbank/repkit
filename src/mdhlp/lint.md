@@ -1,192 +1,122 @@
 # Title
 
-__lint__ - detects and corrects bad coding practices in Stata do-files.
+__lint__ – Detects and corrects bad coding practices in Stata do-files.
 
 # Syntax
 
-__lint__ "_input_file_" [using "_output_file_"] , [_options_]
+__lint__ "_input_file_" [using "_output_file_"], [_options_]
 
-The lint command can be broken into two functionalities:
+The `lint` command operates in two modes:
 
-1. __Detection__ identifies bad coding practices in a Stata do-files
+1. __Detection__ mode identifies bad coding practices in Stata do-files and reports them.
 
-2. __Correction__ corrects bad coding practices in a Stata do-file.
+2. __Correction__ mode applies corrections to a Stata do-file based on the issues detected.
 
-If an _output_file_ is specified with __using__, then the linter will apply the __Correction__ functionality and will write a new file with corrections. If not, the command will only apply the __Detection__ functionality, returning a report of suggested corrections and potential issues of the do-file in Stata's Results window. Users should note that not all the bad practices identified in __Detection__ can be amended by __Correction__.
+In __detection__ mode, the command displays suggested corrections and potential issues in Stata's Results window.  
+__Correction__ mode is activated when an _output_file_ is specified with __using__; the command then writes a new file with the applied corrections to _output_file_.  
+Note that not all issues flagged in __detection__ mode can be automatically corrected.
 
-For this command to run, you will need Stata version 16 or greater, Python, and the Python package [Pandas](https://pandas.pydata.org) installed. To install Python and integrate it with Stata, refer to [this page](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/). To install Python packages, refer to [this page](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages).
+To use this command, you need Stata version 16 or higher, Python, and the [Pandas](https://pandas.pydata.org) Python package installed.
+For instructions on installing Python and integrating it with Stata, see [this guide](https://blog.stata.com/2020/08/18/stata-python-integration-part-1-setting-up-stata-to-use-python/).
+For installing Python packages, refer to [this guide](https://blog.stata.com/2020/09/01/stata-python-integration-part-3-how-to-install-python-packages).
 
 | _options_ | Description |
 |-----------|-------------|
-| __**v**erbose__ | Report bad practices and issues found on each line of the do-file. |
-| __**nosum**mary__ | Suppress summary table of bad practices and potential issues. |
-| __**i**ndent__(_integer_) | Number of whitespaces used when checking indentation coding practices (default: 4). |
-| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when checking indentation practices (default: same as indent). |
-| __**l**inemax__(_integer_) | Maximum number of characters in a line when checking line extension practices (default: 80). |
-| __**e**xcel__(_filename_) | Save an Excel file of line-by-line results. |
-| __force__ | Allow the output file name to be the same as the name of the input file; overwriting the original do-file. __The use of this option is not recommended__ because it is slightly possible that the corrected do-file created by the command will break something in your code and you should always keep a backup of it. |
-| __**auto**matic__ | Correct all bad coding practices without asking if you want each bad coding practice to be corrected or not.  By default, the command will ask the user about each correction interactively after producing the summary report. |
-| __replace__ | Overwrite any existing _output_ file. |
+| __**v**erbose__ | Shows a report of all bad practices and issues flagged by the command. |
+| __**nosum**mary__ | Suppresses the summary table with counts of bad practices and potential issues. |
+| __**e**xcel__(_filename_) | Saves the verbose output in an Excel file. |
+| __**i**ndent__(_integer_) | Number of whitespaces used when checking indentation (default: 4). |
+| __**l**inemax__(_integer_) | Maximum number of characters in a line (default: 80). |
+
+## Options specific to the correction mode
+
+| _options_ | Description |
+|-----------|-------------|
+| __**auto**matic__ | Suppresses the prompt asking users which correction to apply. |
+| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when replacing hard tabs with spaces for indentation (default: same value used for the option __indent()__, 4 when no value is defined). |
+| __replace__ | Allows the command to overwrite any existing _output_ file. |
+| __force__ | Allows the _input_file_ to be the same as _output_file_. Not recommended, see below. |
 
 # Description
 
-This package is based on the DIME Analytics [Stata Style Guide](https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide).
+This command is a linting tool for Stata code that helps standardize code formatting and identify bad practices.  
+For further discussion of linting tools, see `https://en.wikipedia.org/wiki/Lint_(software)`.
 
-## Detect functionality
+The linting rules used in this command are based on the DIME Analytics [Stata Style Guide](https://worldbank.github.io/dime-data-handbook/coding.html#the-dime-analytics-stata-style-guide).  
+All style guides are inherently subjective, and differences in preferences exist.  
+An exact list of the rules used by this command can be found in [this article](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/linting-rules.md) on the `repkit` web documentation.  
+See the list of rules and the DIME Analytics Stata Style Guide for a discussion on the motivations for these rules.
 
-__Bad style practices and potential issues detected:__
+# Options
 
-__Use whitespaces instead of hard tabs__
+__**v**erbose__ displays a detailed report of all bad practices and issues flagged by the command in the Results window. By default, only a summary table with counts for each linting rule is shown.
 
-- Use whitespaces (usually 2 or 4) instead of hard tabs.
+__**nosum**mary__ suppresses the summary table of flagged occurrences.
 
+__**e**xcel__(_filename_) exports the verbose output to an Excel file at the specified location.
 
-__Avoid abstract index names__
+__**i**ndent__(_integer_) sets the number of whitespaces used when checking indentation. Default: 4.
 
-- In for-loop statements, index names should describe what the code is looping over. For example, avoid writing code like this:
+__**l**inemax__(_integer_) sets the maximum number of characters allowed in a single line. Default: 80.
 
-```
-  foreach i of varlist cassava maize wheat { }
-```
+## Options specific to the correction feature
 
-- Instead, looping commands should name the index local descriptively:
+__**auto**matic__ suppresses the interactive prompt before applying corrections. By default, the command asks for confirmation before applying identified corrections.
 
-```
-  foreach crop of varlist cassava maize wheat { }
-```
+__**s**pace__(_integer_) sets the number of whitespaces to replace instead of hard tabs for indentation. Default: same value used for the option __indent()__, 4 when no value is defined.
 
+__replace__ allows overwriting an existing _output_ file.
 
-__Use proper indentations__
+__force__ allows the output file name to be the same as the input file, overwriting the original do-file. __This is not recommended__; see details in the section below.
 
-- After declaring for-loop statements or if-else statements, add indentation with whitespaces (usually 2 or 4) in the lines inside the loop.
+## Recommended workflow for correction mode
 
+The _correction_ mode applies fewer rules than identified in _detection_ mode.
+You may find that `lint "input_file"` flags more issues than can be automatically corrected with `lint "input_file" using "output_file"`.
 
-__Use indentations after declaring newline symbols (///)__
+A recommended workflow is to first use detection to identify bad practices, then manually correct them if there are only a few. This minimizes the risk of unintended changes.If many issues are detected, use the correction mode to address as many as possible, then review and manually fix any remaining issues.
 
-- After a new line statement (///), add indentation (usually 2 or 4 whitespaces).
-
-
-__Use the "!missing()" function for conditions with missing values__
-
-- For clarity, use `!missing(var)` instead of `var < .` or `var != .`
-
-
-__Add whitespaces around math symbols (+, =, <, >)__
-
-- For better readability, add whitespaces around math symbols.  For example, do `gen a = b + c if d == e` instead of `gen a=b+c if d==e`.
-
-
-__Specify the condition in an "if" statement__
-
-- Always explicitly specify the condition in the if statement.  For example, declare `if var == 1` instead of just using `if var`.
-
-
-__Do not use "#delimit", instead use "///" for line breaks__
-
-- More information about the use of line breaks [here](https://worldbank.github.io/dime-data-handbook/coding.html#line-breaks).
-
-
-__Do not use cd to change current folder__
-
-- Use absolute and dynamic file paths. More about this [here](https://worldbank.github.io/dime-data-handbook/coding.html#writing-file-paths).
-
-
-__Use line breaks in long lines__
-
-- For lines that are too long, use `///` to divide them into multiple lines.  It is recommended to restrict the number of characters in a line to 80 or less.
-
-
-__Use curly brackets for global macros__
-
-- Always use `${ }` for global macros.  For example, use `${global_name}` instead of `$global_name`.
-
-
-__Include missing values in condition expressions__
-
-- Condition expressions like `var != 0` or `var > 0` are evaluated to true for missing values. Make sure to explicitly take missing values into account by using `missing(var)` in expressions.
-
-
-__Check if backslashes are not used in file paths__
-
-- Check if backslashes `(\)` are not used in file paths. If you are using them, then replace them with forward slashes `(/)`. Users should note that the linter might not distinguish perfectly which uses of a backslash are file paths. In general, this flag will come up every time a backslash is used in the same line as a local, glocal, or the cd command.
-
-
-__Check if tildes (~) are not used for negations__
-
-- If you are using tildes `(~)` are used for negations, replace them with bangs `(!)`.
-
-## Correct functionality
-
-__Coding practices to be corrected:__
-
-
-Users should note that the Correct feature does not correct all the bad practices detected.  It only corrects the following:
-
-- Replaces the use of `#delimit` with three forward slashes `(///)` in each line affected by `#delimit`
-
-- Replaces hard tabs with soft spaces (4 by default). The amount of spaces can be set with the `tab_space()` option
-
-- Indents lines inside curly brackets with 4 spaces by default. The amount of spaces can be set with the `indent()` option
-
-- Breaks long lines into multiple lines. Long lines are considered to have more than 80 characters by default, but this setting can be changed with the option `linemax()`.  Note that lines can only be split in whitespaces that are not inside parentheses, curly brackets, or double quotes. If a line does not have any whitespaces, the linter will not be able to break a long line.
-
-- Adds a whitespace before opening curly brackets, except for globals
-
-- Removes redundant blank lines after closing curly brackets
-
-- Removes duplicated blank lines
-
-If the option `automatic` is omitted, Stata will prompt the user to confirm that they want to correct each of these bad practices only in case they are detected.  If none of these are detected, it will show a message saying that none of the bad practices it can correct were detected.
-
+Avoid using the `force` option to overwrite the original input file.
+Instead, keep the original file as a backup to safeguard against unintended changes. Always verify that the corrected do-file produces the expected results before replacing the original file.
 
 # Examples
 
-The following examples illustrate the basic usage of lint. Additional examples can be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
+The following examples illustrate basic usages of lint.
+The example file `bad.do` referred to below can be downloaded [here](https://github.com/worldbank/repkit/blob/lint-helpfile-update/src/tests/lint/test-files/bad.do).
+
+Additional examples with more verbose explanation be found [here](https://github.com/worldbank/repkit/blob/add-linter/src/vignettes/lint-examples.md)
 
 ## Detecting bad coding practices
 
-The basic usage is to point to a do-file that requires revision as follows:
+1. The basic usage is to point to a do-file that requires revision as follows:
 
 ```
 lint "test/bad.do"
 ```
 
-For the detection feature you can use all the options but _automatic_, _force_, and _replace_, which are part of the correction functionality.
-
-__**Options:**__
-
-1. Show bad coding practices line-by-line
+2. Show bad coding practices line-by-line
 
 ```
 lint "test/bad.do", verbose
 ```
 
- 2. Remove the summary of bad practices
+3. Remove the summary of bad practices
 
 ```
 lint "test/bad.do", nosummary
 ```
 
-3. Specify the number of whitespaces used for detecting indentation practices (default: 4):
+4. Specify the number of whitespaces used for detecting indentation practices (default: 4):
 
 ```
 lint "test/bad.do", indent(2)
 ```
-
-
-4. Specify the number of whitespaces used instead of hard tabs for detecting indentation practices (default: same value used in indent):
-
-```
-lint "test/bad.do", tab_space(6)
-```
-
 
 5. Specify the maximum number of characters in a line allowed when detecting line extension (default: 80):
 
 ```
 lint "test/bad.do", linemax(100)
 ```
-
 
 6. Export to Excel the results of the line by line analysis
 
@@ -210,27 +140,29 @@ The basic usage of the correction feature requires to specify the input do-file 
 lint "test/bad.do" using "test/bad_corrected.do"
 ```
 
+2. Correction while defining the number of spaces to replace hard tabs with:
 
-2. Automatic use (Stata will correct the file automatically):
+```
+lint "test/bad.do" using "test/bad_corrected.do", space(2)
+```
+
+3. Automatic use (Stata will correct the file automatically):
 
 ```
 lint "test/bad.do" using "test/bad_corrected.do", automatic
 ```
 
-
-3. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
+4. Use the same name for the output file (note that this will overwrite the input file, this is not recommended):
 
 ```
 lint "test/bad.do" using "test/bad.do", automatic force
 ```
 
-
-4. Replace the output file if it already exists
+5. Replace the output file if it already exists
 
 ```
 lint "test/bad.do" using "test/bad_corrected.do", automatic replace
 ```
-
 
 # Feedback, bug reports and contributions
 
