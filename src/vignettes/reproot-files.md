@@ -57,6 +57,8 @@ This settings file must be saved in your _home folder_. The home folder is a dir
 
 It cannot be saved in a custom location, because the purpose of `reproot` is to manage custom locations, and this file is needed to search for them. If a user had to manually specify a custom file path to the `reproot-env.yaml` file before using `reproot`, the tool would not be solving the problem it is designed to address.
 
+If a user tries to use `reproot` without having this file set up, they will get a helpful error message explaining with an option to open up a dialog box where this file can be configured and saved in the correct location.
+
 The `reproot-env.yaml` file has three settings: `recursedepth`, `paths`, and `skipdirs`.
 
 #### `recursedepth`
