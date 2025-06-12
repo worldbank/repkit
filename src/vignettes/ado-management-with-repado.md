@@ -4,79 +4,35 @@ _This is a comprehensive guide on how to use `repado`. For a shorter and more te
 
 ## Background
 
-To create a fully reproducible reproducibility package for a research project,
-you need the following four elements:
+To ensure long-term reproducibility of a research package, it is essential to share both the exact version of the project code and the exact versions of its dependencies. Dependencies refer to any commands used in the project code that are not defined within the code itself. This includes both Stata's built-in commands and community-contributed commands installed from external sources.
 
-1. The exact same data
-2. The exact same project code
-3. The exact same project code dependencies
-4. The exact same computation environment
+The code for these dependencies is just as important for reproducibility as the project code itself. Stata offers robust and user-friendly version control for its built-in commands, which will be briefly discussed in this article. However, the main focus here is on using `repado`, a command designed to enable long-term version control for community-contributed commands.
 
-Sharing the same project data and code is straightforward and
-is typically done by publishing the data and code to an archive.
-Using the same computation environment is more complicated
-and often involves using software like Docker.
-However, this article will focus on how to
-share the same project code dependencies and will primarily cover Stata.
+Both built-in and community-contributed commands are periodically updated to introduce improvements or fix bugs. While it is generally advisable to use the latest versions when starting a new project, research reproducibility—and, by extension, research transparency—requires that results can be reproduced exactly as originally generated, even if the original process was suboptimal or contained bugs.
 
-### Reproducible Code Dependencies
+### Version Control of Stata's Built-In Commands
 
-Writing code is about creating precise instructions that a computer can follow.
-This precision is crucial for ensuring reproducibility in research.
-The code used in a project includes both the code written by the team
-and the code within all the commands that the project code relies on.
-Users running different versions of these commands
-may obtain different results, even if they use the same project code and data.
-Therefore, it's essential to establish a method for
-version controlling all the code (including the code for any commands used)
-that the project code depends on,
-which is commonly referred to as code dependencies.
+Stata makes version control of its built-in commands straightforward through the `version` command. Built-in commands remain unchanged between Stata releases, and by specifying a version number, you ensure that commands like `regress`, `generate`, etc., behave exactly as they did in that release.
 
-All programming languages have two types of code dependencies:
-built-in commands and community-contributed commands.
-It's equally important to version control both of these.
-
-### Version Control of Built-In Commands
-
-The most effective way to version control built-in commands is to
-run the exact same version of the programming software.
-This is typically more straightforward in open-source software,
-as older software versions can be easily installed.
-In Stata, while running the exact same version is ideal,
-built-in commands can be version controlled using the `version` command.
-The `version` command allows Stata users to utilize built-in commands
-from any version equal to or older than the version they have installed.
-
-This command can be added to the top of each script,
-as it doesn't consume much time to execute.
-However, if the project uses a main script for one-click reproducibility,
-it's sufficient to place this line at the top of the main script.
-See example below.
-Be sure to replace `12.1` with the version the project is targeting.
-Unless a specific new feature is required,
-it's advisable not to choose the most recent version to ensure
-reproducibility for as many users as possible.
+For example, placing the following at the top of your do-file ensures compatibility with Stata 14.1:
 
 ```stata
-  version 12.1
+version 14.1
 ```
+
+You can add this line to each script, but if your project uses a main script for reproducibility, it's sufficient to include it only at the top of that main script.
+
+Note that you can only set the version to your current Stata release or an earlier one—not to a newer release. To use features from a newer version, you must purchase an upgrade to your Stata installation. While newer releases generally offer improvements, you should not set the version higher than the oldest Stata version used by any project collaborator. Sub-releases (e.g., 14.1) often include important fixes and are typically available for free to users of the main release. If a sub-release exists for your target version, it is advisable to specify it.
 
 ### Version Control of Community-Contributed Commands
 
-In most other programming languages, there are version-controlled archives for
-community-contributed commands (or libraries).
-For R, there is CRAN, and for Python, there are archives like `pip` and `conda`.
-Tools for these archives make older versions of commands available,
-and in these languages, these tools can be used to specify
-the required commands and their exact versions when reproducing a project.
-When a user reproduces such a project,
-these tools install the exact version of these dependencies.
+Many other programming languages have version-controlled repositories for community-contributed commands (or libraries). For example, R uses CRAN, and Python uses sources like `pip` and `conda`. With these systems, it is sufficient to share the exact versions of code dependencies used in a reproducibility package to ensure it runs identically to how it did at the time of publication.
 
-In Stata, the primary archive for community-contributed commands is
-SSC (Statistical Software Components).
-SSC is not version controlled,
-and only the most recent version of a command is made available.
-For this reason, there is no tool in Stata that functions similarly
+In Stata, however, the primary source for community-contributed commands is SSC (Statistical Software Components). While packages on SSC are versioned, SSC only provides access to the most recent version of each command, not to previous versions. Once a dependency from SSC used in a reproducibility package is updated, it is no longer possible to execute the code identically to how it was executed at the time of publication.
+
+In practice, most updates to dependencies do not change results. However, some updates definitely will, or may even cause the reproducibility code to crash. In either case, the results in the reproducibility package can no longer be considered reproducible.
+
+The `repado` command in the `repkit` package provides a Stata solution for long-term version-control of community-contributed commands. Since the main source of commands in Stata is not fully versioned, and commands are sometimes published from independent sources, this tool functions differently from common tools in R and Python.
 to those in R and Python.
 
 However, the `repado` command in the `repkit` package
