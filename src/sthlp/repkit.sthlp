@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 3.3 20250524}{...}
+{* *! version 3.4 20250609}{...}
 {hline}
 {pstd}help file for {hi:repkit}{p_end}
 {hline}

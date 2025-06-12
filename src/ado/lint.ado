@@ -1,4 +1,4 @@
-*! version 3.3 20250524 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
+*! version 3.4 20250609 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
 program 	 lint
 
@@ -205,8 +205,7 @@ end
 
 // Correct ---------------------------------------------------------------------
 
-capture program drop 	_correct
-		program			_correct
+program			_correct
 
 	syntax, ///
 		input(string) output(string) ///
@@ -375,8 +374,7 @@ end
 
 // Detect ----------------------------------------------------------------------
 
-capture program drop	_detect
-		program			_detect
+program			_detect
 
 		syntax , ///
 				file(string) ado_path(string) ///
@@ -512,8 +510,7 @@ program 		_checkpyinstall
 
 end
 
-capture program drop  	_checkopenpyxlinstall
-		program 		_checkopenpyxlinstall
+program 		_checkopenpyxlinstall
 
 	* Check if openpyxl package is installed
 	cap python which openpyxl
@@ -524,33 +521,14 @@ capture program drop  	_checkopenpyxlinstall
 
 end
 
-// Check that version of lint.ado and Python scripts are the same
+// Check that lint runs on Stata 16 or above
 
-capture program drop _checkversions
-				program			 _checkversions
+program			 _checkversions
 
-	* IMPORTANT: Every time we have a package update, update the version number here
-	* Otherwise we'd be introducing a major bug!
-	local version_ado 1.02
-
-	* Check versions of .py files
-	python: from sfi import Macro
-	python: import stata_linter_detect as sld
-	python: import stata_linter_correct as slc
-	python: Macro.setLocal('version_detect', sld.VERSION)
-	python: Macro.setLocal('version_correct', slc.VERSION)
-
-	* Checking that versions are the same
-	cap assert "`version_ado'" == "`version_detect'"
-	if _rc {
-		noi di as error `"{phang}For this command to run, the versions of all its auxiliary files need to be the same. Please update the command to the newest version with: {bf:ssc install stata_linter, replace} , restart Stata, and try again{p_end}"'
-		error
-	}
-	cap assert "`version_ado'" == "`version_correct'"
-	if _rc {
-	noi di as error `"{phang}For this command to run, the versions of all its auxiliary files need to be the same. Please update the command to the newest version with: {bf:ssc install stata_linter, replace} , restart Stata, and try again{p_end}"'
-		error
-	}
+    if (`c(stata_version)' < 16 ) { 
+    noi di as error "{phang}You are using Stata version `c(stata_version)'. This command requires the Stata-Python integration that was only introduced in Stata 16. To make the other commands in the `repkit` package `lint` is part of available to a large audience, this package targets the older Stata version 14.1, but this specific command requires at least Stata 16.{p_end}"
+    error 198
+    }
 
 end
 
