@@ -110,23 +110,12 @@ Remember that all settings discussed here are reset when Stata is restarted.
 
 ### Installing Commands in the Ado-Folder
 
-As mentioned earlier, `ssc install` and `net install`  
-place packages in the `PLUS` folder.  
-Since the `PLUS` folder now points to the project ado-folder,  
-any actions like `ssc install`, `ssc uninstall`, `ssc update`, and `adoupdate`  
-will affect only the project ado-folder—provided Stata is not restarted.
+As mentioned earlier, `ssc install` and `net install` lace packages in the `PLUS` folder. Since the `PLUS` folder now points to the project ado-folder, any actions like `ssc install`, `ssc uninstall`, `ssc update`, and `adoupdate` will affect only the project ado-folder—provided Stata is not restarted.
 
-In the `repado` workflow,  
-you should avoid including `ssc install` or any other commands  
-that install or update community-contributed commands within your do-files.  
-Instead, these actions should be performed interactively  
-through the _Command window_ in Stata’s main window.
+In the `repado` workflow, you should avoid including `ssc install` or any other commands that install or update community-contributed commands within your do-files. Instead, these actions should be performed interactively through the _Command window_ in Stata’s main window.
 
-Only one user needs to install each required command  
-into the project ado-folder.  
-After that, any other team member—or any future reproducer—  
-can run the code using the version of the commands in the project ado-folder,  
-without needing to install anything in their own Stata installations.
+Only one user needs to install each required command into the project ado-folder. After that, any other team member—or any future reproducer—  
+can run the code using the version of the commands in the project ado-folder, without needing to install anything in their own Stata installations.
 
 ### When to Use `nostrict` Mode
 
