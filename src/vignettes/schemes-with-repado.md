@@ -1,13 +1,8 @@
-# Using custom schemes when using `repado`
+# Using custom schemes with `repado`
 
-The recommended installation location for custom schemes
-is the `PERSONAL` folder.
-If you are using `repado` in `nostrict` mode,
-then this is not an issue as the `PERSONAL` folder is still accessible.
-However, if you are using `repado` in `strict` mode,
-then the `PERSONAL` folder is no longer accessible.
-In this case we recommend installing the custom schemes
-in the folder used in the `adopath()` option.
+Stata's recommended location for installing custom schemes is the `PERSONAL` folder. If you are using `repado` in `nostrict` mode, the `PERSONAL` folder remains accessible and this is still a good place. Note that we only recommend the `nostrict` mode temporarily.
+
+In the default `strict` mode that we recommend, the `PERSONAL` folder is no longer available. In this case, we recommend installing custom schemes in the project ado-folder 
 
 A simple implementation is as follows:
 
@@ -25,8 +20,4 @@ A simple implementation is as follows:
   scatter price mpg
 ```
 
-This means that, by installing the project's scheme
-in the project-specific ado-folder,
-you will ensure that
-all project members and replicators
-are guaranteed exactly-matching outputs.
+By installing the project's scheme in the project-specific ado-folder, you ensure that all project members and replicators will produce exactly matching outputs.

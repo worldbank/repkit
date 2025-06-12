@@ -4,105 +4,41 @@ _This is a comprehensive guide on how to use `repado`. For a shorter and more te
 
 ## Background
 
-To create a fully reproducible reproducibility package for a research project,
-you need the following four elements:
+To ensure long-term reproducibility of a research package, it is essential to share both the exact version of the project code and the exact versions of its dependencies. Dependencies refer to any commands used in the project code that are not defined within the code itself. This includes both Stata's built-in commands and community-contributed commands installed from external sources.
 
-1. The exact same data
-2. The exact same project code
-3. The exact same project code dependencies
-4. The exact same computation environment
+The code for these dependencies is just as important for reproducibility as the project code itself. Stata offers robust and user-friendly version control for its built-in commands, which will be briefly discussed in this article. However, the main focus here is on using `repado`, a command designed to enable long-term version control for community-contributed commands.
 
-Sharing the same project data and code is straightforward and
-is typically done by publishing the data and code to an archive.
-Using the same computation environment is more complicated
-and often involves using software like Docker.
-However, this article will focus on how to
-share the same project code dependencies and will primarily cover Stata.
+Both built-in and community-contributed commands are periodically updated to introduce improvements or fix bugs. While it is generally advisable to use the latest versions when starting a new project, research reproducibility—and, by extension, research transparency—requires that results can be reproduced exactly as originally generated, even if the original process was suboptimal or contained bugs.
 
-### Reproducible Code Dependencies
+### Version Control of Stata's Built-In Commands
 
-Writing code is about creating precise instructions that a computer can follow.
-This precision is crucial for ensuring reproducibility in research.
-The code used in a project includes both the code written by the team
-and the code within all the commands that the project code relies on.
-Users running different versions of these commands
-may obtain different results, even if they use the same project code and data.
-Therefore, it's essential to establish a method for
-version controlling all the code (including the code for any commands used)
-that the project code depends on,
-which is commonly referred to as code dependencies.
+Stata makes version control of its built-in commands straightforward through the `version` command. Built-in commands remain unchanged between Stata releases, and by specifying a version number, you ensure that commands like `regress`, `generate`, etc., behave exactly as they did in that release.
 
-All programming languages have two types of code dependencies:
-built-in commands and community-contributed commands.
-It's equally important to version control both of these.
-
-### Version Control of Built-In Commands
-
-The most effective way to version control built-in commands is to
-run the exact same version of the programming software.
-This is typically more straightforward in open-source software,
-as older software versions can be easily installed.
-In Stata, while running the exact same version is ideal,
-built-in commands can be version controlled using the `version` command.
-The `version` command allows Stata users to utilize built-in commands
-from any version equal to or older than the version they have installed.
-
-This command can be added to the top of each script,
-as it doesn't consume much time to execute.
-However, if the project uses a main script for one-click reproducibility,
-it's sufficient to place this line at the top of the main script.
-See example below.
-Be sure to replace `12.1` with the version the project is targeting.
-Unless a specific new feature is required,
-it's advisable not to choose the most recent version to ensure
-reproducibility for as many users as possible.
+For example, placing the following at the top of your do-file ensures compatibility with Stata 14.1:
 
 ```stata
-  version 12.1
+version 14.1
 ```
+
+You can add this line to each script, but if your project uses a main script for reproducibility, it's sufficient to include it only at the top of that main script.
+
+Note that you can only set the version to your current Stata release or an earlier one—not to a newer release. To use features from a newer version, you must purchase an upgrade to your Stata installation. While newer releases generally offer improvements, you should not set the version higher than the oldest Stata version used by any project collaborator. Sub-releases (e.g., 14.1) often include important fixes and are typically available for free to users of the main release. If a sub-release exists for your target version, it is advisable to specify it.
 
 ### Version Control of Community-Contributed Commands
 
-In most other programming languages, there are version-controlled archives for
-community-contributed commands (or libraries).
-For R, there is CRAN, and for Python, there are archives like `pip` and `conda`.
-Tools for these archives make older versions of commands available,
-and in these languages, these tools can be used to specify
-the required commands and their exact versions when reproducing a project.
-When a user reproduces such a project,
-these tools install the exact version of these dependencies.
+Many other programming languages have version-controlled repositories for community-contributed commands (or libraries). For example, R uses CRAN, and Python uses sources like `pip` and `conda`. With these systems, it is sufficient to share the exact versions of code dependencies used in a reproducibility package to ensure it runs identically to how it did at the time of publication.
 
-In Stata, the primary archive for community-contributed commands is
-SSC (Statistical Software Components).
-SSC is not version controlled,
-and only the most recent version of a command is made available.
-For this reason, there is no tool in Stata that functions similarly
-to those in R and Python.
+In Stata, however, the primary source for community-contributed commands is SSC (Statistical Software Components). While packages on SSC are versioned, SSC only provides access to the most recent version of each command, not to previous versions. Once a dependency from SSC used in a reproducibility package is updated, it is no longer possible to execute the code identically to how it was executed at the time of publication.
 
-However, the `repado` command in the `repkit` package
-provides a Stata solution to the challenge of
-version controlling community-contributed commands.
+In practice, most updates to dependencies do not change results. However, some updates definitely will, or may even cause the reproducibility code to crash. In either case, the results in the reproducibility package can no longer be considered reproducible.
+
+The `repado` command in the `repkit` package provides a Stata solution for long-term version-control of community-contributed commands. Since the main source of commands in Stata is not fully versioned, and commands are sometimes published from independent sources, this tool functions differently from common tools in R and Python.
 
 ## Using `repado`
 
-### The Best Practice `repado` Implements
+### How Stata Installs Commands
 
-In Stata, the best practice for
-version controlling community-contributed commands is to first include
-the ado-files of the commands used in the reproducibility package.
-Then, your project code should code that ensures all users
-utilize these files exclusively.
-To achieve this, the project must incorporate some technical code
-to set the "_ado-paths_".
-The motivation behind `repado` is to encapsulate this technical code
-within an accessible command,
-making this feature available to a wider audience of Stata users.
-
-You can view your default ado-paths by running
-the `adopath` command within your Stata installation.
-Simply enter `adopath` and press Enter,
- and you will see output in the following format.
- The exact paths will differ:
+When you install commands in Stata using `ssc install` or `net install`, Stata downloads the necessary files and saves them in a designated folder called the "PLUS folder". The PLUS folder is included in Stata's ado-paths. You can view your current ado-paths settings by running the `adopath` command in Stata. The output will look something like this:
 
 ```
   [1]  (BASE)      "C:\Program Files\Stata17\ado\base/"
@@ -113,46 +49,30 @@ Simply enter `adopath` and press Enter,
   [6]  (OLDPLACE)  "c:\ado/"
 ```
 
-These locations are where your Stata installation
-looks for commands, from top to bottom.
-If Stata finds the command a user has used in the first folder,
-it will use that command.
-If it doesn't find a command with that name in the first folder,
-it will continue to search in subsequent folders until
-it finds a matching command or exhausts the list and throws an error,
-such as `command [...] is unrecognized`.
+Stata’s built-in commands are stored in the `BASE` folder. You should never modify this path or any of its contents. In addition to `BASE` and `PLUS`, there are other paths where Stata looks for commands when executing code. These are typically only used in special setups or exist for backward compatibility.
 
-Built-in commands are located in the `BASE` path, which should not be changed.
-Commands installed via `ssc install` and `net install`
-are placed in the `PLUS` folder.
-However, as seen in the example,
-the default `PLUS` location is specific to each user.
-In practice, different users may have different versions of
-the commands required for a project installed in their `PLUS` folder.
+The order of this list matters. Stata first looks for a command in path `[1]`, and if the command is not found there, it moves to `[2]`, and so on. If no command is found in any of the listed paths, Stata throws an error stating that the command is unrecognized.
 
-The objective of `repado` is to ensure that all users
-employ commands installed in a shared location,
-and this shared location is the exclusive source
-for the project's command dependencies.
+**Advanced notes:** Stata identifies commands solely by their names, not by their version, source, or author. For example, if you create a command named `regress` and save it in the PLUS folder, Stata will still use the built-in `regress` command from the `BASE` folder, since `BASE` has higher priority in the ado-paths. Similarly, if you create a command called `estout` (which is also the name of a widely used community-contributed command) and save it in your ado-paths, Stata will use your version as long as you do not have `estout` from SSC installed in a path with higher priority. If you run code from someone else who used `estout` from SSC, Stata will execute your version without any indication that it is a different command.
+### Principle Behind `repado`
+
+Stata allows users to modify the ado-paths, and `repado` leverages this to manage project-specific ado-folders. The team creates an ado-folder within the project directory and points `repado` to that folder. `repado` then sets the PLUS folder to the project ado-folder and removes all other ado-paths except for the BASE folder. Note that Stata restores the default ado-paths each time it is restarted, so changes made by `repado` are only temporary for the current Stata session.
+
+While `repado` is configured to use the project ado-folder, commands installed via `ssc install` or `net install` will be placed in that folder. Anyone running project code that use `repado`  will only use the commands installed in the project ado-folder. It does not matter if another user has a different version of a command in their default PLUS folder or does not have it installed at all—the project will always use the version in the project ado-folder.
+
+When sharing a reproducibility package, the project ado-folder should be distributed alongside the project code. This ensures that anyone reproducing the results—now or in the future—will use exactly the same versions (practically the same command files) as the original author. This approach works regardless of what version if the most recent at that time or any other changes to the original source of the command after the package is created.
+
+**Important note:** When sharing third-party code as part of your reproducibility package, ensure you have the appropriate licensing rights. Commands installed from SSC are distributed under the GPL v3 (https://www.gnu.org/licenses/gpl-3.0.txt), which allows redistribution as part of a reproducibility package, provided the commands are not modified or relicensed. However, licensing terms may change, so it is your responsibility to verify your rights at the time of publication. If you have installed commands from sources other than SSC, check the applicable license. If in doubt, contact the author for permission.
 
 ## Setting Up the Project's Ado-Folder
 
-Using `repado` is best done at the beginning of the project,
-but it can be implemented at any point of a project.
-The first requirement is to create a folder referred to as the ado-folder.
-A suitable name for this folder is `ado`, but it can be given any name.
+Using `repado` is best done at the beginning of a project, but it can be implemented at any stage. The first step is to create the ado-folder.
 
-The ado-folder should be created in a location distinct from the project code.
-This separation is crucial to differentiate code owned by
-the project team from code authored by others.
-Commands from SSC can be republished as per the `GPL v3` license.
-However, if commands are installed from other sources,
-different licenses might apply.
+We recommend creating the ado-folder inside the `code` directory, as this simplifies the process of eventually creating reproducibility package. Make it a separate folder within the `code` directory, and only modify the contents of the ado-folder using `ssc install` or `net install`. A suitable name for this folder is `ado`, but there is no technical requirement for the name—it can be named anything you prefer.
 
 ### A Simple Example
 
-Consider a project with the following folder structure.
-This example project will be used throughout this guide.
+Consider a project with the following folder structure, which will be used throughout this guide:
 
 ```
 myproject/
@@ -163,195 +83,102 @@ myproject/
 ├─ outputs/
 ```
 
-In this case, the basic use of `repado` would be as follows:
+In this case, the basic use of `repado` is as follows:
 
 ```stata
 * Set user root folder
 global root "C:\Users\user123\github\myproject"
 
 * Point repado to the ado-folder
-repado, adopath("${root}/code/ado") mode(strict)
+repado using "${root}/code/ado"
 ```
 
-Upon re-running the `adopath` command, the output will now be:
+If running the `adopath` command, the output will now be:
 
 ```
 [1]  (BASE)      "C:\Program Files\Stata17\ado\base/"
 [2]  (PLUS)      "C:\Users\user123\github\myproject/code/ado"
 ```
 
-It's important to note three key aspects after running `repado`.
+Note three key aspects after running `repado`:
 
-First, the `BASE` folder remains intact.
-Removing it would render Stata's built-in commands unavailable.
-
-Second, the `PLUS` folder now points to the ado-folder
-shared within the project.
-The project folder can be shared via various means,
-such as Git repositories, syncing services (OneDrive, Dropbox),
-network drives, or even in a .zip archive
-(common for reproducibility packages but less so for collaborative sharing).
-
-Third, all other paths are removed,
-meaning commands installed by the user in other locations
-are no longer available.
-Although this might initially seem inconvenient,
-it serves as a useful tool to ensure that all commands
-needed for the project are contained within the project's ado-folder.
-Later, we will explore how this can be relaxed using the `mode()` option.
-However, for teams aiming to guarantee project reproducibility,
-it's advisable to use `mode(strict)` as the default.
+1. The `BASE` ado-folder remains unchanged. Removing or modifying it would make Stata's built-in commands unavailable.
+2. The `PLUS` folder now points to the project ado-folder. Regardless of how the project folder is shared (e.g., via Git/GitHub, cloud services like OneDrive or Dropbox, network drives, or even as a .zip archive), the exact command files will be available to anyone with access to the project folder.
+3. All other ado-paths are removed, so commands installed by the user in other locations (which is uncommon) are no longer available. While this might seem inconvenient at first, it ensures that all commands needed for the project are contained within the project's ado-folder.
 
 Remember that all settings discussed here are reset when Stata is restarted.
 
 ### Installing Commands in the Ado-Folder
 
-The project now has a project ado-folder and
-a mechanism to ensure that all users employ commands installed in that folder.
-However, no commands have been installed in the folder yet.
-An easy way to do so is facilitated by how `repado` changed the ado-paths.
+As mentioned earlier, `ssc install` and `net install` lace packages in the `PLUS` folder. Since the `PLUS` folder now points to the project ado-folder, any actions like `ssc install`, `ssc uninstall`, `ssc update`, and `adoupdate` will affect only the project ado-folder—provided Stata is not restarted.
 
-As mentioned earlier, `ssc install` and `net install`
-place packages in the `PLUS` folder.
-Since the `PLUS` folder now points to the project ado-folder,
-any actions like `ssc install`, `ssc update`, and `adoupdate`
-will affect only the project ado-folder, provided Stata is not restarted.
+In the `repado` workflow, you should avoid including `ssc install` or any other commands that install or update community-contributed commands within your do-files. Instead, these actions should be performed interactively through the _Command window_ in Stata’s main window.
 
-In the `repado` workflow,
-you should avoid including `ssc install` or any other commands
-that install or update community-contributed commands within your do-file.
-Instead, this should be done interactively through
-the "Command" window in Stata's main interface.
-Only one user needs to install each required command
-into the project ado-folder.
-Subsequently, any other team member or future project reproducer
-will use the version of the commands in the project ado-folder
-without needing to install anything in their Stata installations.
+Only one user needs to install each required command into the project ado-folder. After that, any other team member—or any future reproducer—  
+can run the code using the version of the commands in the project ado-folder, without needing to install anything in their own Stata installations.
 
-Using the strict mode (`mode(strict)`) ensures that
-the project code exclusively source commands from the project ado-folder,
-guaranteeing uniformity in command versions for all current and future users.
+### When to Use `nostrict` Mode
 
-### When Not to Use Strict Mode
+`repado` offers a `nostrict` option, which is only intended to be used temporarily (if at all). In `nostrict` mode, the project ado-folder is set as the `PERSONAL` directory instead of `PLUS`. This gives `PERSONAL` the second-highest priority after `BASE`, meaning commands in the project ado-folder will take precedence over those in the user's default `PLUS` folder.
 
-In short, strict mode (`mode(strict)`) should be used almost always
-and especially for reproducibility packages.
-However, the no-strict mode (`mode(nostrict)`) exists to enable a user
-to utilize a command already installed on their computer
-before deciding to install it in the project ado-folder.
-In no-strict mode, the project ado-folder path is
-set to `PERSONAL` instead of `PLUS`.
-`PERSONAL` is given the second highest priority after `BASE` in this mode,
-meaning `PERSONAL` is given higher priority compared to `PLUS`.
-Thus, a command installed in the project ado-folder
-will be used over a command with the same name
-(typically the same command but a different version)
-in the user's default `PLUS` folder.
+The `nostrict` mode is useful when users want access to commands already installed in their default `PLUS` folder and wish to test them within the project before deciding to install them in the project ado-folder. This can be especially helpful in large teams, where users may want to experiment before making a command available to everyone. It is also useful for using commands with meta-functionality (such as linters or tools for removing unused variables) that are not directly involved in generating project results.
 
-It's important to note that the no-strict mode workflow
-is not guaranteed to be reproducible and
-is only intended to be used temporarily.
+However, we strongly recommend that, even if `nostrict` mode is used during some part of the development, the final reproducibility package should be created in `strict` mode (i.e., without the `nostrict` option). This ensures that all dependencies required by the project code are either built-in commands or are installed in the project ado-folder, guaranteeing full reproducibility.
 
-## Drawbacks of `repado`
 
-Once `repado` is set up and utilized,
-there are no drawbacks from a reproducibility perspective.
-It aligns with all the gold standards for future-proofing
-the reproducibility of a reproducibility package.
-However, there are two aspects that users of `repado` should consider.
+## `repado` Cannot Install Itself
 
-### Licenses and Republishing of Commands
+One limitation of `repado` is that, while it can ensure all of a project's code dependencies are provided, it cannot install itself. Even if `repado` is included in the project ado-folder, it must still be installed in each user's default `PLUS` folder to manage ado-folders in the first place.
 
-The first aspect pertains to licenses and
-whether republishing of commands is allowed.
-This is particularly relevant to reproducibility packages published publicly.
-Commands from SSC are published under the `GPL v3`,
-where republishing is permitted.
-However, it's important to review the `GPL v3` for
-specific requirements regarding how to republish the commands.
-If other sources are used,
-the project team will need to ascertain whether they are allowed to
-publish a reproducibility package containing these commands.
-
-### `repado` Cannot Install Itself
-
-The other aspect to consider is that,
-even after `repado` is set up in the project code,
-each user needs to install `repkit` on their own computers
-before the `repado` functionality will work on their computers.
-This is the case even if `repkit` is installed in the project ado-folder.
-Below, we suggest our recommended mitigation for this aspect,
-as well as an alternative approach that
-achieves the same results but involves more lines of code.
-
-We will never add any commands to the `repkit` package
-that are used for analysis or generate outcomes in a project.
-This is why it is acceptable to depend on users installing `repkit`
-before reproducing the results of a project.
-
-Initially, this functionality was implemented as
-a feature in the `ieboilstart` command in the `ietoolkit` package.
-However, it was later realized that this was not a good idea,
-as other commands in `ietoolkit` are used to generate results.
-To version control all dependencies used for generating results,
-the functionality now in `repado` cannot
-share a package with any command used for that purpose.
-
+Below, we suggest our recommended mitigation for this limitation, as well as an alternative approach to `repado` that achieves the same results but involves more lines of code and the project team needs to make sure it is set up correctly.
 ### Mitigation
 
-One mitigation to this is to include code that tests
-if `repkit` is already installed on a user's computer.
-A do-file intended for potential wide distribution
-should never include code that automatically
-installs anything on other users' computers.
-That practice is inconsiderate and is generally considered bad practice.
-However, it is a good practice to include a polite prompt
-instructing the user to install `repkit` in order to run the code
-if the package is not already installed.
-See the example below:
+A recommended mitigation is to include code that checks whether `repkit` is already installed in the user's PLUS folders. Do-files intended for broad distribution should never automatically install packages on a user's system, as this is generally considered poor practice. Instead, it is best to provide a clear and polite prompt instructing the user to install `repkit` if it is not already present. See the example below:
 
 ```stata
-* Make sure that repkit is installed
-* If not, prompt user to install it from ssc
-cap which repkit  
+* Check if repkit is installed
+cap which repkit
 if _rc == 111 {
-    di as error "{pstd}You need to have {cmd:repkit} installed to run this reproducibility package. Click {stata ssc install repkit} to do so.{p_end}"
+  di as error "{pstd}You need to have {cmd:repkit} installed to run this reproducibility package. Click {stata ssc install repkit} to do so.{p_end}"
 }
 ```
 
 ### Alternative
 
-As an alternative, the code from `repado` can be copied
-into the project's main file.
-`repkit` is published using the MIT license where this is perfectly allowed.
-The ado-folder must still be created in the same way as described above.
-Afterward, you can add that folder using one of the two examples below.
-Both examples assume the same folder structure as previously outlined.
+As an alternative, the code underlying `repado` can be copied directly into the project's main do-file. This approach replicates the functionality of `repado` within the project code, achieving the same results without requiring users to have `repkit` installed. Since `repkit` is published under the MIT license, this is fully permitted.
 
-Before using any of these examples, ensure they are utilizing
-the most recent version of the code used in the `repado` command
-[here](https://github.com/worldbank/repkit/blob/main/src/ado/repado.ado).
+The ado-folder must still be created as described above. Afterward, you can add that folder using one of the two examples below. Both examples assume the same folder structure as previously outlined.
 
-**Example 1:** In this example, the same results are achieved
-as when using `repado` in strict mode.
-This version maintains only the project ado-folder
-and the `BASE` folder in the ado-paths.
-After running this code, you can still install commands
-in the project ado-folder using `ssc install` and
-use other commands that use the `PLUS` folder.
+**Example 1:** In this example, the same results are achieved as when using `repado` in strict mode. This version maintains only the project ado-folder and the `BASE` folder in the ado-paths. After running this code, you can install commands in the project ado-folder using `ssc install`, and only commands in the project ado-folder or built-in commands will be available to your project.
 
 ```stata
 * Set user root folder
 global root "C:\Users\user123\github\myproject"
 
-* Set PLUS to adopath and list it first, then list BASE first.
-* This means that BASE is first and PLUS is second.
-sysdir set  PLUS "${root}/code/ado"
-adopath ++  PLUS
-adopath ++  BASE
+* Set PLUS to the project ado-folder and add it to the ado-paths.
+sysdir set PLUS "${root}/code/ado"
+adopath ++ PLUS
+adopath ++ BASE
 
-* Keep removing adopaths with rank 3 until only BASE and PLUS,
-* that has rank 1 and 2, are left in the adopaths
+* Remove all ado-paths with rank 3 or higher, leaving only BASE and PLUS.
+local morepaths 1
+while (`morepaths' == 1) {
+  capture adopath - 3
+  if _rc local morepaths 0
+}
+```
+**Example 2:** This example is similar to the first, but does not use the `PLUS` folder. By avoiding `PLUS`, you eliminate the risk of users accidentally running `adoupdate` and updating all commands in the project ado-folder. This is especially helpful if you are not using Git, as such changes cannot be easily reverted. If you are using Git and tracking the ado-folder in your repository, this distinction is less critical.
+
+```stata
+* Set user root folder
+global root "C:\Users\user123\github\myproject"
+
+* Add the project ado-folder as an unnamed path, then add BASE.
+* This results in BASE as the first path and the project ado-folder as the second.
+adopath ++ "${root}/code/ado"
+adopath ++ BASE
+
+* Remove all ado-paths with rank 3 or higher, leaving only BASE and the project ado-folder.
 local morepaths 1
 while (`morepaths' == 1) {
   capture adopath - 3
@@ -359,35 +186,4 @@ while (`morepaths' == 1) {
 }
 ```
 
-**Example 2:** This example is identical to the first one,
-with the exception that `PLUS` is not used.
-This eliminates the risk of any user accidentally using
-`adoupdate` to update all commands in the project ado-folder.
-This aspect is especially useful when not using Git,
-as mistakes like this cannot be easily reverted.
-If Git is employed, and all content in the ado-folder
-is tracked in the repository, this difference becomes less significant.
-
-```stata
-* Set user root folder
-global root "C:\Users\user123\github\myproject"
-
-* Set the project adopath as an unnamed path and list it first, then list BASE first.
-* This means that BASE is first and PLUS is second.
-adopath ++  "${root}/code/ado"
-adopath ++  BASE
-
-* Keep removing adopaths with rank 3 until only BASE and the project ado-folder,
-* that has rank 1 and 2, are left in the adopaths
-local morepaths 1
-while (`morepaths' == 1) {
-  capture adopath - 3
-  if _rc local morepaths 0
-}
-```
-
-It is equally possible to create a future-proof reproducibility package
-using `repado` or either of the two examples provided here.
-We have offered `repado` in the form of a command to make this process easier
-and to abstract away technical code.
-In the end, it is up to each team to decide which method to employ.
+You can create a future-proof reproducibility package using `repado` or either of the two code examples above. The `repado` command is provided to simplify this process and abstract away technical details. Ultimately, it is up to each team to choose the method that best fits their workflow.
