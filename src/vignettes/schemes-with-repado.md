@@ -4,11 +4,11 @@ Stata's recommended location for installing custom schemes is the `PERSONAL` fol
 
 In the default `strict` mode that we recommend, the `PERSONAL` folder is no longer available. In this case, we recommend installing custom schemes in the project ado-folder 
 
-A simple implementation is as follows:
+A simple implementation when using the recommended default `strict` mode is as follows:
 
 ```stata
   global myproject "/path/to/project/"
-  repado , adopath("${myproject}/ado") mode(strict)
+  repado using "${myproject}/ado"
 
   local url "https://github.com/graykimbrough/uncluttered-stata-graphs/raw/master/schemes/scheme-uncluttered.scheme" 
   copy "`url" "${myproject}/ado/scheme-uncluttered.scheme" , replace
