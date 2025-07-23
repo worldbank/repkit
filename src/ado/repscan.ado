@@ -1,7 +1,7 @@
 
 
 cap program drop repscan
-program define repscan, rclass
+program define repscan
 
 {
     
@@ -11,9 +11,10 @@ program define repscan, rclass
     args do_file
     
     // reading file
-    file open myfile using "`do_file'", read
+    cap file close _myfile
+    file open _myfile using "`do_file'", read
     display("Scanning file `do_file':")
-    file read myfile line
+    file read _myfile line
     
     //iterating through lines, saving lines in rows
     local n_line = 1
@@ -22,19 +23,19 @@ program define repscan, rclass
         display("    Scanning line `n_line'...")
         
         // checking possible reproducibility issues
-        _check_merge_mm       `"`line'"`
-        _check_dup_drop_force `"`line'"`
-        _check_sort           `"`line'"`
-        _check_sortseed       `"`line'"`
-        _check_bysort         `"`line'"`
-        _check_reclink        `"`line'"`
+        _check_merge_mm       "`line'"
+        _check_dup_drop_force "`line'"
+        _check_sort           "`line'"
+        _check_sortseed       "`line'"
+        _check_bysort         "`line'"
+        _check_reclink        "`line'"
         
         // increment in line counter and content
         local n_line = `n_line' + 1
-        file read myfile line
+        file read _myfile line
             
     }
-    file close myfile
+    file close _myfile
     
 }
 
@@ -144,7 +145,7 @@ end
         args mystring
         
         // Check if the line uses reclink
-        local regx "\s*reclink"
+        local regx "^\s*reclink"
         if ustrregexm("`mystring'", "`regx'") {
             display as result `"        reclink found"'
         }
