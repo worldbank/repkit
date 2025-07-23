@@ -22,12 +22,12 @@ program define repscan, rclass
         display("    Scanning line `n_line'...")
         
         // checking possible reproducibility issues
-        _check_merge_mm       "`line'"
-        _check_dup_drop_force "`line'"
-        _check_sort           "`line'"
-        _check_sortseed       "`line'"
-        _check_bysort         "`line'"
-        _check_reclink        "`line'"
+        _check_merge_mm       `"`line'"`
+        _check_dup_drop_force `"`line'"`
+        _check_sort           `"`line'"`
+        _check_sortseed       `"`line'"`
+        _check_bysort         `"`line'"`
+        _check_reclink        `"`line'"`
         
         // increment in line counter and content
         local n_line = `n_line' + 1
