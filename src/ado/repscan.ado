@@ -21,25 +21,33 @@ program define repscan
     local setseed = 0
     while r(eof) == 0 {
             
-        display("    Scanning line `n_line'...")
+        // checking if line has "REPSCAN OK"
+        _check_repscan_ok        "`line'"
         
-        // checking possible reproducibility issues
-        _check_merge_mm       "`line'"
-        _check_dup_drop_force "`line'"
-        _check_sort           "`line'"
-        _check_sortseed       "`line'"
-        _check_bysort         "`line'"
-        _check_reclink        "`line'"
-        
-        // checking multiline issues
-        if `setseed' == 0 {
-            _check_setseed    "`line'"
-            local setseed = `r(_setseed)'
+        if `r(_repscan_ok)' == 1 {
+            display("    Skipping line `n_line...'")
         }
-        if `setseed' == 0 {
-            _check_runiform   "`line'"
-        }
+        else {
+            display("    Scanning line `n_line'...")
         
+            // checking possible reproducibility issues
+            _check_merge_mm       "`line'"
+            _check_dup_drop_force "`line'"
+            _check_sort           "`line'"
+            _check_sortseed       "`line'"
+            _check_bysort         "`line'"
+            _check_reclink        "`line'"
+            
+            // checking multiline issues
+            if `setseed' == 0 {
+                _check_setseed    "`line'"
+                local setseed = `r(_setseed)'
+            }
+            if `setseed' == 0 {
+                _check_runiform   "`line'"
+            }   
+        }
+
         // increment in line counter and update content
         local n_line = `n_line' + 1
         file read _myfile line
@@ -58,6 +66,27 @@ end
 
 ****************************************************************************
 ***************************************************************************/
+
+    /*************************************************************************
+      check_repscan_ok: detects "REPSCAN OK" at the end of a line
+        Note that it doesn't print a detection message but returns a scalar
+    *************************************************************************/
+    cap program drop _check_repscan_ok
+    program define _check_repscan_ok, rclass
+    {
+        // Take the name of a string local as the argument
+        args mystring
+        
+        // Check if "set seed" is present
+        local regx "REPSCAN +(?:O|o)(?:K|k) *$"
+        if ustrregexm("`mystring'", "`regx'") {
+            return scalar _repscan_ok = 1
+        }
+        else {
+            return scalar _repscan_ok = 0
+        }
+    }
+    end
 
     /*************************************************************************
       check_runiform: detects the use of runiform
