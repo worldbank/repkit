@@ -1,0 +1,1 @@
+repscan "../tests/repscan/test-files/bad.do"

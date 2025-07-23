@@ -17,7 +17,8 @@ program define repscan
     file read _myfile line
     
     //iterating through lines, saving lines in rows
-    local n_line = 1
+    local n_line  = 1
+    local setseed = 0
     while r(eof) == 0 {
             
         display("    Scanning line `n_line'...")
@@ -30,7 +31,16 @@ program define repscan
         _check_bysort         "`line'"
         _check_reclink        "`line'"
         
-        // increment in line counter and content
+        // checking multiline issues
+        if `setseed' == 0 {
+            _check_setseed    "`line'"
+            local setseed = `r(_setseed)'
+        }
+        if `setseed' == 0 {
+            _check_runiform   "`line'"
+        }
+        
+        // increment in line counter and update content
         local n_line = `n_line' + 1
         file read _myfile line
             
@@ -48,6 +58,45 @@ end
 
 ****************************************************************************
 ***************************************************************************/
+
+    /*************************************************************************
+      check_runiform: detects the use of runiform
+    *************************************************************************/
+    cap program drop _check_runiform
+    program define _check_runiform
+    {
+        // Take the name of a string local as the argument
+        args mystring
+        
+        // Check if "runiform" is present
+        local regx "= +runiform\("
+        if ustrregexm("`mystring'", "`regx'") {
+            display as result `"        found runiform() without setting a seed first"'
+        }
+    }
+    end
+    
+    
+    /*************************************************************************
+      check_setseed: detects the use of set seed.
+        Note that it doesn't print a detection message but returns a scalar
+    *************************************************************************/
+    cap program drop _check_setseed
+    program define _check_setseed, rclass
+    {
+        // Take the name of a string local as the argument
+        args mystring
+        
+        // Check if "set seed" is present
+        local regx "^\s*set +seed +\d+"
+        if ustrregexm("`mystring'", "`regx'") {
+            return scalar _setseed = 1
+        }
+        else {
+            return scalar _setseed = 0
+        }
+    }
+    end
 
     /*************************************************************************
       check_merge_mm: detects the use of a many-to-many merge on a local string
