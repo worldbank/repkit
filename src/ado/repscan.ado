@@ -16,9 +16,13 @@ program define repscan
     display("Scanning file `do_file':")
     file read _myfile line
     
-    //iterating through lines, saving lines in rows
-    local n_line  = 1
-    local setseed = 0
+    
+    // defining locals for line counter and multiline checks
+    local n_line      = 1
+    local setseed     = 0
+    local set_version = 0
+    
+    // iterating through lines
     while r(eof) == 0 {
             
         // checking if line has "REPSCAN OK"
@@ -30,7 +34,7 @@ program define repscan
         else {
             display("    Scanning line `n_line'...")
         
-            // checking possible reproducibility issues
+            // checking single-line reproducibility issues
             _check_merge_mm       "`line'"
             _check_dup_drop_force "`line'"
             _check_sort           "`line'"
@@ -38,11 +42,24 @@ program define repscan
             _check_bysort         "`line'"
             _check_reclink        "`line'"
             
-            // checking multiline issues
+            // detection for multi-line issues: version
+            if `set_version' == 0 {
+                _check_version    "`line'"
+                local set_version = `r(_set_version)'
+            }
+            
+            // detection for multi-line issues: setseed
             if `setseed' == 0 {
                 _check_setseed    "`line'"
                 local setseed = `r(_setseed)'
             }
+            
+            // checking multiline issue: setseed without version
+            if `set_version' == 0 {
+                _check_setseed_as_issue "`line'"
+            }
+            
+            // checking multiline issue: runiform without setseed
             if `setseed' == 0 {
                 _check_runiform   "`line'"
             }   
@@ -66,6 +83,27 @@ end
 
 ****************************************************************************
 ***************************************************************************/
+
+    /*************************************************************************
+      check_version: detects version is set
+        Note that it doesn't print a detection message but returns a scalar
+    *************************************************************************/
+    cap program drop _check_version
+    program define _check_version, rclass
+    {
+        // Take the name of a string local as the argument
+        args mystring
+        
+        // Check if "version XX" is present
+        local regx "^\s*version +\d{1,2}"
+        if ustrregexm("`mystring'", "`regx'") {
+            return scalar _set_version = 1
+        }
+        else {
+            return scalar _set_version = 0
+        }
+    }
+    end
 
     /*************************************************************************
       check_repscan_ok: detects "REPSCAN OK" at the end of a line
@@ -123,6 +161,25 @@ end
         }
         else {
             return scalar _setseed = 0
+        }
+    }
+    end
+    
+    /*************************************************************************
+      check_setseed_as_issue: also detects the use of set seed.
+        But note this functions prints the result as an issue flagged
+        instead of returning a scalar
+    *************************************************************************/
+    cap program drop _check_setseed_as_issue
+    program define _check_setseed_as_issue
+    {
+        // Take the name of a string local as the argument
+        args mystring
+        
+        // Check if "set seed" is present
+        local regx "^\s*set +seed +\d+"
+        if ustrregexm("`mystring'", "`regx'") {
+            display as result `"        found set seed without setting the version first"'
         }
     }
     end

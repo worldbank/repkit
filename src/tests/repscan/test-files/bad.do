@@ -4,8 +4,14 @@
 ** runiform() without a seed
 gen myvar1 = runiform()
 
-** set seed and runiform()--should not be flagged
+** Setting random seed without version
 set seed 5678
+
+** Setting random seed after version--should not be flagged
+version 16.0
+set seed 5678
+
+** runiform() after setting random seed--should not be flagged
 gen myvar2 = runiform()
 
 ** Merge many-to-many
