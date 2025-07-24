@@ -39,7 +39,7 @@ program define repscan
     while r(eof) == 0 {
             
         // checking if line has "REPSCAN OK"
-        _check_repscan_ok        "`line'"
+        _check_repscan_ok        `"`line'"'
         
         if `r(_repscan_ok)' == 1 {
             display("    Skipping line `n_line...'")
@@ -50,18 +50,18 @@ program define repscan
             // 1 - Critical checks are always performed
         
                 // checking single-line reproducibility issues
-                _check_merge_mm       "`line'"
-                _check_dup_drop_force "`line'"
+                _check_merge_mm       `"`line'"'
+                _check_dup_drop_force `"`line'"'
                 
                 // detection for multi-line issues: setseed
                 if `setseed' == 0 {
-                    _check_setseed    "`line'"
+                    _check_setseed    `"`line'"'
                     local setseed = `r(_setseed)'
                 }
                 
                 // checking multiline issue: runiform without setseed
                 if `setseed' == 0 {
-                    _check_runiform   "`line'"
+                    _check_runiform   `"`line'"'
                 }
             
             // 2 - Other checks are only performed in complete mode
@@ -69,20 +69,20 @@ program define repscan
             if `complete' == 1 {
                 
                 // checking single-line reproducibility issues
-                _check_sort           "`line'"
-                _check_sortseed       "`line'"
-                _check_bysort         "`line'"
-                _check_reclink        "`line'"
+                _check_sort           `"`line'"'
+                _check_sortseed       `"`line'"'
+                _check_bysort         `"`line'"'
+                _check_reclink        `"`line'"'
                 
                 // detection for multi-line issues: version
                 if `set_version' == 0 {
-                    _check_version    "`line'"
+                    _check_version    `"`line'"'
                     local set_version = `r(_set_version)'
                 }
                 
                 // checking multiline issue: setseed without version
                 if `set_version' == 0 {
-                    _check_setseed_as_issue "`line'"
+                    _check_setseed_as_issue `"`line'"'
                 }
                 
             }
