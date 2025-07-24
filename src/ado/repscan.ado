@@ -26,7 +26,7 @@ program define repscan
     // reading file
     cap file close _myfile
     file open _myfile using "`do_file'", read
-    display("Scanning file `do_file':")
+    display("Scanning do-file `do_file':")
     file read _myfile line
     
     
@@ -42,16 +42,15 @@ program define repscan
         _check_repscan_ok        `"`line'"'
         
         if `r(_repscan_ok)' == 1 {
-            display("    Skipping line `n_line...'")
+            // do nothing
         }
         else {
-            display("    Scanning line `n_line'...")
             
             // 1 - Critical checks are always performed
         
                 // checking single-line reproducibility issues
-                _check_merge_mm       `"`line'"'
-                _check_dup_drop_force `"`line'"'
+                _check_merge_mm       `"`line'"' `n_line'
+                _check_dup_drop_force `"`line'"' `n_line'
                 
                 // detection for multi-line issues: setseed
                 if `setseed' == 0 {
@@ -61,7 +60,7 @@ program define repscan
                 
                 // checking multiline issue: runiform without setseed
                 if `setseed' == 0 {
-                    _check_runiform   `"`line'"'
+                    _check_runiform   `"`line'"' `n_line'
                 }
             
             // 2 - Other checks are only performed in complete mode
@@ -69,10 +68,10 @@ program define repscan
             if `complete' == 1 {
                 
                 // checking single-line reproducibility issues
-                _check_sort           `"`line'"'
-                _check_sortseed       `"`line'"'
-                _check_bysort         `"`line'"'
-                _check_reclink        `"`line'"'
+                _check_sort           `"`line'"' `n_line'
+                _check_sortseed       `"`line'"' `n_line'
+                _check_bysort         `"`line'"' `n_line'
+                _check_reclink        `"`line'"' `n_line'
                 
                 // detection for multi-line issues: version
                 if `set_version' == 0 {
@@ -82,7 +81,7 @@ program define repscan
                 
                 // checking multiline issue: setseed without version
                 if `set_version' == 0 {
-                    _check_setseed_as_issue `"`line'"'
+                    _check_setseed_as_issue `"`line'"' `n_line'
                 }
                 
             }
@@ -156,12 +155,12 @@ end
     program define _check_runiform
     {
         // Take the name of a string local as the argument
-        args mystring
+        args mystring n_line
         
         // Check if "runiform" is present
         local regx "= +runiform\("
         if ustrregexm("`mystring'", "`regx'") {
-            display as result `"        found runiform() without setting a seed first"'
+            display as result `"    Line `n_line': found runiform() without setting a seed first"'
         }
     }
     end
@@ -197,12 +196,12 @@ end
     program define _check_setseed_as_issue
     {
         // Take the name of a string local as the argument
-        args mystring
+        args mystring n_line
         
         // Check if "set seed" is present
         local regx "^\s*set +seed +\d+"
         if ustrregexm("`mystring'", "`regx'") {
-            display as result `"        found set seed without setting the version first"'
+            display as result `"    Line `n_line': found set seed without setting the version first"'
         }
     }
     end
@@ -214,12 +213,12 @@ end
     program define _check_merge_mm
     {
         // Take the name of a string local as the argument
-        args mystring
+        args mystring n_line
 
         // Check if "merge m:m" is present
         local regx "^\s*merge +m:m"
         if ustrregexm("`mystring'", "`regx'") {
-            display as result `"        m:m merge found"'
+            display as result `"    Line `n_line': m:m merge found"'
         }
     }
     end
@@ -231,13 +230,13 @@ end
     program define _check_dup_drop_force
     {
         // Take the name of a string local as the argument
-        args mystring
+        args mystring n_line
         
         // Check if the line is a forced drop of duplicates with the syntax:
         // duplicates drop *, force
         local regx "^\s*duplicates +drop[^,]*, +force"
         if ustrregexm("`mystring'", "`regx'") {
-            display as result `"        Forced drop of duplicates found"'
+            display as result `"    Line `n_line': forced drop of duplicates found"'
         }
     }
     end
@@ -249,12 +248,12 @@ end
     program define _check_sort
     {
         // Take the name of a string local as the argument
-        args mystring
+        args mystring n_line
         
         // Check if the line is sorting
         local regx "^\s*sort +"
         if ustrregexm("`mystring'", "`regx'") {
-            display as result `"        Sort found"'
+            display as result `"    Line `n_line': sort found"'
         }
     }
     end
@@ -266,12 +265,12 @@ end
     program define _check_sortseed
     {
         // Take the name of a string local as the argument
-        args mystring
+        args mystring n_line
         
         // Check if the line is a sortseed
         local regx "^\s*set +sort(seed|rngstate)"
         if ustrregexm("`mystring'", "`regx'") {
-            display as result `"        Sortseed found"'
+            display as result `"    Line `n_line': sortseed found"'
         }
     }
     end
@@ -283,12 +282,12 @@ end
     program define _check_bysort
     {
         // Take the name of a string local as the argument
-        args mystring
+        args mystring n_line
         
         // Check if the line is a bysort
         local regx "^\s*bys[^:]{2,}:"
         if ustrregexm("`mystring'", "`regx'") {
-            display as result `"        bysort found"'
+            display as result `"    Line `n_line': bysort found"'
         }
     }
     end
@@ -300,12 +299,12 @@ end
     program define _check_reclink
     {
         // Take the name of a string local as the argument
-        args mystring
+        args mystring n_line
         
         // Check if the line uses reclink
         local regx "^\s*reclink"
         if ustrregexm("`mystring'", "`regx'") {
-            display as result `"        reclink found"'
+            display as result `"    Line `n_line': reclink found"'
         }
     }
     end
