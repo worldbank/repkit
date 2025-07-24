@@ -7,8 +7,21 @@ program define repscan
     
     version 14.1
     
+    syntax anything,   ///
+        [              ///
+            complete   ///
+        ]
+    
     // take do-file as argument
     args do_file
+    
+    // complete scan of issues or basic scan
+    if !missing("`complete'") {
+        local complete = 1
+    }
+    else {
+        local complete = 0
+    }
     
     // reading file
     cap file close _myfile
@@ -33,36 +46,46 @@ program define repscan
         }
         else {
             display("    Scanning line `n_line'...")
+            
+            // 1 - Critical checks are always performed
         
-            // checking single-line reproducibility issues
-            _check_merge_mm       "`line'"
-            _check_dup_drop_force "`line'"
-            _check_sort           "`line'"
-            _check_sortseed       "`line'"
-            _check_bysort         "`line'"
-            _check_reclink        "`line'"
+                // checking single-line reproducibility issues
+                _check_merge_mm       "`line'"
+                _check_dup_drop_force "`line'"
+                
+                // detection for multi-line issues: setseed
+                if `setseed' == 0 {
+                    _check_setseed    "`line'"
+                    local setseed = `r(_setseed)'
+                }
+                
+                // checking multiline issue: runiform without setseed
+                if `setseed' == 0 {
+                    _check_runiform   "`line'"
+                }
             
-            // detection for multi-line issues: version
-            if `set_version' == 0 {
-                _check_version    "`line'"
-                local set_version = `r(_set_version)'
+            // 2 - Other checks are only performed in complete mode
+            
+            if `complete' == 1 {
+                
+                // checking single-line reproducibility issues
+                _check_sort           "`line'"
+                _check_sortseed       "`line'"
+                _check_bysort         "`line'"
+                _check_reclink        "`line'"
+                
+                // detection for multi-line issues: version
+                if `set_version' == 0 {
+                    _check_version    "`line'"
+                    local set_version = `r(_set_version)'
+                }
+                
+                // checking multiline issue: setseed without version
+                if `set_version' == 0 {
+                    _check_setseed_as_issue "`line'"
+                }
+                
             }
-            
-            // detection for multi-line issues: setseed
-            if `setseed' == 0 {
-                _check_setseed    "`line'"
-                local setseed = `r(_setseed)'
-            }
-            
-            // checking multiline issue: setseed without version
-            if `set_version' == 0 {
-                _check_setseed_as_issue "`line'"
-            }
-            
-            // checking multiline issue: runiform without setseed
-            if `setseed' == 0 {
-                _check_runiform   "`line'"
-            }   
         }
 
         // increment in line counter and update content
