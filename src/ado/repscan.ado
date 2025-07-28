@@ -118,7 +118,7 @@ end
         
         // Check if "version XX" is present
         local regx "^\s*version +\d{1,2}"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             return scalar _set_version = 1
         }
         else {
@@ -139,7 +139,7 @@ end
         
         // Check if "set seed" is present
         local regx "REPSCAN +(?:O|o)(?:K|k) *$"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             return scalar _repscan_ok = 1
         }
         else {
@@ -159,7 +159,7 @@ end
         
         // Check if "runiform" is present
         local regx "= +runiform\("
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             display as result `"    Line `n_line': found runiform() without setting a seed first"'
         }
     }
@@ -178,7 +178,7 @@ end
         
         // Check if "set seed" is present
         local regx "^\s*set +seed +\d+"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             return scalar _setseed = 1
         }
         else {
@@ -200,7 +200,7 @@ end
         
         // Check if "set seed" is present
         local regx "^\s*set +seed +\d+"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             display as result `"    Line `n_line': found set seed without setting the version first"'
         }
     }
@@ -217,7 +217,7 @@ end
 
         // Check if "merge m:m" is present
         local regx "^\s*merge +m:m"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             display as result `"    Line `n_line': m:m merge found"'
         }
     }
@@ -235,7 +235,7 @@ end
         // Check if the line is a forced drop of duplicates with the syntax:
         // duplicates drop *, force
         local regx "^\s*duplicates +drop[^,]*, +force"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             display as result `"    Line `n_line': forced drop of duplicates found"'
         }
     }
@@ -252,7 +252,7 @@ end
         
         // Check if the line is sorting
         local regx "^\s*sort +"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             display as result `"    Line `n_line': sort found"'
         }
     }
@@ -269,7 +269,7 @@ end
         
         // Check if the line is a sortseed
         local regx "^\s*set +sort(seed|rngstate)"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             display as result `"    Line `n_line': sortseed found"'
         }
     }
@@ -286,7 +286,7 @@ end
         
         // Check if the line is a bysort
         local regx "^\s*bys[^:]{2,}:"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             display as result `"    Line `n_line': bysort found"'
         }
     }
@@ -303,7 +303,7 @@ end
         
         // Check if the line uses reclink
         local regx "^\s*reclink"
-        if ustrregexm("`mystring'", "`regx'") {
+        if ustrregexm(`"`mystring'"', "`regx'") {
             display as result `"    Line `n_line': reclink found"'
         }
     }
