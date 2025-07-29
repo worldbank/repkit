@@ -27,7 +27,7 @@ program define repscan
     cap file close _myfile
     file open _myfile using "`do_file'", read
     display("Scanning do-file `do_file':")
-    file read _myfile line
+    file read _myfile _line
     
     
     // defining locals for line counter and multiline checks
@@ -39,7 +39,7 @@ program define repscan
     while r(eof) == 0 {
             
         // checking if line has "REPSCAN OK"
-        _check_repscan_ok        `"`line'"'
+        _check_repscan_ok        `"`macval(_line)'"'
         
         if `r(_repscan_ok)' == 1 {
             // do nothing
@@ -49,18 +49,18 @@ program define repscan
             // 1 - Critical checks are always performed
         
                 // checking single-line reproducibility issues
-                _check_merge_mm       `"`line'"' `n_line'
-                _check_dup_drop_force `"`line'"' `n_line'
+                _check_merge_mm       `"`macval(_line)'"' `n_line'
+                _check_dup_drop_force `"`macval(_line)'"' `n_line'
                 
                 // detection for multi-line issues: setseed
                 if `setseed' == 0 {
-                    _check_setseed    `"`line'"'
+                    _check_setseed    `"`macval(_line)'"'
                     local setseed = `r(_setseed)'
                 }
                 
                 // checking multiline issue: runiform without setseed
                 if `setseed' == 0 {
-                    _check_runiform   `"`line'"' `n_line'
+                    _check_runiform   `"`macval(_line)'"' `n_line'
                 }
             
             // 2 - Other checks are only performed in complete mode
@@ -68,20 +68,20 @@ program define repscan
             if `complete' == 1 {
                 
                 // checking single-line reproducibility issues
-                _check_sort           `"`line'"' `n_line'
-                _check_sortseed       `"`line'"' `n_line'
-                _check_bysort         `"`line'"' `n_line'
-                _check_reclink        `"`line'"' `n_line'
+                _check_sort           `"`macval(_line)'"' `n_line'
+                _check_sortseed       `"`macval(_line)'"' `n_line'
+                _check_bysort         `"`macval(_line)'"' `n_line'
+                _check_reclink        `"`macval(_line)'"' `n_line'
                 
                 // detection for multi-line issues: version
                 if `set_version' == 0 {
-                    _check_version    `"`line'"'
+                    _check_version    `"`macval(_line)'"'
                     local set_version = `r(_set_version)'
                 }
                 
                 // checking multiline issue: setseed without version
                 if `set_version' == 0 {
-                    _check_setseed_as_issue `"`line'"' `n_line'
+                    _check_setseed_as_issue `"`macval(_line)'"' `n_line'
                 }
                 
             }
@@ -89,7 +89,7 @@ program define repscan
 
         // increment in line counter and update content
         local n_line = `n_line' + 1
-        file read _myfile line
+        file read _myfile _line
             
     }
     file close _myfile
@@ -118,7 +118,7 @@ end
         
         // Check if "version XX" is present
         local regx "^\s*version +\d{1,2}"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             return scalar _set_version = 1
         }
         else {
@@ -137,9 +137,9 @@ end
         // Take the name of a string local as the argument
         args mystring
         
-        // Check if "set seed" is present
+        // Check if "REPSCAN OK" is present
         local regx "REPSCAN +(?:O|o)(?:K|k) *$"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             return scalar _repscan_ok = 1
         }
         else {
@@ -159,7 +159,7 @@ end
         
         // Check if "runiform" is present
         local regx "= +runiform\("
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"    Line `n_line': found runiform() without setting a seed first"'
         }
     }
@@ -178,7 +178,7 @@ end
         
         // Check if "set seed" is present
         local regx "^\s*set +seed +\d+"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             return scalar _setseed = 1
         }
         else {
@@ -200,7 +200,7 @@ end
         
         // Check if "set seed" is present
         local regx "^\s*set +seed +\d+"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"    Line `n_line': found set seed without setting the version first"'
         }
     }
@@ -217,7 +217,7 @@ end
 
         // Check if "merge m:m" is present
         local regx "^\s*merge +m:m"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"    Line `n_line': m:m merge found"'
         }
     }
@@ -235,7 +235,7 @@ end
         // Check if the line is a forced drop of duplicates with the syntax:
         // duplicates drop *, force
         local regx "^\s*duplicates +drop[^,]*, +force"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"    Line `n_line': forced drop of duplicates found"'
         }
     }
@@ -252,7 +252,7 @@ end
         
         // Check if the line is sorting
         local regx "^\s*sort +"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"    Line `n_line': sort found"'
         }
     }
@@ -269,7 +269,7 @@ end
         
         // Check if the line is a sortseed
         local regx "^\s*set +sort(seed|rngstate)"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"    Line `n_line': sortseed found"'
         }
     }
@@ -286,7 +286,7 @@ end
         
         // Check if the line is a bysort
         local regx "^\s*bys[^:]{2,}:"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"    Line `n_line': bysort found"'
         }
     }
@@ -303,7 +303,7 @@ end
         
         // Check if the line uses reclink
         local regx "^\s*reclink"
-        if ustrregexm(`"`mystring'"', "`regx'") {
+        if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"    Line `n_line': reclink found"'
         }
     }
