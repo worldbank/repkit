@@ -1,6 +1,6 @@
 * This package file is generated in the adodown workflow. Do not edit directly.
 *** version
-v 3.4
+v 4.0
 *** title
 d 'REPKIT': a module facilitating collaboration and computational reproducibility
 *** description
@@ -21,9 +21,10 @@ d Contact: dimeanalytics@@worldbank.org, lsms@@worldbank.org
 d URL: https://github.com/worldbank/repkit
 d
 *** date
-d Distribution-Date: 20250609
+d Distribution-Date: 20250729
 d
 *** adofiles
+f ado/repscan.ado
 f ado/lint.ado
 f ado/reproot_setup.ado
 f ado/repadolog.ado
@@ -37,6 +38,7 @@ f ado/repado.ado
 f ado/repkit.ado
 
 *** helpfiles
+f sthlp/repscan.sthlp
 f sthlp/lint.sthlp
 f sthlp/reproot_setup.sthlp
 f sthlp/repadolog.sthlp
