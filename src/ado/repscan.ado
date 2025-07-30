@@ -1,6 +1,5 @@
+*! version 4.0 20250729 - DIME Analytics & LSMS Team, The World Bank - dimeanalytics@worldbank.org, lsms@worldbank.org
 
-
-cap program drop repscan
 program define repscan
 
 {
@@ -120,7 +119,6 @@ end
       check_version: detects version is set
         Note that it doesn't print a detection message but returns a scalar
     *************************************************************************/
-    cap program drop _check_version
     program define _check_version, rclass
     {
         // Take the name of a string local as the argument
@@ -141,7 +139,6 @@ end
       check_repscan_ok: detects "REPSCAN OK" at the end of a line
         Note that it doesn't print a detection message but returns a scalar
     *************************************************************************/
-    cap program drop _check_repscan_ok
     program define _check_repscan_ok, rclass
     {
         // Take the name of a string local as the argument
@@ -161,7 +158,6 @@ end
     /*************************************************************************
       check_runiform: detects the use of runiform
     *************************************************************************/
-    cap program drop _check_runiform
     program define _check_runiform
     {
         // Take the name of a string local as the argument
@@ -180,7 +176,6 @@ end
       check_setseed: detects the use of set seed.
         Note that it doesn't print a detection message but returns a scalar
     *************************************************************************/
-    cap program drop _check_setseed
     program define _check_setseed, rclass
     {
         // Take the name of a string local as the argument
@@ -202,7 +197,6 @@ end
         But note this functions prints the result as an issue flagged
         instead of returning a scalar
     *************************************************************************/
-    cap program drop _check_setseed_as_issue
     program define _check_setseed_as_issue
     {
         // Take the name of a string local as the argument
@@ -219,7 +213,6 @@ end
     /*************************************************************************
       check_merge_mm: detects the use of a many-to-many merge on a local string
     *************************************************************************/
-    cap program drop _check_merge_mm
     program define _check_merge_mm
     {
         // Take the name of a string local as the argument
@@ -236,7 +229,6 @@ end
     /*************************************************************************
       check_dup_drop_force: detects the use of a forced drop of duplicates
     *************************************************************************/
-    cap program drop _check_dup_drop_force
     program define _check_dup_drop_force
     {
         // Take the name of a string local as the argument
@@ -254,7 +246,6 @@ end
     /*************************************************************************
       check_sort: detects the use of a sort
     *************************************************************************/
-    cap program drop _check_sort
     program define _check_sort
     {
         // Take the name of a string local as the argument
@@ -271,7 +262,6 @@ end
     /*************************************************************************
       check_sortseed: detects the use of a sortseed
     *************************************************************************/
-    cap program drop _check_sortseed
     program define _check_sortseed
     {
         // Take the name of a string local as the argument
@@ -288,7 +278,6 @@ end
     /*************************************************************************
       check_bysort: detects the use of a sortseed
     *************************************************************************/
-    cap program drop _check_bysort
     program define _check_bysort
     {
         // Take the name of a string local as the argument
@@ -305,7 +294,6 @@ end
     /*************************************************************************
       check_reclink: detects the use of reclink
     *************************************************************************/
-    cap program drop _check_reclink
     program define _check_reclink
     {
         // Take the name of a string local as the argument
@@ -318,3 +306,4 @@ end
         }
     }
     end
+
