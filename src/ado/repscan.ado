@@ -35,6 +35,13 @@ program define repscan
     local setseed     = 0
     local set_version = 0
     
+    // Outputs table
+    display as result " ________________________________________________________________"
+    display as result "|                                                                |"
+    display as result "|                            Issue                               |"
+    display as result "|________________________________________________________________|"
+    display as result " "
+    
     // iterating through lines
     while r(eof) == 0 {
             
@@ -93,6 +100,9 @@ program define repscan
             
     }
     file close _myfile
+    
+    display as result "__________________________________________________________________"
+    display as result "See repscan's help article for an explanation of each issue."
     
 }
 
@@ -160,7 +170,7 @@ end
         // Check if "runiform" is present
         local regx "= +runiform\("
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
-            display as result `"    Line `n_line': found runiform() without setting a seed first"'
+            display as result `"  Line `n_line': using runiform() without setting a random seed first"'
         }
     }
     end
@@ -201,7 +211,7 @@ end
         // Check if "set seed" is present
         local regx "^\s*set +seed +\d+"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
-            display as result `"    Line `n_line': found set seed without setting the version first"'
+            display as result `"  Line `n_line': setting a random seed without setting the version first"'
         }
     }
     end
@@ -218,7 +228,7 @@ end
         // Check if "merge m:m" is present
         local regx "^\s*merge +m:m"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
-            display as result `"    Line `n_line': m:m merge found"'
+            display as result `"  Line `n_line': Using many-to-many merge"'
         }
     }
     end
@@ -236,7 +246,7 @@ end
         // duplicates drop *, force
         local regx "^\s*duplicates +drop[^,]*, +force"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
-            display as result `"    Line `n_line': forced drop of duplicates found"'
+            display as result `"  Line `n_line': forced drop of duplicates"'
         }
     }
     end
@@ -253,7 +263,7 @@ end
         // Check if the line is sorting
         local regx "^\s*sort +"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
-            display as result `"    Line `n_line': sort found"'
+            display as result `"  Line `n_line': using sort"'
         }
     }
     end
@@ -270,7 +280,7 @@ end
         // Check if the line is a sortseed
         local regx "^\s*set +sort(seed|rngstate)"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
-            display as result `"    Line `n_line': sortseed found"'
+            display as result `"  Line `n_line': using sortseed"'
         }
     }
     end
@@ -287,7 +297,7 @@ end
         // Check if the line is a bysort
         local regx "^\s*bys[^:]{2,}:"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
-            display as result `"    Line `n_line': bysort found"'
+            display as result `"  Line `n_line': using bysort"'
         }
     }
     end
@@ -304,7 +314,7 @@ end
         // Check if the line uses reclink
         local regx "^\s*reclink"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
-            display as result `"    Line `n_line': reclink found"'
+            display as result `"  Line `n_line': using reclink"'
         }
     }
     end
