@@ -105,7 +105,7 @@ Pull requests with suggestions for improvements or bug fixes are also greatly ap
 
 {title:Authors}
 
-{pstd}DECDI Analytics, The World Bank (dimeanalytics@worldbank.org).
+{pstd}DIME Analytics, The World Bank dimeanalytics@worldbank.org
 {p_end}
 
 {title:Acknowledgements}
