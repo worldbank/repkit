@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 3.4 20250609}{...}
+{* *! version 4.0 20250729}{...}
 {hline}
 {pstd}help file for {hi:repado}{p_end}
 {hline}
