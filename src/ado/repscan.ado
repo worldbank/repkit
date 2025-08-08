@@ -125,7 +125,7 @@ end
         args mystring
         
         // Check if "version XX" is present
-        local regx "^\s*version +\d{1,2}"
+        local regx "^\s*version\s+\d{1,2}"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             return scalar _set_version = 1
         }
@@ -145,7 +145,7 @@ end
         args mystring
         
         // Check if "REPSCAN OK" is present
-        local regx "REPSCAN +(?:O|o)(?:K|k) *$"
+        local regx "//\s*REPSCAN\s+(?i)ok(?-i)\s*$"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             return scalar _repscan_ok = 1
         }
@@ -164,7 +164,7 @@ end
         args mystring n_line
         
         // Check if "runiform" is present
-        local regx "= +runiform\("
+        local regx "=\s+runiform\("
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"  Line `n_line': using runiform() without setting a random seed first"'
         }
@@ -182,7 +182,7 @@ end
         args mystring
         
         // Check if "set seed" is present
-        local regx "^\s*set +seed +\d+"
+        local regx "^\s*set\s+seed\s+\d+"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             return scalar _setseed = 1
         }
@@ -203,7 +203,7 @@ end
         args mystring n_line
         
         // Check if "set seed" is present
-        local regx "^\s*set +seed +\d+"
+        local regx "^\s*set\s+seed\s+\d+"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"  Line `n_line': setting a random seed without setting the version first"'
         }
@@ -219,7 +219,7 @@ end
         args mystring n_line
 
         // Check if "merge m:m" is present
-        local regx "^\s*merge +m:m"
+        local regx "^\s*merge\s+m:m\s+"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"  Line `n_line': Using many-to-many merge"'
         }
@@ -236,7 +236,7 @@ end
         
         // Check if the line is a forced drop of duplicates with the syntax:
         // duplicates drop *, force
-        local regx "^\s*duplicates +drop[^,]*, +force"
+        local regx "^\s*duplicates\s+drop\s+[^,]*,\s*force"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"  Line `n_line': forced drop of duplicates"'
         }
@@ -252,7 +252,7 @@ end
         args mystring n_line
         
         // Check if the line is sorting
-        local regx "^\s*sort +"
+        local regx "^\s*sort\s+"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"  Line `n_line': using sort"'
         }
@@ -268,7 +268,7 @@ end
         args mystring n_line
         
         // Check if the line is a sortseed
-        local regx "^\s*set +sort(seed|rngstate)"
+        local regx "^\s*set\s+sort(seed|rngstate)"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"  Line `n_line': using sortseed"'
         }
@@ -300,7 +300,7 @@ end
         args mystring n_line
         
         // Check if the line uses reclink
-        local regx "^\s*reclink"
+        local regx "^\s*reclink\s+"
         if ustrregexm(`"`macval(mystring)'"', "`regx'") {
             display as result `"  Line `n_line': using reclink"'
         }
