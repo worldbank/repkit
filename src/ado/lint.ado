@@ -11,6 +11,7 @@ program 	 lint
       NOSUMmary         			///
       Indent(string)    			///
       Linemax(string)   			///
+      Space(string) 				///
       Correct(string)   			///
       Excel(string)     			///
       AUTOmatic         			///
@@ -34,18 +35,8 @@ program 	 lint
   * set indent size = 4 if missing
   if missing("`indent'")		local indent "4"
 
-  * Set number of spaces used for indentation and tab replacement
-* Prefer indent(), fall back to space() for backward compatibility
-if ("`indent'" != "") {
-    local indentval = "`indent'"
-}
-else if ("`space'" != "") {
-    local indentval = "`space'"
-}
-else {
-    local indentval = 4
-}
-
+  * set whitespaces for tab (space) = indent size if space is missing
+  if missing("`space'")   		local space "`indent'"
 
   * set linemax = 80 if missing
   if missing("`linemax'")		local linemax "80"
@@ -166,7 +157,7 @@ _checkversions
 
 		_detect, ///
 			file("`file'") excel("`excel'") ado_path("`ado_path'") ///
-			indent("`indentval'") linemax("`linemax'") ///
+			indent("`indent'") linemax("`linemax'") space("`space'") ///
 			suppress_flag("`suppress_flag'") summary_flag("`summary_flag'") ///
 			`header' `footer'
     }
@@ -180,7 +171,7 @@ _checkversions
 
 			_detect, ///
 				file("`folder'/`file'") excel("`excel'") ado_path("`ado_path'") ///
-				indent("`indentval'") linemax("`linemax'") ///
+				indent("`indent'") linemax("`linemax'") space("`space'") ///
 				suppress_flag("`suppress_flag'") summary_flag("`summary_flag'") ///
 				header footer
 		}
@@ -197,7 +188,7 @@ _checkversions
 
 		_correct, ///
 			input("`input'") output("`output'") ///
-			indent("`indentval'")linemax("`linemax'") ///
+			indent("`indent'") space("`space'") linemax("`linemax'") ///
 			`replace' `force' `automatic' `debug'
 
 	}
@@ -218,7 +209,7 @@ program			_correct
 
 	syntax, ///
 		input(string) output(string) ///
-		indent(string) linemax(string) ///
+		indent(string) space(string) linemax(string) ///
 		[replace force automatic debug]
 
 	* Check that the Python function is defined
@@ -248,7 +239,7 @@ program			_correct
 	* Checking which issues are present in the dofile so we ask for their correction
 		python: Macro.setLocal('_delimiter',  str(slu.detect_delimit_in_file(r"`input'")))
 		python: Macro.setLocal('_hard_tab',   str(slu.detect_hard_tab_in_file(r"`input'")))
-		python: Macro.setLocal('_bad_indent', str(slu.detect_bad_indent_in_file(r"`input'", "`indentval'", "`indentval'")))
+		python: Macro.setLocal('_bad_indent', str(slu.detect_bad_indent_in_file(r"`input'", "`indent'", "`space'")))
 		python: Macro.setLocal('_long_lines', str(slu.detect_line_too_long_in_file(r"`input'", "`linemax'")))
 		python: Macro.setLocal('_no_space_before_curly', str(slu.detect_no_space_before_curly_bracket_in_file(r"`input'")))
 		python: Macro.setLocal('_blank_before_curly', str(slu.detect_blank_line_before_curly_close_in_file(r"`input'")))
@@ -368,7 +359,7 @@ program			_correct
 				    }
 				}
 
-		    python: `fun'(r"`output'", r"`output'", "`indentval'", "`indentval'", "`linemax'")
+		    python: `fun'(r"`output'", r"`output'", "`indent'", "`space'", "`linemax'")
 		}
     }
 
@@ -387,7 +378,7 @@ program			_detect
 
 		syntax , ///
 				file(string) ado_path(string) ///
-				indent(string) linemax(string) ///
+				indent(string) linemax(string) space(string) ///
 				suppress_flag(string) summary_flag(string) ///
 				[excel(string) header footer]
 
@@ -404,7 +395,7 @@ program			_detect
 		}
 
 		* Actually run the Python code
-        python: r = stata_linter_detect_py("`file'", "`indentval'", "`suppress_flag'", "`summary_flag'", "`excel'", "`linemax'", "`indentval'")
+        python: r = stata_linter_detect_py("`file'", "`indent'", "`suppress_flag'", "`summary_flag'", "`excel'", "`linemax'", "`space'")
 
 		* Stata result footer
 		if !missing("`footer'") {
