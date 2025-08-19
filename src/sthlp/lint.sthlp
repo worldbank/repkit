@@ -1,5 +1,5 @@
 {smcl}
-{* *! version 3.4 20250609}{...}
+{* *! version NOPKGMETA NOPKGMETA}{...}
 {hline}
 {pstd}help file for {hi:lint}{p_end}
 {hline}
@@ -39,17 +39,16 @@ For installing Python packages, refer to {browse "https://blog.stata.com/2020/09
 {synopt: {bf:{ul:v}erbose}}Shows a report of all bad practices and issues flagged by the command.{p_end}
 {synopt: {bf:{ul:nosum}mary}}Suppresses the summary table with counts of bad practices and potential issues.{p_end}
 {synopt: {bf:{ul:e}xcel}({it:filename})}Saves the verbose output in an Excel file.{p_end}
-{synopt: {bf:{ul:i}ndent}({it:integer})}Number of whitespaces used when checking indentation (default: 4).{p_end}
+{synopt: {bf:{ul:i}ndent}({it:integer})}Sets the number of spaces for indentation and replaces hard tabs with that number of spaces (default: 4).{p_end}
 {synopt: {bf:{ul:l}inemax}({it:integer})}Maximum number of characters in a line (default: 80).{p_end}
 {synoptline}
 
 {dlgtab:Options specific to the correction mode}
 
-{synoptset 14}{...}
+{synoptset 9}{...}
 {p2coldent:{it:options}}Description{p_end}
 {synoptline}
 {synopt: {bf:{ul:auto}matic}}Suppresses the prompt asking users which correction to apply.{p_end}
-{synopt: {bf:{ul:s}pace}({it:integer})}Number of whitespaces used instead of hard tabs when replacing hard tabs with spaces for indentation (default: same value used for the option {bf:indent()}, 4 when no value is defined).{p_end}
 {synopt: {bf:replace}}Allows the command to overwrite any existing {it:output} file.{p_end}
 {synopt: {bf:force}}Allows the {it:input_file} to be the same as {it:output_file}. Not recommended, see below.{p_end}
 {synoptline}
@@ -77,8 +76,10 @@ See the list of rules and the DIME Analytics Stata Style Guide for a discussion 
 {pstd}{bf:{ul:e}xcel}({it:filename}) exports the verbose output to an Excel file at the specified location.
 {p_end}
 
-{pstd}{bf:{ul:i}ndent}({it:integer}) sets the number of whitespaces used when checking indentation. Default: 4.
-{p_end}
+{synoptset 0}{...}
+{p2coldent:{bf:{ul:i}ndent}({it:integer})}Sets the number of spaces for indentation and replaces hard tabs with that number of spaces (default: 4).{p_end}
+{synoptline}
+{synoptline}
 
 {pstd}{bf:{ul:l}inemax}({it:integer}) sets the maximum number of characters allowed in a single line. Default: 80.
 {p_end}
