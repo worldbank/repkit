@@ -50,11 +50,13 @@ net install repkit, ///
   from("https://raw.githubusercontent.com/worldbank/repkit/`tag'/src")
 ```
 
-# Contributions
+## Contributions
 
 This package is developed in
 [this repo](https://github.com/worldbank/repkit)
 on GitHub using the [adodown](https://github.com/lsms-worldbank/adodown) workflow.
+
+Please read our [Contributing Guide](https://github.com/worldbank/.github/blob/main/CONTRIBUTING.md) for details on our [Code of Conduct](https://github.com/worldbank/.github/blob/main/CODE_OF_CONDUCT.md) and the process for submitting pull requests.
 
 We are happy to receive feedback and/or contributions.
 Please feel free to report bugs or request new features
@@ -66,13 +68,14 @@ You are also welcome to fork this repo and submit a
 with contribution to the code.
 
 ## License
+
 This project is licensed under the MIT License together with the [World Bank IGO Rider](https://github.com/worldbank/.github/blob/main/WB-IGO-RIDER.md). The Rider is purely procedural: it reserves all privileges and immunities enjoyed by the World Bank, without adding restrictions to the MIT permissions. Please review both files before using, distributing or contributing.
 
 ## Citation
 
 Please use the citation suggested in [CITATION.cff](CITATION.cff). Find the `APA` and `BIBTeX` formats in the right hand side menu of the [landing page](https://github.com/worldbank/repkit) of this project's repository.
 
-# Authors
+## Authors
 
 This package is written and published by
 [DIME Analytics](https://www.worldbank.org/en/research/dime/data-and-analytics)
