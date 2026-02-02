@@ -19,32 +19,32 @@ Currently, this toolkit has the following commands:
 | [reproot_setup](https://worldbank.github.io/repkit/reference/reproot_setup.html) | This command helps setting up the environment setting file used in `reproot` |
 | [reprun](https://worldbank.github.io/repkit/reference/reprun.html) | This command is used to automate reproducibility checks by running a do-file or a set of do-files and compare all state values (RNG-value, datasignature etc.) between the two runs. This command is currently only release as a beta-version. |
 | [repscan](https://worldbank.github.io/repkit/reference/repscan.html) | Scans a do-file and flags the use of commands that may cause issues with the reproducibility of results. |
-| [lint](https://worldbank.github.io/repkit/reference/lint.html) | `lint` is an opinionated detector that attempts to improve the readability and organization of Stata do files. The command is written based on the good coding practices of the Development Impact Evaluation Unit at The World Bank.|
+| [lint](https://worldbank.github.io/repkit/reference/lint.html) | `lint` is an opinionated detector that attempts to improve the readability and organization of Stata do files. The command is written based on the good coding practices of the Development Impact Evaluation Unit at The World Bank. |
 
-# Installation
+## Installation
 
 While we allow multiple ways of installing the package,
 we recommend all users to install the package from SSC
 unless there is a very specific reason to not do so.
 
-## Install from SSC
+### Install from SSC
 
 To install from SSC, run this code in your Stata command line.
 
-```
+```stata
 ssc install repkit
 ```
 
-## Install from GitHub repo
+### Install from GitHub repo
 
 You can install older versions of `repkit` directly from the GitHub repository.
 To do so, start by finding the tag corresponding to
 the version you want to install here:
-https://github.com/worldbank/repkit/tags.
+<https://github.com/worldbank/repkit/tags>.
 Update the local "tag" in the code below with the value of the tag you picked,
 and then run the code.
 
-```
+```stata
 local tag "v1.0"
 net install repkit, ///
   from("https://raw.githubusercontent.com/worldbank/repkit/`tag'/src")
@@ -88,6 +88,6 @@ flagship household survey program and is
 part of the World Bank’s
 [Development Data Group](https://www.worldbank.org/en/about/unit/unit-dec/dev).
 
-Contact:
-- dimeanalytics@worldbank.org
-- lsms@worldbank.org
+### Contact
+
+DIME Analytics ([dimeanalytics@worldbank.org](mailto:dimeanalytics@worldbank.org)) and LSMS Team ([lsms@worldbank.org](mailto:lsms@worldbank.org))
