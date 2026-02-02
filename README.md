@@ -65,6 +65,10 @@ You are also welcome to fork this repo and submit a
 [pull request](https://github.com/worldbank/repkit/pulls)
 with contribution to the code.
 
+## License
+This project is licensed under the MIT License together with the [World Bank IGO Rider](https://github.com/worldbank/.github/blob/main/WB-IGO-RIDER.md). The Rider is purely procedural: it reserves all privileges and immunities enjoyed by the World Bank, without adding restrictions to the MIT permissions. Please review both files before using, distributing or contributing.
+
+
 # Authors
 
 This package is written and published by
