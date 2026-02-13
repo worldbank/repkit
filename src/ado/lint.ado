@@ -14,6 +14,7 @@ program 	 lint
       Space(string) 				///
       Correct(string)   			///
       Excel(string)     			///
+      csv(string)     			///
       AUTOmatic         			///
       replace           			///
       force            			///
@@ -44,8 +45,15 @@ program 	 lint
   * if !missing("`excel'")   cap erase `excel'
   if !missing("`excel'")		cap rm `excel'
 
-  * set excel = "" if excel is missing
-  if missing("`excel'")      	local excel ""
+  * set csv = "" if csv is missing
+  if missing("`csv'")      		local csv ""
+
+  * error if both csv and excel are provided
+  if ("`csv'" != "" & "`excel'" != "") {
+	di as error "{phang}Options [csv] and [excel] cannot be used together. Please choose only one output format.{p_end}"
+	error 198
+}
+
 
   * set a constant for the suppress option being used
   local suppress_flag "1"
@@ -156,7 +164,7 @@ _checkversions
 		}
 
 		_detect, ///
-			file("`file'") excel("`excel'") ado_path("`ado_path'") ///
+			file("`file'") csv("`csv'")excel("`excel'") ado_path("`ado_path'") ///
 			indent("`indent'") linemax("`linemax'") space("`space'") ///
 			suppress_flag("`suppress_flag'") summary_flag("`summary_flag'") ///
 			`header' `footer'
@@ -170,7 +178,7 @@ _checkversions
         foreach file of local files {
 
 			_detect, ///
-				file("`folder'/`file'") excel("`excel'") ado_path("`ado_path'") ///
+				file("`folder'/`file'")csv("`csv'")excel("`excel'") ado_path("`ado_path'") ///
 				indent("`indent'") linemax("`linemax'") space("`space'") ///
 				suppress_flag("`suppress_flag'") summary_flag("`summary_flag'") ///
 				header footer
@@ -380,7 +388,7 @@ program			_detect
 				file(string) ado_path(string) ///
 				indent(string) linemax(string) space(string) ///
 				suppress_flag(string) summary_flag(string) ///
-				[excel(string) header footer]
+				[csv(string) excel(string) header footer]
 
 		* Import relevant python functions
 		python: import sys, os
@@ -395,7 +403,8 @@ program			_detect
 		}
 
 		* Actually run the Python code
-        python: r = stata_linter_detect_py("`file'", "`indent'", "`suppress_flag'", "`summary_flag'", "`excel'", "`linemax'", "`space'")
+       python: r = stata_linter_detect_py("`file'", "`indent'", "`suppress_flag'", "`summary_flag'", "`excel'", "`csv'", "`linemax'", "`space'")
+
 
 		* Stata result footer
 		if !missing("`footer'") {
@@ -410,6 +419,9 @@ program			_detect
 		}
 
 
+                if "`csv'" != "" {
+	display as result 	`"{phang}File {browse "`csv'":`csv'} created.{p_end}"'
+}
 
 end
 

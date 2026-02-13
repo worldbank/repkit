@@ -26,7 +26,9 @@ def run():
     parser.add_argument('--excel_output', type=str, nargs='?', default="",
                             help="If specified, save results to Excel workbook"
                             )
-
+    parser.add_argument('--csv_output', type=str, nargs='?', default="",
+                            help="If specified, save results to CSV file"
+                            )
 
     args=parser.parse_args()
     return stata_linter_detect_py(
@@ -35,6 +37,7 @@ def run():
         suppress="1" if args.suppress else "0",
         summary="1" if args.summary else "0",
         excel=args.excel_output,
+        csv=args.csv_output,
         linemax=args.linemax,
         tab_space=args.indent
         )
@@ -654,10 +657,10 @@ def update_comment_delimiter(comment_delimiter, line):
 # Run linter program to detect bad coding practices ===================
 def stata_linter_detect_py(
     input_file, indent,
-    suppress, summary, excel, linemax,
+    suppress, summary, excel, csv , linemax,
     tab_space
     ):
-
+    print("Updated function is running")
     excel_output_list = []
 
     # style ============
@@ -819,15 +822,28 @@ def stata_linter_detect_py(
         print("{:60s} {:10d}".format("Tilde (~) used instead of bang (!) in expression: ", check_dictionary["bang_not_tilde"]))
 
     output_df = pd.DataFrame(excel_output_list)
-    if excel != "":
-        if (output_df.empty == True):
-            output_df = pd.DataFrame(columns = ["Line", "Type", "Problem"])
+
+    if excel != "" and excel.lower().endswith((".xlsx", ".xls")):
+        if output_df.empty:
+            output_df = pd.DataFrame(columns=["Line", "Type", "Problem"])
         output_df.columns = ["Line", "Type", "Problem"]
-        if os.path.exists(excel):
-            with pd.ExcelWriter(excel, engine = "openpyxl", mode = "a") as writer:
-                output_df.to_excel(writer, index = False, sheet_name = os.path.basename(input_file)[:20])
-        else:
-            with pd.ExcelWriter(excel) as writer:
-                output_df.to_excel(writer, index = False, sheet_name = os.path.basename(input_file)[:20])
+
+    if os.path.exists(excel):
+        with pd.ExcelWriter(excel, engine="openpyxl", mode="a") as writer:
+            output_df.to_excel(writer, index=False, sheet_name=os.path.basename(input_file)[:20])
+    else:
+        with pd.ExcelWriter(excel, engine="openpyxl") as writer:
+            output_df.to_excel(writer, index=False, sheet_name=os.path.basename(input_file)[:20])
+
+
+    if csv != "":
+        if output_df.empty:
+            output_df = pd.DataFrame(columns=["Line", "Type", "Problem"])
+        output_df.columns = ["Line", "Type", "Problem"]
+        output_df.to_csv(csv, index=False)
+
 
     return( not output_df.empty )
+
+
+
