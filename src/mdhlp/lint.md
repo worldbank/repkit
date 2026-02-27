@@ -25,7 +25,7 @@ For installing Python packages, refer to [this guide](https://blog.stata.com/202
 | __**v**erbose__ | Shows a report of all bad practices and issues flagged by the command. |
 | __**nosum**mary__ | Suppresses the summary table with counts of bad practices and potential issues. |
 | __**e**xcel__(_filename_) | Saves the verbose output in an Excel file. |
-| __**i**ndent__(_integer_) | Number of whitespaces used when checking indentation (default: 4). |
+| __**i**ndent__(_integer_) | Sets the number of spaces for indentation and replaces hard tabs with that number of spaces (default: 4). |
 | __**l**inemax__(_integer_) | Maximum number of characters in a line (default: 80). |
 
 ## Options specific to the correction mode
@@ -33,7 +33,6 @@ For installing Python packages, refer to [this guide](https://blog.stata.com/202
 | _options_ | Description |
 |-----------|-------------|
 | __**auto**matic__ | Suppresses the prompt asking users which correction to apply. |
-| __**s**pace__(_integer_) | Number of whitespaces used instead of hard tabs when replacing hard tabs with spaces for indentation (default: same value used for the option __indent()__, 4 when no value is defined). |
 | __replace__ | Allows the command to overwrite any existing _output_ file. |
 | __force__ | Allows the _input_file_ to be the same as _output_file_. Not recommended, see below. |
 
@@ -55,7 +54,7 @@ __**nosum**mary__ suppresses the summary table of flagged occurrences.
 
 __**e**xcel__(_filename_) exports the verbose output to an Excel file at the specified location.
 
-__**i**ndent__(_integer_) sets the number of whitespaces used when checking indentation. Default: 4.
+| __**i**ndent__(_integer_) | Sets the number of spaces for indentation and replaces hard tabs with that number of spaces (default: 4). |
 
 __**l**inemax__(_integer_) sets the maximum number of characters allowed in a single line. Default: 80.
 
